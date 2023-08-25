@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 //import 'pages/perguntas.dart';
-import './home.dart';
+//import './home.dart';
+import './appbar.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,7 +19,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.pinkAccent),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Emprestaí'),
+      home: const AppBarPage(title: 'Emprestaí'),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
