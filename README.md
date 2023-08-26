@@ -1,16 +1,15 @@
-# appteste
+# Emprestaí | Aplicativo mobile para empréstimos de objetos
 
-A new Flutter project.
+Projeto de programação de conclusão de curso técnico de TI do CETEC.
 
-## Getting Started
+## Características:
 
-This project is a starting point for a Flutter application.
+FrameWork: Flutter <br />
+Linguagem de programação: Dart <br />
+Envolvidos:
+- Luana Reginato Bassanesi
+- Ederson Almeida (Professor Orientador)
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+ ## Contatos: 
+ linkedin: https://www.linkedin.com/in/luana-reginato-bassanesi-228642280/ <br />
+ github: https://github.com/Luana-RB
