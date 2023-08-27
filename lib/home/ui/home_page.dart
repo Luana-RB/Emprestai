@@ -1,5 +1,8 @@
 import 'package:appteste/appbar.dart';
+import 'package:appteste/routes/app_routes.dart';
 import 'package:flutter/material.dart';
+//import 'package:appteste/main.dart';
+//import 'package:appteste/routes/app_routes.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -27,19 +30,21 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     const String title = 'Emprestaí';
-    return const Scaffold(
-      appBar: PreferredSize(
+    return Scaffold(
+      appBar: const PreferredSize(
           preferredSize: Size.fromHeight(50), child: AppBarPage(title: title)),
-      drawer: MyDrawer(),
-      body: Center(
+      drawer: const MyDrawer(),
+      body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: null,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
+        focusColor: Colors.amberAccent,
+        onPressed: () {
+          Navigator.of(context).pushNamed(AppRoutes.USER_LIST);
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }
