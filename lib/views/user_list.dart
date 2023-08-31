@@ -2,6 +2,7 @@
 
 import 'package:appteste/appbar.dart';
 import 'package:appteste/components/user_tile.dart';
+import 'package:appteste/models/user/user.dart';
 //import 'package:appteste/models/user/user.dart';
 import 'package:appteste/provider/users_provider.dart';
 import 'package:appteste/routes/app_routes.dart';
@@ -27,7 +28,17 @@ class UserList extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         focusColor: Colors.pinkAccent,
         onPressed: () {
-          Navigator.of(context).pushNamed(AppRoutes.USER_FORM);
+          Navigator.of(context).pushNamed(
+            AppRoutes.USER_FORM,
+            arguments: User(
+              id: '',
+              name: '',
+              email: '',
+              password: '',
+              groupName: '',
+              avatarUrl: '',
+            ),
+          );
         },
         child: const Icon(Icons.add),
       ),
