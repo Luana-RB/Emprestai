@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -29,35 +31,36 @@ class MyDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          const DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.pinkAccent,
+    
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.2,
+       child: Drawer(
+  child: Column(
+      children: <Widget>[
+        Container(
+          height: 100,
+          color: Colors.pinkAccent,
+          child: const Center(
+            child: Text(
+              'Menu',
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.white,
+              ),
             ),
-            child: Text('Menu'),
           ),
-          ListTile(
-            title: const Text('Opções'),
-            onTap: () {
-              if (kDebugMode) {
-                print('opções');
-              }
-            },
-          ),
-          ListTile(
-            title: const Text('Sair'),
-            onTap: () {
-              if (kDebugMode) {
-                print('sair');
-              }
-            },
-          ),
-          // Adicione mais itens do menu lateral, se necessário
-        ],
-      ),
-    );
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: IconButton(onPressed: (){}, icon: const Icon(Icons.settings, size: 40)),
+        ),
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: TextButton(onPressed: (){ exit(0);}, child: const Text('Sair', style: TextStyle(
+                fontSize: 18,)),
+      ),)
+      ],
+    ),
+    ));
   }
 }

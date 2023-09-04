@@ -1,6 +1,8 @@
+
 import 'package:appteste/appbar.dart';
 import 'package:appteste/routes/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:appteste/navigationbar.dart';
 //import 'package:appteste/main.dart';
 //import 'package:appteste/routes/app_routes.dart';
 
@@ -14,6 +16,24 @@ class MyHomePage extends StatefulWidget {
 //counter de clicks
 class _MyHomePageState extends State<MyHomePage> {
   final scrollController = ScrollController();
+  int _selectedIndex = 1;
+
+  void onTap(int index)  {
+    setState(() {
+      _selectedIndex = index;
+    });
+    switch (index) {
+      case 0:
+        Navigator.of(context).pushNamed('/user-list');
+        break;
+      case 1:
+        Navigator.of(context).pushNamed('/');
+        break;
+      case 2:
+        Navigator.of(context).pushNamed('/user-form');
+        break;
+    }
+  }
   //late final HomeController _homeController;
 
   @override
@@ -34,6 +54,10 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: const PreferredSize(
           preferredSize: Size.fromHeight(50), child: AppBarPage(title: title)),
       drawer: const MyDrawer(),
+      bottomNavigationBar: CustomBottomNavigationBar(
+      selectedIndex: _selectedIndex,
+      onItemTapped: onTap,
+      ),
       body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
