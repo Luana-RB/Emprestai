@@ -6,7 +6,6 @@ Map<String, User> dummyUsers = {
     name: 'Maria',
     email: 'mnoro@ucs.br',
     password: 'password',
-    groupName: 'K03',
     avatarUrl: 'https://cdn-icons-png.flaticon.com/512/1468/1468166.png',
   ),
   '2': User(
@@ -14,7 +13,6 @@ Map<String, User> dummyUsers = {
     name: 'Luana',
     email: 'lrbassanesi@ucs.br',
     password: 'password',
-    groupName: 'K03',
     avatarUrl: null,
   ),
 };

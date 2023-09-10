@@ -2,7 +2,6 @@
 // ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
 
 import 'package:appteste/models/user/user.dart';
-//import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:appteste/provider/users_provider.dart';
@@ -24,7 +23,6 @@ class _UserFormState extends State<UserForm> {
     _formData['name'] = user.name!;
     _formData['email'] = user.email!;
     _formData['password'] = user.password!;
-    _formData['groupName'] = user.groupName!;
   }
 
 //Set Load Data
@@ -60,8 +58,6 @@ class _UserFormState extends State<UserForm> {
                   existingUser.setName = _formData['name']!;
                   existingUser.setEmail = _formData['email']!;
                   existingUser.setPassword = _formData['password']!;
-                  existingUser.setGroupName = _formData['groupName']!;
-                  //existingUser.avatarUrl = _formData['avatarUrl'];
                   userProvider.notifyListeners();
                 } else {
 //if user doesn't exists yet, creat new user
@@ -70,8 +66,6 @@ class _UserFormState extends State<UserForm> {
                     name: _formData['name']!,
                     email: _formData['email']!,
                     password: _formData['password']!,
-                    groupName: _formData['groupName']!,
-                    //avatarUrl: _formData['avatarUrl'],
                   );
                   userProvider.put(newUser);
                   userProvider.notifyListeners();
@@ -112,12 +106,6 @@ class _UserFormState extends State<UserForm> {
                 initialValue: _formData['password'],
                 decoration: const InputDecoration(labelText: 'Password'),
                 onSaved: (value) => _formData['password'] = value!,
-              ),
-//GroupName field
-              TextFormField(
-                initialValue: _formData['groupName'],
-                decoration: const InputDecoration(labelText: 'Group Name'),
-                onSaved: (value) => _formData['groupName'] = value!,
               ),
             ],
           ),

@@ -46,7 +46,6 @@ class UsersProvider extends ChangeNotifier {
                 name: user.name,
                 email: user.email,
                 password: user.password,
-                groupName: user.groupName,
                 avatarUrl: user.avatarUrl,
               ));
     }

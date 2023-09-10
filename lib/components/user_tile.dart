@@ -29,7 +29,7 @@ class UserTile extends StatelessWidget {
             color: Colors.black12,
             onPressed: () {
               Navigator.of(context).pushNamed(
-                AppRoutes.USER_FORM,
+                AppRoutes.POSTS_FORM,
                 arguments: user,
               );
             },

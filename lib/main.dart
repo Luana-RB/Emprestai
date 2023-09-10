@@ -1,16 +1,20 @@
 import 'package:appteste/home/ui/home_page.dart';
+import 'package:appteste/provider/posts_provider.dart';
 import 'package:appteste/provider/users_provider.dart';
 import 'package:appteste/routes/app_routes.dart';
-import 'package:appteste/views/user_form.dart';
-import 'package:appteste/views/user_list.dart';
+import 'package:appteste/views/posts_form.dart';
+import 'package:appteste/views/posts_list.dart';
+//import 'package:appteste/views/user_form.dart';
+//import 'package:appteste/views/user_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+//import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-//import 'pages/perguntas.dart';
-//import 'home/ui/home_page.dart';
-//import './appbar.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -23,6 +27,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<UsersProvider>(
           create: (ctx) => UsersProvider(),
+        ),
+        ChangeNotifierProvider<PostsProvider>(
+          create: (ctx) => PostsProvider(),
         )
       ],
       child: MaterialApp(
@@ -33,9 +40,8 @@ class MyApp extends StatelessWidget {
         ),
         home: const MyHomePage(),
         routes: {
-          //AppRoutes.HOME: (context) => const MyHomePage(),
-          AppRoutes.USER_LIST: (context) => const UserList(),
-          AppRoutes.USER_FORM: (_) => const UserForm(),
+          AppRoutes.POSTS_LIST: (context) => const PostsList(),
+          AppRoutes.POSTS_FORM: (_) => const PostsForm(),
         },
         debugShowCheckedModeBanner: false,
       ),

@@ -1,10 +1,9 @@
 
 import 'package:appteste/appbar.dart';
 import 'package:appteste/routes/app_routes.dart';
+import 'package:appteste/views/posts_list.dart';
 import 'package:flutter/material.dart';
 import 'package:appteste/navigationbar.dart';
-//import 'package:appteste/main.dart';
-//import 'package:appteste/routes/app_routes.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -24,7 +23,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
     switch (index) {
       case 0:
-        Navigator.of(context).pushNamed('/user-list');
+        Navigator.of(context).pushNamed('/posts-list');
         break;
       case 1:
         Navigator.of(context).pushNamed('/');
@@ -58,15 +57,11 @@ class _MyHomePageState extends State<MyHomePage> {
       selectedIndex: _selectedIndex,
       onItemTapped: onTap,
       ),
-      body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-        ),
-      ),
+      body: const PostsList(),
       floatingActionButton: FloatingActionButton(
         focusColor: Colors.amberAccent,
         onPressed: () {
-          Navigator.of(context).pushNamed(AppRoutes.USER_LIST);
+          Navigator.of(context).pushNamed(AppRoutes.POSTS_FORM, arguments: null);
         },
         child: const Icon(Icons.add),
       ),
