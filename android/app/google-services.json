@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "283485336844",
+    "project_id": "emprestai-5a926",
+    "storage_bucket": "emprestai-5a926.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:283485336844:android:2308a4bc9d29a242f60529",
+        "android_client_info": {
+          "package_name": "com.example.appteste"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtwuerj41IxLnZTTELWIXHTpmPN1W5n2c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
