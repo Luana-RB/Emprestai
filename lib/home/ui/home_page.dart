@@ -1,4 +1,3 @@
-
 import 'package:appteste/appbar.dart';
 import 'package:appteste/routes/app_routes.dart';
 import 'package:appteste/views/posts_list.dart';
@@ -17,13 +16,13 @@ class _MyHomePageState extends State<MyHomePage> {
   final scrollController = ScrollController();
   int _selectedIndex = 1;
 
-  void onTap(int index)  {
+  void onTap(int index) {
     setState(() {
       _selectedIndex = index;
     });
     switch (index) {
       case 0:
-        Navigator.of(context).pushNamed('/posts-list');
+        Navigator.of(context).pushNamed('/profile-page');
         break;
       case 1:
         Navigator.of(context).pushNamed('/');
@@ -54,14 +53,15 @@ class _MyHomePageState extends State<MyHomePage> {
           preferredSize: Size.fromHeight(50), child: AppBarPage(title: title)),
       drawer: const MyDrawer(),
       bottomNavigationBar: CustomBottomNavigationBar(
-      selectedIndex: _selectedIndex,
-      onItemTapped: onTap,
+        selectedIndex: _selectedIndex,
+        onItemTapped: onTap,
       ),
       body: const PostsList(),
       floatingActionButton: FloatingActionButton(
         focusColor: Colors.amberAccent,
         onPressed: () {
-          Navigator.of(context).pushNamed(AppRoutes.POSTS_FORM, arguments: null);
+          Navigator.of(context)
+              .pushNamed(AppRoutes.POSTS_FORM, arguments: null);
         },
         child: const Icon(Icons.add),
       ),

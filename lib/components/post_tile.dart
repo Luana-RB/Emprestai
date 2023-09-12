@@ -17,20 +17,22 @@ class PostTile extends StatelessWidget {
           width: 500,
           //decoration: BoxDecoration(
           //border: Border.all(
-            //color: Colors.pinkAccent,
-            //width: 5.0,
+          //color: Colors.pinkAccent,
+          //width: 5.0,
           //),
-        //),
+          //),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center, 
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
                 height: 50,
-                decoration: const BoxDecoration(color: Colors.pinkAccent,),
+                decoration: const BoxDecoration(
+                  color: Colors.pinkAccent,
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    //Título
+//Título
                     Text(
                       post.title.toString(),
                       textAlign: TextAlign.left,
@@ -40,16 +42,7 @@ class PostTile extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Text(
-                      post.id.toString(),
-                      textAlign: TextAlign.left,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    //Autor
+//Autor
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Row(
@@ -68,14 +61,17 @@ class PostTile extends StatelessWidget {
                           ),
                         ],
                       ),
-                    ), IconButton(
-            icon: const Icon(Icons.edit),
-            color: Colors.black12,
-            onPressed: () {
-              Navigator.of(context).pushNamed(
-                AppRoutes.POSTS_FORM,
-                arguments: post,
-              );},)
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.edit),
+                      color: Colors.black12,
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(
+                          AppRoutes.POSTS_FORM,
+                          arguments: post,
+                        );
+                      },
+                    )
                   ],
                 ),
               ),
@@ -91,16 +87,17 @@ class PostTile extends StatelessWidget {
                       fit: BoxFit.cover,
                     ),
                   ),
-              const SizedBox(height: 10),
-               Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Text(
-                    post.description.toString(),
-                    softWrap: true, // Permite que o texto seja quebrado automaticamente
+                  const SizedBox(height: 10),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Text(
+                        post.description.toString(),
+                        softWrap:
+                            true, // Permite que o texto seja quebrado automaticamente
+                      ),
+                    ),
                   ),
-                ),
-              ),
                 ],
               ),
               const SizedBox(height: 10),

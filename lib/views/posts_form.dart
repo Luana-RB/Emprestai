@@ -1,4 +1,3 @@
-
 // ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
 
 import 'package:appteste/models/posts/post_generico.dart';
@@ -21,31 +20,33 @@ class _PostsFormState extends State<PostsForm> {
   void _loadFormaData(Post post) {
     _formData['id'] = post.id!;
     _formData['title'] = post.title!;
-    _formData['status'] = post.status!;
+    //_formData['status'] = post.status!;
     _formData['imageUrl'] = post.imageUrl!;
     _formData['description'] = post.description!;
     _formData['creatorName'] = post.creatorName!;
     _formData['creatorProfileLink'] = post.creatorProfileLink!;
-    _formData['creatorImageUrl'] = post.creatorImageUrl!;
-    _formData['ownerName'] = post.ownerName!;
-    _formData['ownerProfileLink'] = post.ownerProfileLink!;
-    _formData['ownerImageUrl'] = post.ownerImageUrl!;
+    // _formData['creatorImageUrl'] = post.creatorImageUrl!;
+    // _formData['ownerName'] = post.ownerName!;
+    //_formData['ownerProfileLink'] = post.ownerProfileLink!;
+    //_formData['ownerImageUrl'] = post.ownerImageUrl!;
     _formData['dateOfLending'] = post.dateOfLending!;
-    _formData['dateOfReturning'] = post.dateOfReturning!;
+    //_formData['dateOfReturning'] = post.dateOfReturning!;
   }
-   @override
+
+  @override
   void didChangeDependencies() {
     final post = ModalRoute.of(context)?.settings.arguments as Post?;
-    if(post != null){
+    if (post != null) {
       _loadFormaData(post);
     } else {
-      _formData.clear();}
+      _formData.clear();
+    }
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-     const title = 'Create a Post';
+    const title = 'Create a Post';
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -65,14 +66,15 @@ class _PostsFormState extends State<PostsForm> {
                 final existingPost = postProvider.findById(_formData['id']!);
 //Update user's data
                 if (existingPost != null) {
+                  existingPost.setId = _formData['id']!;
                   existingPost.setTitle = _formData['title']!;
                   existingPost.setImageUrl = _formData['imageUrl']!;
                   existingPost.setDescription = _formData['description']!;
-                  existingPost.setCreatorImageUrl = _formData['creatorImageUrl']!;
+                  //existingPost.setCreatorImageUrl =_formData['creatorImageUrl']!;
                   existingPost.setCreatorName = _formData['creatorName']!;
-                 // existingPost.setOwnerName= _formData['ownerName']!;
-                 // existingPost.setOwnerProfileLink = _formData['ownerProfileLink']!;
-                 // existingPost.setOwnerImageUrl = _formData['ownerImageUrl']!;
+                  // existingPost.setOwnerName= _formData['ownerName']!;
+                  // existingPost.setOwnerProfileLink = _formData['ownerProfileLink']!;
+                  // existingPost.setOwnerImageUrl = _formData['ownerImageUrl']!;
                   existingPost.setDateOfLending = _formData['dateOfLending']!;
                   //existingPost.setDateOfReturning = _formData['dateOfReturning']!;
                   //existingPost.setStatus= _formData['status']!;
@@ -80,19 +82,19 @@ class _PostsFormState extends State<PostsForm> {
                 } else {
 //if user doesn't exists yet, creat new user
                   final newPost = Post(
-                    // id: _formData['id'],
-                     title:  _formData['title'],
+                    id: _formData['id'],
+                    title: _formData['title'],
                     // status: _formData['status'],
-                     imageUrl: _formData['imageUrl'],
-                     description: _formData['description'],
-                     creatorName: _formData['creatorName'],
-                     creatorProfileLink: _formData['creatorProfileLink'],
-                     //creatorImageUrl: _formData['creatorImageUrl'],
-                     //ownerName: _formData['ownerName'],
-                     //ownerProfileLink:  _formData['ownerProfileLink'],
-                     //ownerImageUrl: _formData['ownerImageUrl'],
-                     dateOfLending: _formData['dateOfLending'],
-                     //dateOfReturning: _formData['dateOfReturning'],
+                    imageUrl: _formData['imageUrl'],
+                    description: _formData['description'],
+                    creatorName: _formData['creatorName'],
+                    creatorProfileLink: _formData['creatorProfileLink'],
+                    //creatorImageUrl: _formData['creatorImageUrl'],
+                    //ownerName: _formData['ownerName'],
+                    //ownerProfileLink:  _formData['ownerProfileLink'],
+                    //ownerImageUrl: _formData['ownerImageUrl'],
+                    dateOfLending: _formData['dateOfLending'],
+                    //dateOfReturning: _formData['dateOfReturning'],
                   );
                   postProvider.put(newPost);
                   postProvider.notifyListeners();
@@ -111,6 +113,11 @@ class _PostsFormState extends State<PostsForm> {
           child: Column(
             children: [
 //Name field
+              TextFormField(
+                initialValue: _formData['id'],
+                decoration: const InputDecoration(labelText: 'id'),
+                onSaved: (value) => _formData['id'] = value!,
+              ),
               TextFormField(
                 initialValue: _formData['title'],
                 decoration: const InputDecoration(labelText: 'Title'),
@@ -142,7 +149,8 @@ class _PostsFormState extends State<PostsForm> {
               ),
               TextFormField(
                 initialValue: _formData['creatorProfileLink'],
-                decoration: const InputDecoration(labelText: 'creatorProfileLink'),
+                decoration:
+                    const InputDecoration(labelText: 'creatorProfileLink'),
                 onSaved: (value) => _formData['creatorProfileLink'] = value!,
               ),
               TextFormField(
@@ -156,4 +164,4 @@ class _PostsFormState extends State<PostsForm> {
       ),
     );
   }
-  }
+}

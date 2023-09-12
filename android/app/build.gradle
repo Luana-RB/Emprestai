@@ -23,6 +23,9 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+
 android {
     namespace "com.example.appteste"
     compileSdkVersion flutter.compileSdkVersion
@@ -76,3 +79,5 @@ dependencies {
   // Add the dependencies for any other desired Firebase products
   // https://firebase.google.com/docs/android/setup#available-libraries
 }
+
+apply plugin: 'com.google.gms.google-services'
