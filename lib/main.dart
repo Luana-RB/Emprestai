@@ -2,13 +2,11 @@ import 'package:appteste/home/ui/home_page.dart';
 import 'package:appteste/provider/posts_provider.dart';
 import 'package:appteste/provider/users_provider.dart';
 import 'package:appteste/routes/app_routes.dart';
-import 'package:appteste/views/login_page.dart';
 import 'package:appteste/views/posts_form.dart';
 import 'package:appteste/views/posts_list.dart';
 import 'package:appteste/views/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   runApp(const MyApp());

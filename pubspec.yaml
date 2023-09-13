@@ -36,10 +36,9 @@ dependencies:
   camera: ^0.10.5+3
   path_provider: ^2.1.0
   path: ^1.8.3
-  firebase_auth: ^4.9.0
-  firebase_core: ^2.15.1
-  cloud_firestore: ^4.9.1
   url_launcher: ^6.0.12
+  image_cropper: ^5.0.0
+  image_picker: ^1.0.4
 
 dev_dependencies:
   flutter_test:
