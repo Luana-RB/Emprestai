@@ -1,13 +1,16 @@
 import 'package:appteste/appbar.dart';
+import 'package:appteste/home/ui/home_page.dart';
 import 'package:appteste/image_helper.dart';
 import 'package:appteste/navigationbar.dart';
+import 'package:appteste/views/chat_selection_page.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
 class MyProfilePage extends StatefulWidget {
-  const MyProfilePage({super.key});
+  const MyProfilePage({Key? key, this.nomeUsuario}) : super(key: key);
+  final String? nomeUsuario;
 
   @override
   State<MyProfilePage> createState() => _MyProfilePageState();
@@ -23,20 +26,36 @@ class _MyProfilePageState extends State<MyProfilePage> {
     });
     switch (index) {
       case 0:
-        Navigator.of(context).pushNamed('/profile-page');
-        break;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                MyProfilePage(nomeUsuario: widget.nomeUsuario),
+          ),
+        );
       case 1:
-        Navigator.of(context).pushNamed('/home-page');
-        break;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MyHomePage(nomeUsuario: widget.nomeUsuario),
+          ),
+        );
       case 2:
-        Navigator.of(context).pushNamed('/chat-selection');
-        break;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                ChatSelectionPage(nomeUsuario: widget.nomeUsuario),
+          ),
+        );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     String title = "Usuário";
+    String nome = (widget.nomeUsuario).toString();
+
     return Scaffold(
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(50),
@@ -46,36 +65,47 @@ class _MyProfilePageState extends State<MyProfilePage> {
         selectedIndex: _selectedIndex,
         onItemTapped: onTap,
       ),
-      body: const Center(
+      body: Center(
         child: Column(
           children: [
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
 //Profile Image
             Padding(
-                padding: EdgeInsets.all(8.0),
-                child: ProfilePicture(initials: "LP")),
-            SizedBox(height: 10),
+                padding: const EdgeInsets.all(8.0),
+                child: ProfilePicture(initials: (nome[0].toUpperCase()))),
+            const SizedBox(height: 10),
 //Name
             Text(
-              'Nome do Usuário',
-              style: TextStyle(fontSize: 20),
+              nome,
+              style: const TextStyle(fontSize: 20),
               softWrap: true,
             ),
-            Row(
-              children: [
-//Email
-                Expanded(
-                  child: Text(
-                    'Email do Usuário',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.black38,
-                    ),
-                    softWrap: true,
+            const SizedBox(height: 100),
+            Container(
+              width: 250,
+              height: 100,
+              decoration: BoxDecoration(
+                color: Colors.pinkAccent, // Cor de fundo do Container
+                borderRadius: BorderRadius.circular(10.0), // Borda arredondada
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5), // Sombra
+                    spreadRadius: 2,
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Center(
+                child: TextButton(
+                  onPressed: () {},
+                  child: const Text(
+                    'Pasta de Empréstimos',
+                    style: TextStyle(fontSize: 20),
                   ),
                 ),
-              ],
-            ),
+              ),
+            )
           ],
         ),
       ),

@@ -1,5 +1,4 @@
-import 'dart:io';
-//import 'package:flutter/foundation.dart';
+import 'package:appteste/views/login_page.dart';
 import 'package:flutter/material.dart';
 
 class AppBarPage extends StatelessWidget {
@@ -58,7 +57,12 @@ class MyDrawer extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: TextButton(
                   onPressed: () {
-                    Navigator.of(context).pushNamed('/');
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LoginPage(),
+                      ),
+                    );
                   },
                   child: const Text('Sair',
                       style: TextStyle(

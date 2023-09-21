@@ -1,4 +1,6 @@
 import 'package:appteste/data/dummy_users.dart';
+import 'package:appteste/home/ui/home_page.dart';
+import 'package:appteste/models/user/user.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -9,6 +11,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  User? userLog;
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final TextEditingController emailController = TextEditingController();
@@ -17,6 +21,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
+    userLog = null;
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
@@ -65,11 +70,11 @@ class _LoginPageState extends State<LoginPage> {
                         return ('Senha não válida');
                       }
 
-                      final user = dummyUsers.values.firstWhere(
+                      userLog = dummyUsers.values.firstWhere(
                         (user) => user.email == emailController.text,
                       );
 
-                      if (user.password == value) {
+                      if (userLog?.password == value) {
                         return null; // Senha válida
                       } else {
                         return 'Senha incorreta';
@@ -88,8 +93,17 @@ class _LoginPageState extends State<LoginPage> {
 // Botão de Login
             ElevatedButton(
               onPressed: () {
+                userLog = dummyUsers.values.firstWhere(
+                  (user) => user.email == emailController.text,
+                );
                 if (_formKey.currentState!.validate()) {
-                  Navigator.of(context).pushNamed('/home-page');
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          MyHomePage(nomeUsuario: userLog?.name),
+                    ),
+                  );
                 }
               },
               child: const Text('Login'),

@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.pinkAccent),
           useMaterial3: true,
         ),
-        home: LoginPage(),
+        home: const MyHomePage(),
         routes: {
           AppRoutes.POSTS_LIST: (context) => const PostsList(),
           AppRoutes.POSTS_FORM: (_) => const PostsForm(),

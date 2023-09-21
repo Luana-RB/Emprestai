@@ -1,13 +1,15 @@
 import 'package:appteste/appbar.dart';
 import 'package:appteste/components/chat_tile.dart';
+import 'package:appteste/home/ui/home_page.dart';
 import 'package:appteste/navigationbar.dart';
 import 'package:appteste/provider/chat_users_provider.dart';
+import 'package:appteste/views/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ChatSelectionPage extends StatefulWidget {
-  const ChatSelectionPage({super.key});
-
+  const ChatSelectionPage({super.key, this.nomeUsuario});
+  final String? nomeUsuario;
   @override
   State<ChatSelectionPage> createState() => _ChatSelectionPageState();
 }
@@ -22,14 +24,28 @@ class _ChatSelectionPageState extends State<ChatSelectionPage> {
     });
     switch (index) {
       case 0:
-        Navigator.of(context).pushNamed('/profile-page');
-        break;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                MyProfilePage(nomeUsuario: widget.nomeUsuario),
+          ),
+        );
       case 1:
-        Navigator.of(context).pushNamed('/home-page');
-        break;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MyHomePage(nomeUsuario: widget.nomeUsuario),
+          ),
+        );
       case 2:
-        Navigator.of(context).pushNamed('/chat-selection');
-        break;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                ChatSelectionPage(nomeUsuario: widget.nomeUsuario),
+          ),
+        );
     }
   }
 

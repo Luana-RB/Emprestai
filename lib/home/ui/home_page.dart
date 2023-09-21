@@ -1,11 +1,14 @@
 import 'package:appteste/appbar.dart';
 import 'package:appteste/routes/app_routes.dart';
+import 'package:appteste/views/chat_selection_page.dart';
 import 'package:appteste/views/posts_list.dart';
+import 'package:appteste/views/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:appteste/navigationbar.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+  const MyHomePage({super.key, this.nomeUsuario});
+  final String? nomeUsuario;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -21,14 +24,28 @@ class _MyHomePageState extends State<MyHomePage> {
     });
     switch (index) {
       case 0:
-        Navigator.of(context).pushNamed('/profile-page');
-        break;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                MyProfilePage(nomeUsuario: widget.nomeUsuario),
+          ),
+        );
       case 1:
-        Navigator.of(context).pushNamed('/home-page');
-        break;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MyHomePage(nomeUsuario: widget.nomeUsuario),
+          ),
+        );
       case 2:
-        Navigator.of(context).pushNamed('/chat-selection');
-        break;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                ChatSelectionPage(nomeUsuario: widget.nomeUsuario),
+          ),
+        );
     }
   }
 
