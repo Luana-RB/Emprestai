@@ -11,7 +11,6 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-//counter de clicks
 class _MyHomePageState extends State<MyHomePage> {
   final scrollController = ScrollController();
   int _selectedIndex = 1;
@@ -25,24 +24,18 @@ class _MyHomePageState extends State<MyHomePage> {
         Navigator.of(context).pushNamed('/profile-page');
         break;
       case 1:
-        Navigator.of(context).pushNamed('/');
+        Navigator.of(context).pushNamed('/home-page');
         break;
       case 2:
-        Navigator.of(context).pushNamed('/user-form');
+        Navigator.of(context).pushNamed('/chat-selection');
         break;
     }
   }
-  //late final HomeController _homeController;
 
   @override
   void initState() {
     super.initState();
-    //messages = Messages.of(context);
-    //_homeController = context.read<HomeController>();
-    //_homeController.initItems(messages);
-    scrollController.addListener(() {
-      //_homeController.pagination(scrollController);
-    });
+    scrollController.addListener(() {});
   }
 
   @override

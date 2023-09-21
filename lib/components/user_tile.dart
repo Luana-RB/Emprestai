@@ -1,7 +1,6 @@
 import 'package:appteste/models/user/user.dart';
 import 'package:appteste/provider/users_provider.dart';
 import 'package:appteste/routes/app_routes.dart';
-//import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,7 +10,6 @@ class UserTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //final UsersProvider users = Provider.of(context);
     final avatar = user.avatarUrl == null || user.avatarUrl!.isEmpty
         ? const CircleAvatar(child: Icon(Icons.person_2))
         : CircleAvatar(backgroundImage: NetworkImage(user.avatarUrl!));

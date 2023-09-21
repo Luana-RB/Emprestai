@@ -1,10 +1,11 @@
 import 'dart:math';
-import 'package:appteste/data/dummy_users.dart';
-import 'package:appteste/models/user/user.dart';
-import 'package:flutter/foundation.dart';
 
-class UsersProvider extends ChangeNotifier {
-  final Map<String, User> _items = {...dummyUsers};
+import 'package:appteste/data/dummy_chat_users.dart';
+import 'package:appteste/models/user/user.dart';
+import 'package:flutter/material.dart';
+
+class ChatUsersProvider extends ChangeNotifier {
+  final Map<String, User> _items = {...dummyChatUsers};
 //retorna os valores
   List<User> get all {
     return [..._items.values];

@@ -1,10 +1,27 @@
+import 'package:appteste/data/dummy_users.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   final TextEditingController emailController = TextEditingController();
+
   final TextEditingController passwordController = TextEditingController();
 
-  LoginPage({super.key});
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,36 +32,64 @@ class LoginPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
 // Adicionando o Logotipo
-            Center(
-              child: Image.asset('assets/logo.png', height: 100.0),
-            ),
             const SizedBox(height: 20),
+            Form(
+              key: _formKey,
+              child: Column(
+                children: [
 // Campo do Usuário
-            TextFormField(
-              controller: emailController,
-              decoration: const InputDecoration(
-                labelText: 'Usuário',
-                prefixIcon: Icon(Icons.person),
-              ),
-            ),
-            const SizedBox(height: 10),
+                  TextFormField(
+                    controller: emailController,
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return ('Usuário não válido');
+                      }
+                      if (dummyUsers.values
+                          .any((user) => user.email == value)) {
+                        return null;
+                      } else {
+                        return ('Usuário não existe');
+                      }
+                    },
+                    decoration: const InputDecoration(
+                      labelText: 'Email',
+                      prefixIcon: Icon(Icons.person),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
 // Campo da Senha
-            TextFormField(
-              controller: passwordController,
-              obscureText: true,
-              decoration: const InputDecoration(
-                labelText: 'Senha',
-                prefixIcon: Icon(Icons.lock),
+                  TextFormField(
+                    controller: passwordController,
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return ('Senha não válida');
+                      }
+
+                      final user = dummyUsers.values.firstWhere(
+                        (user) => user.email == emailController.text,
+                      );
+
+                      if (user.password == value) {
+                        return null; // Senha válida
+                      } else {
+                        return 'Senha incorreta';
+                      }
+                    },
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                      labelText: 'Senha',
+                      prefixIcon: Icon(Icons.lock),
+                    ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 20),
 // Botão de Login
             ElevatedButton(
-              onPressed: () async {
-                try {
-// Redirecionar para a tela de boas-vindas
-                } catch (e) {
-// Tratar erros
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  Navigator.of(context).pushNamed('/home-page');
                 }
               },
               child: const Text('Login'),

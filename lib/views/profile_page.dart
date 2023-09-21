@@ -23,13 +23,13 @@ class _MyProfilePageState extends State<MyProfilePage> {
     });
     switch (index) {
       case 0:
-        Navigator.of(this.context).pushNamed('/profile-page');
+        Navigator.of(context).pushNamed('/profile-page');
         break;
       case 1:
-        Navigator.of(this.context).pushNamed('/');
+        Navigator.of(context).pushNamed('/home-page');
         break;
       case 2:
-        Navigator.of(this.context).pushNamed('/user-form');
+        Navigator.of(context).pushNamed('/chat-selection');
         break;
     }
   }

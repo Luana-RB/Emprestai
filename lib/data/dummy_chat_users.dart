@@ -1,6 +1,6 @@
 import 'package:appteste/models/user/user.dart';
 
-Map<String, User> dummyUsers = {
+Map<String, User> dummyChatUsers = {
   '1': User(
     id: '1',
     name: 'Maria',
@@ -13,13 +13,6 @@ Map<String, User> dummyUsers = {
     name: 'Luana',
     email: 'lrbassanesi@ucs.br',
     password: 'password',
-    avatarUrl: null,
-  ),
-  '3': User(
-    id: '3',
-    name: 'Matheus',
-    email: 'teste',
-    password: 'senha',
     avatarUrl: null,
   ),
 };
