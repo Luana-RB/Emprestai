@@ -2,6 +2,8 @@ import 'package:appteste/data/dummy_users.dart';
 import 'package:appteste/home/ui/home_page.dart';
 import 'package:appteste/models/user/user.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:async';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -92,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(height: 20),
 // Botão de Login
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 userLog = dummyUsers.values.firstWhere(
                   (user) => user.email == emailController.text,
                 );
@@ -105,6 +107,8 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   );
                 }
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                await prefs.setBool('isLoggedIn', true);
               },
               child: const Text('Login'),
             ),

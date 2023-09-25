@@ -4,8 +4,9 @@ import 'package:appteste/provider/posts_provider.dart';
 import 'package:appteste/provider/users_provider.dart';
 import 'package:appteste/routes/app_routes.dart';
 import 'package:appteste/views/chat_page.dart';
-import 'package:appteste/views/login_page.dart';
+//import 'package:appteste/views/login_page.dart';
 import 'package:appteste/views/chat_selection_page.dart';
+import 'package:appteste/views/login_page.dart';
 import 'package:appteste/views/posts_form.dart';
 import 'package:appteste/views/posts_list.dart';
 import 'package:appteste/views/profile_page.dart';
@@ -19,11 +20,17 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
-
   final FluroRouter router = FluroRouter();
 
   @override
   Widget build(BuildContext context) {
+    bool isUserLog = false;
+    StatefulWidget path;
+    if (isUserLog = true) {
+      path = const LoginPage();
+    } else {
+      path = const MyHomePage();
+    }
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<UsersProvider>(
@@ -42,7 +49,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.pinkAccent),
           useMaterial3: true,
         ),
-        home: const MyHomePage(),
+        home: MyHomePage(),
         routes: {
           AppRoutes.POSTS_LIST: (context) => const PostsList(),
           AppRoutes.POSTS_FORM: (_) => const PostsForm(),
