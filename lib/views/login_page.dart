@@ -3,7 +3,6 @@ import 'package:appteste/home/ui/home_page.dart';
 import 'package:appteste/models/user/user.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:async';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -95,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
 // Botão de Login
             ElevatedButton(
               onPressed: () async {
-                userLog = dummyUsers.values.firstWhere(
+                userLog ??= dummyUsers.values.firstWhere(
                   (user) => user.email == emailController.text,
                 );
                 if (_formKey.currentState!.validate()) {

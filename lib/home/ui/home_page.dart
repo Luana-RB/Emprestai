@@ -66,7 +66,9 @@ class _MyHomePageState extends State<MyHomePage> {
         selectedIndex: _selectedIndex,
         onItemTapped: onTap,
       ),
-      body: const PostsList(),
+      body: PostsList(
+        nomeUsuario: widget.nomeUsuario.toString(),
+      ),
       floatingActionButton: FloatingActionButton(
         focusColor: Colors.amberAccent,
         onPressed: () {

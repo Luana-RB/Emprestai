@@ -1,5 +1,6 @@
 import 'package:appteste/views/login_page.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AppBarPage extends StatelessWidget {
   const AppBarPage({super.key, required this.title});
@@ -47,22 +48,27 @@ class MyDrawer extends StatelessWidget {
                   ),
                 ),
               ),
+//Configurações
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: IconButton(
                     onPressed: () {},
                     icon: const Icon(Icons.settings, size: 40)),
               ),
+//Sair
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextButton(
-                  onPressed: () {
+                  onPressed: () async {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                         builder: (context) => const LoginPage(),
                       ),
                     );
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    await prefs.setBool('isLoggedIn', false);
                   },
                   child: const Text('Sair',
                       style: TextStyle(

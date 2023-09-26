@@ -4,7 +4,6 @@ import 'package:appteste/provider/posts_provider.dart';
 import 'package:appteste/provider/users_provider.dart';
 import 'package:appteste/routes/app_routes.dart';
 import 'package:appteste/views/chat_page.dart';
-//import 'package:appteste/views/login_page.dart';
 import 'package:appteste/views/chat_selection_page.dart';
 import 'package:appteste/views/login_page.dart';
 import 'package:appteste/views/posts_form.dart';
@@ -13,24 +12,22 @@ import 'package:appteste/views/profile_page.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
-  runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+  runApp(MyApp(isLoggedIn: isLoggedIn));
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
+  final bool isLoggedIn;
+  MyApp({super.key, required this.isLoggedIn});
   final FluroRouter router = FluroRouter();
 
   @override
   Widget build(BuildContext context) {
-    bool isUserLog = false;
-    StatefulWidget path;
-    if (isUserLog = true) {
-      path = const LoginPage();
-    } else {
-      path = const MyHomePage();
-    }
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<UsersProvider>(
@@ -49,7 +46,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.pinkAccent),
           useMaterial3: true,
         ),
-        home: MyHomePage(),
+        home: isLoggedIn ? const MyHomePage() : const LoginPage(),
         routes: {
           AppRoutes.POSTS_LIST: (context) => const PostsList(),
           AppRoutes.POSTS_FORM: (_) => const PostsForm(),

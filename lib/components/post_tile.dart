@@ -4,8 +4,9 @@ import 'package:appteste/views/post_page.dart';
 import 'package:flutter/material.dart';
 
 class PostTile extends StatelessWidget {
-  const PostTile({super.key, required this.post});
+  const PostTile({super.key, required this.post, required this.nomeUsuario});
   final Post post;
+  final String? nomeUsuario;
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +25,6 @@ class PostTile extends StatelessWidget {
     }
     return InkWell(
       onTap: () {
-        // Implemente a ação que deve ocorrer quando o PostTile for clicado.
-        // Por exemplo, navegar para a página de detalhes do post.
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -67,16 +66,19 @@ class PostTile extends StatelessWidget {
                       ),
                       const SizedBox(width: 150),
 //Edição
-                      IconButton(
-                        icon: const Icon(Icons.edit),
-                        color: Colors.white30,
-                        onPressed: () {
-                          Navigator.of(context).pushNamed(
-                            AppRoutes.POSTS_FORM,
-                            arguments: post,
-                          );
-                        },
-                      )
+                      Visibility(
+                        visible: nomeUsuario == post.creatorName,
+                        child: IconButton(
+                          icon: const Icon(Icons.edit),
+                          color: Colors.white30,
+                          onPressed: () {
+                            Navigator.of(context).pushNamed(
+                              AppRoutes.POSTS_FORM,
+                              arguments: post,
+                            );
+                          },
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -108,7 +110,7 @@ class PostTile extends StatelessWidget {
                         width: 170,
                         height: 200,
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Expanded(
@@ -120,7 +122,7 @@ class PostTile extends StatelessWidget {
 
 // Nome do criador
                             Align(
-                              alignment: Alignment.bottomCenter,
+                              alignment: Alignment.bottomRight,
                               child: InkWell(
                                 onTap: () {},
                                 child: Text(

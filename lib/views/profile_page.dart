@@ -3,6 +3,7 @@ import 'package:appteste/home/ui/home_page.dart';
 import 'package:appteste/image_helper.dart';
 import 'package:appteste/navigationbar.dart';
 import 'package:appteste/views/chat_selection_page.dart';
+import 'package:appteste/views/lending_panel.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_cropper/image_cropper.dart';
@@ -53,13 +54,12 @@ class _MyProfilePageState extends State<MyProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    String title = "Usuário";
-    String nome = (widget.nomeUsuario).toString();
+    String nomeUsuario = (widget.nomeUsuario).toString();
 
     return Scaffold(
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(50),
-          child: AppBarPage(title: title)),
+          child: AppBarPage(title: nomeUsuario)),
       drawer: const MyDrawer(),
       bottomNavigationBar: CustomBottomNavigationBar(
         selectedIndex: _selectedIndex,
@@ -72,11 +72,12 @@ class _MyProfilePageState extends State<MyProfilePage> {
 //Profile Image
             Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: ProfilePicture(initials: (nome[0].toUpperCase()))),
+                child:
+                    ProfilePicture(initials: (nomeUsuario[0].toUpperCase()))),
             const SizedBox(height: 10),
 //Name
             Text(
-              nome,
+              nomeUsuario,
               style: const TextStyle(fontSize: 20),
               softWrap: true,
             ),
@@ -85,11 +86,11 @@ class _MyProfilePageState extends State<MyProfilePage> {
               width: 250,
               height: 100,
               decoration: BoxDecoration(
-                color: Colors.pinkAccent, // Cor de fundo do Container
+                color: Colors.pinkAccent,
                 borderRadius: BorderRadius.circular(10.0), // Borda arredondada
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.5), // Sombra
+                    color: Colors.grey.withOpacity(0.5),
                     spreadRadius: 2,
                     blurRadius: 4,
                     offset: const Offset(0, 2),
@@ -98,9 +99,17 @@ class _MyProfilePageState extends State<MyProfilePage> {
               ),
               child: Center(
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            LendingPanel(nomeUsuario: nomeUsuario),
+                      ),
+                    );
+                  },
                   child: const Text(
-                    'Pasta de Empréstimos',
+                    'Painel de Empréstimos',
                     style: TextStyle(fontSize: 20),
                   ),
                 ),

@@ -41,6 +41,7 @@ dependencies:
   image_picker: ^1.0.4
   fluro: ^2.0.5
   shared_preferences: ^2.2.1
+  localstorage: ^4.0.1+4
 
 
 dev_dependencies:

@@ -23,7 +23,7 @@ Map<String, Post> dummyPosts = {
     title: 'Guirlanda de Natal',
     imageUrl:
         'https://photo-cdn2.icons8.com/PLxdvW6trezV5vS8UZ-UxhL0JDB2GMVXnxNdL19RymE/rs:fit:1608:1072/czM6Ly9pY29uczgu/bW9vc2UtcHJvZC5l/eHRlcm5hbC9hMmE0/Mi8xMjQwYzdjOThi/ZjI0YWQyYjc4YTU2/NGNmMjMyMmQxOC5q/cGc.jpg',
-    description: 'Para decoração',
+    description: 'Para decoração de uma porta de uma casa',
     creatorName: 'Luana',
     creatorProfileLink: 'exemplo',
     //creatorImageUrl: '',

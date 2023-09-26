@@ -10,8 +10,8 @@ class User {
   User({
     this.id,
     required this.name,
-    required this.email,
-    required this.password,
+    this.email,
+    this.password,
     this.avatarUrl,
   });
 
