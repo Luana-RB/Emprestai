@@ -20,7 +20,7 @@ class _PostsFormState extends State<PostsForm> {
   void _loadFormaData(Post post) {
     _formData['id'] = post.id!;
     _formData['title'] = post.title!;
-    //_formData['status'] = post.status!;
+    _formData['status'] = post.status!;
     _formData['imageUrl'] = post.imageUrl!;
     _formData['description'] = post.description!;
     _formData['creatorName'] = post.creatorName!;
@@ -68,6 +68,7 @@ class _PostsFormState extends State<PostsForm> {
                 if (existingPost != null) {
                   existingPost.setId = _formData['id']!;
                   existingPost.setTitle = _formData['title']!;
+                  existingPost.setStatus = _formData['status']!;
                   existingPost.setImageUrl = _formData['imageUrl']!;
                   existingPost.setDescription = _formData['description']!;
                   //existingPost.setCreatorImageUrl =_formData['creatorImageUrl']!;
@@ -77,14 +78,13 @@ class _PostsFormState extends State<PostsForm> {
                   // existingPost.setOwnerImageUrl = _formData['ownerImageUrl']!;
                   existingPost.setDateOfLending = _formData['dateOfLending']!;
                   //existingPost.setDateOfReturning = _formData['dateOfReturning']!;
-                  //existingPost.setStatus= _formData['status']!;
                   postProvider.notifyListeners();
                 } else {
 //if user doesn't exists yet, creat new user
                   final newPost = Post(
                     id: _formData['id'],
                     title: _formData['title'],
-                    // status: _formData['status'],
+                    status: _formData['status'],
                     imageUrl: _formData['imageUrl'],
                     description: _formData['description'],
                     creatorName: _formData['creatorName'],
@@ -112,12 +112,13 @@ class _PostsFormState extends State<PostsForm> {
           key: _form,
           child: Column(
             children: [
-//Name field
+//Id field
               TextFormField(
                 initialValue: _formData['id'],
                 decoration: const InputDecoration(labelText: 'id'),
                 onSaved: (value) => _formData['id'] = value!,
               ),
+//Title field
               TextFormField(
                 initialValue: _formData['title'],
                 decoration: const InputDecoration(labelText: 'Title'),
@@ -129,19 +130,25 @@ class _PostsFormState extends State<PostsForm> {
                 },
                 onSaved: (value) => _formData['title'] = value!,
               ),
-//Email field
+//Status field
+              TextFormField(
+                initialValue: _formData['status'],
+                decoration: const InputDecoration(labelText: 'status'),
+                onSaved: (value) => _formData['status'] = value!,
+              ),
+//Image field
               TextFormField(
                 initialValue: _formData['imageUrl'],
                 decoration: const InputDecoration(labelText: 'imageUrl'),
                 onSaved: (value) => _formData['imageUrl'] = value!,
               ),
-//Password field
+//Description field
               TextFormField(
                 initialValue: _formData['description'],
                 decoration: const InputDecoration(labelText: 'Description'),
                 onSaved: (value) => _formData['description'] = value!,
               ),
-//GroupName field
+//CreatorName field
               TextFormField(
                 initialValue: _formData['creatorName'],
                 decoration: const InputDecoration(labelText: 'Creator Name'),

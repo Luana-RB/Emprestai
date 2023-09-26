@@ -35,6 +35,10 @@ class Post {
     id = newId;
   }
 
+  set setStatus(String newStatus) {
+    status = newStatus;
+  }
+
   set setTitle(String newTitle) {
     title = newTitle;
   }
