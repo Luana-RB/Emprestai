@@ -1,4 +1,4 @@
-import 'package:appteste/home/ui/home_page.dart';
+import 'package:appteste/home/home_page.dart';
 import 'package:appteste/provider/chat_users_provider.dart';
 import 'package:appteste/provider/posts_provider.dart';
 import 'package:appteste/provider/users_provider.dart';

@@ -1,5 +1,5 @@
 import 'package:appteste/appbar.dart';
-import 'package:appteste/home/ui/home_page.dart';
+import 'package:appteste/home/home_page.dart';
 import 'package:appteste/image_helper.dart';
 import 'package:appteste/navigationbar.dart';
 import 'package:appteste/views/chat_selection_page.dart';
@@ -57,6 +57,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
     String nomeUsuario = (widget.nomeUsuario).toString();
 
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 255, 224, 235),
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(50),
           child: AppBarPage(title: nomeUsuario)),
@@ -68,7 +69,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
       body: Center(
         child: Column(
           children: [
-            const SizedBox(height: 10),
+            const SizedBox(height: 40),
 //Profile Image
             Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -81,7 +82,8 @@ class _MyProfilePageState extends State<MyProfilePage> {
               style: const TextStyle(fontSize: 20),
               softWrap: true,
             ),
-            const SizedBox(height: 100),
+            const SizedBox(height: 70),
+//Panel Button
             Container(
               width: 250,
               height: 100,
@@ -122,6 +124,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
   }
 }
 
+//Profile picture getter
 class ProfilePicture extends StatefulWidget {
   const ProfilePicture({super.key, required this.initials});
 
@@ -142,7 +145,7 @@ class _ProfilePictureState extends State<ProfilePicture> {
           child: FittedBox(
             fit: BoxFit.contain,
             child: CircleAvatar(
-              backgroundColor: Colors.grey,
+              backgroundColor: Colors.white.withOpacity(0.5),
               radius: 64,
               foregroundImage: _image != null ? FileImage(_image!) : null,
               child: Text(

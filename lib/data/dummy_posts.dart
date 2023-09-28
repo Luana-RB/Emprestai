@@ -8,7 +8,7 @@ Map<String, Post> dummyPosts = {
     imageUrl:
         'https://photo-cdn2.icons8.com/Hgw_bromz7wCKDs0oanDx4jUp0V5qwAmJgUkCUsgpvs/rs:fit:1613:1072/czM6Ly9pY29uczgu/bW9vc2UtcHJvZC5l/eHRlcm5hbC9hMmE0/Mi84ODA5MDg0MDBk/MzE0MDU5OWQwM2Ji/YzBhYWYwYzQwMi5q/cGc.jpg',
     description: 'Descrição de um anel de plástico com rede',
-    creatorName: 'Maria',
+    creatorName: 'Matheus',
     creatorProfileLink: 'exemplo',
     //creatorImageUrl: 'https://cdn-icons-png.flaticon.com/512/1468/1468166.png',
     //ownerName: 'exemplo',

@@ -1,7 +1,11 @@
 import 'package:appteste/models/posts/post_generico.dart';
+import 'package:appteste/models/user/user.dart';
+import 'package:appteste/provider/posts_provider.dart';
+import 'package:appteste/provider/users_provider.dart';
 import 'package:appteste/routes/app_routes.dart';
 import 'package:appteste/views/post_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PostTile extends StatelessWidget {
   const PostTile({super.key, required this.post, required this.nomeUsuario});
@@ -10,6 +14,10 @@ class PostTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final usersProvider = Provider.of<UsersProvider>(context, listen: false);
+    final User solicitant =
+        usersProvider.all.firstWhere((user) => user.name == post.creatorName);
+    //final User owner = usersProvider.all.firstWhere((user) => user.name == post.ownerName,  orElse: () => null);
     final String status = post.status.toString();
     Color colorName;
     switch (status) {
@@ -28,7 +36,10 @@ class PostTile extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => PostPage(post: post),
+            builder: (context) => PostPage(
+              post: post,
+              solicitant: solicitant,
+            ),
           ),
         );
       },
@@ -54,7 +65,7 @@ class PostTile extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       const SizedBox(width: 10),
-//Título
+//Title
                       Text(
                         post.title.toString(),
                         textAlign: TextAlign.left,
@@ -65,7 +76,7 @@ class PostTile extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 150),
-//Edição
+//Edit
                       Visibility(
                         visible: nomeUsuario == post.creatorName,
                         child: IconButton(
@@ -79,23 +90,34 @@ class PostTile extends StatelessWidget {
                           },
                         ),
                       ),
+//Delete
+                      Visibility(
+                        visible: nomeUsuario == post.creatorName,
+                        child: IconButton(
+                          icon: const Icon(Icons.delete),
+                          color: Colors.white30,
+                          onPressed: () {
+                            Provider.of<PostsProvider>(context, listen: false)
+                                .remove(post);
+                          },
+                        ),
+                      ),
                     ],
                   ),
                 ),
-//Corpo do Post
+//Post Body
                 Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-//Imagem
+//Image
                       Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15.0)),
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(
-                              10.0), // Mesmo valor do Container
+                          borderRadius: BorderRadius.circular(10.0),
                           child: Image.network(
                             post.imageUrl.toString(),
                             width: 280,
@@ -105,7 +127,7 @@ class PostTile extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 15),
-//Descrição
+//Description
                       SizedBox(
                         width: 170,
                         height: 200,
@@ -120,7 +142,7 @@ class PostTile extends StatelessWidget {
                               ),
                             ),
 
-// Nome do criador
+//Creator's name
                             Align(
                               alignment: Alignment.bottomRight,
                               child: InkWell(

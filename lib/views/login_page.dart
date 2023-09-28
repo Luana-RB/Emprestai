@@ -1,5 +1,5 @@
 import 'package:appteste/data/dummy_users.dart';
-import 'package:appteste/home/ui/home_page.dart';
+import 'package:appteste/home/home_page.dart';
 import 'package:appteste/models/user/user.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,9 +15,7 @@ class _LoginPageState extends State<LoginPage> {
   User? userLog;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   final TextEditingController emailController = TextEditingController();
-
   final TextEditingController passwordController = TextEditingController();
 
   @override
@@ -37,13 +35,12 @@ class _LoginPageState extends State<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-// Adicionando o Logotipo
             const SizedBox(height: 20),
             Form(
               key: _formKey,
               child: Column(
                 children: [
-// Campo do Usuário
+//Email Form
                   TextFormField(
                     controller: emailController,
                     validator: (value) {
@@ -63,7 +60,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   const SizedBox(height: 10),
-// Campo da Senha
+//Password Form
                   TextFormField(
                     controller: passwordController,
                     validator: (value) {
@@ -91,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             const SizedBox(height: 20),
-// Botão de Login
+//Login Button
             ElevatedButton(
               onPressed: () async {
                 userLog ??= dummyUsers.values.firstWhere(

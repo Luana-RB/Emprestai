@@ -8,23 +8,29 @@ class PostsProvider extends ChangeNotifier {
   final Map<String, Post> _items = {...dummyPosts};
   final LocalStorage localStorage = LocalStorage('posts.json');
 
-//retorna os valores
+//returns all values
   List<Post> get all {
     return [..._items.values];
   }
 
-//retorna o tamanho
+//returns lenght
   int get count {
     return _items.length;
   }
 
-//retorna o valor baseado no índice
+//returns posts based by their indices
   Post byIndex(int i) {
     return _items.values.elementAt(i);
   }
 
+//returns posts bades by their id
   Post? findById(String id) {
     return _items[id];
+  }
+
+  //returns posts filtered by their status
+  List<Post> filterPostsByStatus(List<Post> posts, String status) {
+    return posts.where((post) => post.status == status).toList();
   }
 
   //verify if user is not null
@@ -32,13 +38,15 @@ class PostsProvider extends ChangeNotifier {
     if (post.id == null) {
       return;
     }
-//if post already exists, it will update it
+
+//if post already exists, updates it
     if (post.id != null &&
         !post.id!.trim().isNotEmpty &&
         _items.containsKey(post.id)) {
       _items.update(post.id!, (_) => post);
     }
-//if post doesn't exists yet, it will creat it
+
+//if post doesn't exists yet, creats it
     else {
       final id = Random().nextDouble().toString();
       _items.putIfAbsent(
@@ -60,6 +68,14 @@ class PostsProvider extends ChangeNotifier {
               ));
     }
     notifyListeners();
+  }
+
+//Deletes posts
+  void remove(Post post) {
+    if (post.id != null) {
+      _items.remove(post.id);
+      notifyListeners();
+    }
   }
 
   Future<void> savePost(Map<String, dynamic> post) async {
@@ -87,12 +103,5 @@ class PostsProvider extends ChangeNotifier {
     // }
 
     return posts;
-  }
-
-  void remove(Post post) {
-    if (post.id != null) {
-      _items.remove(post.id);
-      notifyListeners();
-    }
   }
 }
