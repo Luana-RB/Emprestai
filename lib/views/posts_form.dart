@@ -1,21 +1,25 @@
 // ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
-
 import 'package:appteste/models/posts/post_generico.dart';
 import 'package:appteste/provider/posts_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 class PostsForm extends StatefulWidget {
-  const PostsForm({Key? key}) : super(key: key);
+  const PostsForm({Key? key, required this.nomeUsuario}) : super(key: key);
+  final String nomeUsuario;
 
   @override
   State<PostsForm> createState() => _PostsFormState();
 }
 
+class StatusButtonController {
+  String selectedStatus = 'Solicitado';
+}
+
 class _PostsFormState extends State<PostsForm> {
   final _form = GlobalKey<FormState>();
-  final Map<String, String> _formData = {};
-
+  final Map<String, Object> _formData = {};
 //Load Data
   void _loadFormaData(Post post) {
     _formData['id'] = post.id!;
@@ -29,8 +33,19 @@ class _PostsFormState extends State<PostsForm> {
     // _formData['ownerName'] = post.ownerName!;
     //_formData['ownerProfileLink'] = post.ownerProfileLink!;
     //_formData['ownerImageUrl'] = post.ownerImageUrl!;
-    _formData['dateOfLending'] = post.dateOfLending!;
+    _formData['dateOfLending'] = post.dateOfLending;
     //_formData['dateOfReturning'] = post.dateOfReturning!;
+  }
+
+// Status
+  final StatusButtonController _statusButtonController =
+      StatusButtonController();
+  String selectedStatus = 'Solicitado';
+  late DateTime selectedDate;
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -38,10 +53,27 @@ class _PostsFormState extends State<PostsForm> {
     final post = ModalRoute.of(context)?.settings.arguments as Post?;
     if (post != null) {
       _loadFormaData(post);
+      selectedStatus = _formData['status'].toString();
+      selectedDate = post.dateOfLending;
     } else {
-      _formData.clear();
+      selectedDate = DateTime.now();
     }
     super.didChangeDependencies();
+  }
+//Calendário
+
+  Future<DateTime?> _selectDate(BuildContext context) async {
+    showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2022),
+      lastDate: DateTime(2101), // Ajuste o último ano conforme necessário
+    ).then((value) {
+      setState(() {
+        selectedDate = value!;
+      });
+    });
+    return null;
   }
 
   @override
@@ -63,38 +95,38 @@ class _PostsFormState extends State<PostsForm> {
 //Find User ID
                 final postProvider =
                     Provider.of<PostsProvider>(context, listen: false);
-                final existingPost = postProvider.findById(_formData['id']!);
+                final existingPost =
+                    postProvider.findById(_formData['id']!.toString());
+//Status Controller
+                var selectedStatus = _statusButtonController.selectedStatus;
 //Update user's data
                 if (existingPost != null) {
-                  existingPost.setId = _formData['id']!;
-                  existingPost.setTitle = _formData['title']!;
-                  existingPost.setStatus = _formData['status']!;
-                  existingPost.setImageUrl = _formData['imageUrl']!;
-                  existingPost.setDescription = _formData['description']!;
-                  //existingPost.setCreatorImageUrl =_formData['creatorImageUrl']!;
-                  existingPost.setCreatorName = _formData['creatorName']!;
-                  // existingPost.setOwnerName= _formData['ownerName']!;
-                  // existingPost.setOwnerProfileLink = _formData['ownerProfileLink']!;
-                  // existingPost.setOwnerImageUrl = _formData['ownerImageUrl']!;
-                  existingPost.setDateOfLending = _formData['dateOfLending']!;
-                  //existingPost.setDateOfReturning = _formData['dateOfReturning']!;
+                  selectedStatus = _formData['status'].toString();
+                  existingPost.setId = _formData['id']!.toString();
+                  existingPost.setTitle = _formData['title']!.toString();
+                  existingPost.setStatus = selectedStatus;
+                  existingPost.setImageUrl = _formData['imageUrl']!.toString();
+                  existingPost.setDescription =
+                      _formData['description']!.toString();
+                  existingPost.setCreatorName =
+                      _formData['creatorName']!.toString();
+                  // existingPost.setOwnerName= _formData['ownerName']!.toString();
+                  existingPost.setDateOfLending = selectedDate;
+                  //existingPost.setDateOfReturning = _formData['dateOfReturning']!.toString();
                   postProvider.notifyListeners();
                 } else {
-//if user doesn't exists yet, creat new user
+                  selectedStatus = 'Solicitado';
+//if post doesn't exists yet, creat new post
                   final newPost = Post(
-                    id: _formData['id'],
-                    title: _formData['title'],
-                    status: _formData['status'],
-                    imageUrl: _formData['imageUrl'],
-                    description: _formData['description'],
-                    creatorName: _formData['creatorName'],
-                    creatorProfileLink: _formData['creatorProfileLink'],
-                    //creatorImageUrl: _formData['creatorImageUrl'],
-                    //ownerName: _formData['ownerName'],
-                    //ownerProfileLink:  _formData['ownerProfileLink'],
-                    //ownerImageUrl: _formData['ownerImageUrl'],
-                    dateOfLending: _formData['dateOfLending'],
-                    //dateOfReturning: _formData['dateOfReturning'],
+                    id: _formData['id'].toString(),
+                    title: _formData['title'].toString(),
+                    status: selectedStatus,
+                    imageUrl: _formData['imageUrl'].toString(),
+                    description: _formData['description'].toString(),
+                    creatorName: widget.nomeUsuario.toString(),
+                    //ownerName: _formData['ownerName'].toString(),
+                    dateOfLending: selectedDate,
+                    //dateOfReturning: _formData['dateOfReturning'].toString(),
                   );
                   postProvider.put(newPost);
                   postProvider.notifyListeners();
@@ -114,13 +146,13 @@ class _PostsFormState extends State<PostsForm> {
             children: [
 //Id field
               TextFormField(
-                initialValue: _formData['id'],
+                initialValue: _formData['id'].toString(),
                 decoration: const InputDecoration(labelText: 'id'),
                 onSaved: (value) => _formData['id'] = value!,
               ),
 //Title field
               TextFormField(
-                initialValue: _formData['title'],
+                initialValue: _formData['title'].toString(),
                 decoration: const InputDecoration(labelText: 'Title'),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
@@ -131,40 +163,47 @@ class _PostsFormState extends State<PostsForm> {
                 onSaved: (value) => _formData['title'] = value!,
               ),
 //Status field
-              TextFormField(
-                initialValue: _formData['status'],
-                decoration: const InputDecoration(labelText: 'status'),
+              DropdownButtonFormField<String>(
+                value: selectedStatus,
+                onChanged: (newValue) {
+                  setState(() {
+                    selectedStatus = newValue!;
+                  });
+                },
+                items: ['Solicitado', 'Emprestado', 'Devolvido']
+                    .map<DropdownMenuItem<String>>(
+                      (String value) => DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      ),
+                    )
+                    .toList(),
                 onSaved: (value) => _formData['status'] = value!,
+                decoration: const InputDecoration(
+                  labelText: 'Status',
+                ),
               ),
 //Image field
               TextFormField(
-                initialValue: _formData['imageUrl'],
+                initialValue: _formData['imageUrl'].toString(),
                 decoration: const InputDecoration(labelText: 'imageUrl'),
                 onSaved: (value) => _formData['imageUrl'] = value!,
               ),
 //Description field
               TextFormField(
-                initialValue: _formData['description'],
+                initialValue: _formData['description'].toString(),
                 decoration: const InputDecoration(labelText: 'Description'),
                 onSaved: (value) => _formData['description'] = value!,
               ),
-//CreatorName field
-              TextFormField(
-                initialValue: _formData['creatorName'],
-                decoration: const InputDecoration(labelText: 'Creator Name'),
-                onSaved: (value) => _formData['creatorName'] = value!,
+              TextButton(
+                onPressed: () async {
+                  _selectDate(context);
+                },
+                child: const Text('Selecionar Data de Empréstimo'),
               ),
-              TextFormField(
-                initialValue: _formData['creatorProfileLink'],
-                decoration:
-                    const InputDecoration(labelText: 'creatorProfileLink'),
-                onSaved: (value) => _formData['creatorProfileLink'] = value!,
-              ),
-              TextFormField(
-                initialValue: _formData['dateOfLending'],
-                decoration: const InputDecoration(labelText: 'date Of Lending'),
-                onSaved: (value) => _formData['dateOfLending'] = value!,
-              ),
+              Text(
+                'Data selecionada: ${DateFormat('dd/MM/yyyy').format(selectedDate)}',
+              ) // Exemplo de exibição da data selecionada
             ],
           ),
         ),

@@ -49,11 +49,21 @@ class MyApp extends StatelessWidget {
         home: isLoggedIn ? const MyHomePage() : const LoginPage(),
         routes: {
           AppRoutes.POSTS_LIST: (context) => const PostsList(),
-          AppRoutes.POSTS_FORM: (_) => const PostsForm(),
           AppRoutes.PROFILE_PAGE: (_) => const MyProfilePage(),
           AppRoutes.CHAT_SELECTION: (_) => const ChatSelectionPage(),
           AppRoutes.CHAT_PAGE: (_) => const ChatPage(),
           AppRoutes.HOME: (_) => const MyHomePage(),
+        },
+        onGenerateRoute: (settings) {
+          if (settings.name == AppRoutes.POSTS_FORM) {
+            // Extrai o argumento do nome de usuário
+            final nomeUsuario = settings.arguments as String?;
+            return MaterialPageRoute(
+              builder: (context) =>
+                  PostsForm(nomeUsuario: nomeUsuario.toString()),
+            );
+          }
+          return null;
         },
         debugShowCheckedModeBanner: false,
       ),

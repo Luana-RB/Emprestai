@@ -8,11 +8,11 @@ class Post {
   String? description;
   String? creatorName;
   String? creatorProfileLink;
-  //String? creatorImageUrl;
-  //String? ownerName;
+  String? creatorImageUrl;
+  String? ownerName;
   //String? ownerProfileLink;
-  //String? ownerImageUrl;
-  String? dateOfLending;
+  String? ownerImageUrl;
+  DateTime dateOfLending;
   //String? dateOfReturning;
 
   Post({
@@ -22,11 +22,11 @@ class Post {
     required this.imageUrl,
     required this.description,
     required this.creatorName,
-    required this.creatorProfileLink,
-    //this.creatorImageUrl,
-    //this.ownerName,
+    this.creatorProfileLink,
+    this.creatorImageUrl,
+    this.ownerName,
     //this.ownerProfileLink,
-    //this.ownerImageUrl,
+    this.ownerImageUrl,
     required this.dateOfLending,
     //this.dateOfReturning,
   });
@@ -67,7 +67,7 @@ class Post {
   set setOwnerImageUrl(String newOwnerImageUrl) {
     //ownerImageUrl = newOwnerImageUrl;
   }
-  set setDateOfLending(String newDateOfLending) {
+  set setDateOfLending(DateTime newDateOfLending) {
     dateOfLending = newDateOfLending;
   }
 

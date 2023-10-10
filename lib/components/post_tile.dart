@@ -2,8 +2,8 @@ import 'package:appteste/models/posts/post_generico.dart';
 import 'package:appteste/models/user/user.dart';
 import 'package:appteste/provider/posts_provider.dart';
 import 'package:appteste/provider/users_provider.dart';
-import 'package:appteste/routes/app_routes.dart';
 import 'package:appteste/views/post_page.dart';
+import 'package:appteste/views/posts_form.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,8 +15,13 @@ class PostTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final usersProvider = Provider.of<UsersProvider>(context, listen: false);
-    final User solicitant =
-        usersProvider.all.firstWhere((user) => user.name == post.creatorName);
+    //o solicitante é o user cujo nome é igual ao nome do criador do post, senão, é nulo
+    final User? solicitant = usersProvider.all.isNotEmpty
+        ? usersProvider.all.firstWhere(
+            (user) => user.name == post.creatorName,
+            orElse: () => User(name: 'null'),
+          )
+        : null;
     //final User owner = usersProvider.all.firstWhere((user) => user.name == post.ownerName,  orElse: () => null);
     final String status = post.status.toString();
     Color colorName;
@@ -38,7 +43,7 @@ class PostTile extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) => PostPage(
               post: post,
-              solicitant: solicitant,
+              creator: solicitant,
             ),
           ),
         );
@@ -78,21 +83,27 @@ class PostTile extends StatelessWidget {
                       const SizedBox(width: 150),
 //Edit
                       Visibility(
-                        visible: nomeUsuario == post.creatorName,
+                        visible: nomeUsuario == solicitant?.name,
                         child: IconButton(
                           icon: const Icon(Icons.edit),
                           color: Colors.white30,
                           onPressed: () {
-                            Navigator.of(context).pushNamed(
-                              AppRoutes.POSTS_FORM,
-                              arguments: post,
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PostsForm(
+                                    nomeUsuario: nomeUsuario.toString()),
+                                settings: RouteSettings(
+                                  arguments: post,
+                                ),
+                              ),
                             );
                           },
                         ),
                       ),
 //Delete
                       Visibility(
-                        visible: nomeUsuario == post.creatorName,
+                        visible: nomeUsuario == solicitant?.name,
                         child: IconButton(
                           icon: const Icon(Icons.delete),
                           color: Colors.white30,

@@ -6,7 +6,8 @@ class AppRoutes {
   static const PROFILE_PAGE = '/profile-page';
   static const CHAT_SELECTION = '/chat-selection';
   static const POSTS_LIST = '/posts-list';
-  static const POSTS_FORM = '/posts-form';
+  static const String POSTS_FORM = '/posts-form';
   static const CHAT_PAGE = '/chat-page';
+  static const SPLASH = '/splash';
   //var PROFILES = '/profile/$user';
 }

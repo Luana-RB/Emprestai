@@ -69,11 +69,12 @@ class _MyHomePageState extends State<MyHomePage> {
       body: PostsList(
         nomeUsuario: widget.nomeUsuario.toString(),
       ),
+//New Post
       floatingActionButton: FloatingActionButton(
         focusColor: Colors.amberAccent,
         onPressed: () {
           Navigator.of(context)
-              .pushNamed(AppRoutes.POSTS_FORM, arguments: null);
+              .pushNamed(AppRoutes.POSTS_FORM, arguments: widget.nomeUsuario);
         },
         child: const Icon(Icons.add),
       ),

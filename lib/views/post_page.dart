@@ -1,3 +1,4 @@
+import 'package:appteste/components/post_calendar.dart';
 import 'package:appteste/models/posts/post_generico.dart';
 import 'package:appteste/models/user/user.dart';
 import 'package:appteste/routes/app_routes.dart';
@@ -5,14 +6,14 @@ import 'package:flutter/material.dart';
 
 class PostPage extends StatefulWidget {
   final Post post;
-  final User solicitant;
+  final User? creator;
   final User? owner;
   final String? nomeUsuario;
   const PostPage({
     super.key,
     required this.post,
     this.nomeUsuario,
-    required this.solicitant,
+    required this.creator,
     this.owner,
   });
 
@@ -31,12 +32,19 @@ class _PostPageState extends State<PostPage> {
     return widget.post.creatorName == widget.nomeUsuario;
   }
 
+  List<LoanData> loanDataList = [
+    LoanData(DateTime(2023, 9, 10),
+        DateTime(2023, 9, 15)), // Exemplo de empréstimo e devolução
+    LoanData(
+        DateTime(2023, 9, 20), null), // Exemplo de empréstimo sem devolução
+  ];
+
   @override
   void initState() {
     super.initState();
     scrollController.addListener(() {});
-    _solicitantAvatarUrl = widget.solicitant.avatarUrl;
-    _solicitantName = widget.solicitant.name;
+    _solicitantAvatarUrl = widget.creator?.avatarUrl;
+    _solicitantName = widget.creator?.name;
   }
 
   @override
@@ -101,148 +109,136 @@ class _PostPageState extends State<PostPage> {
         ],
       ),
       body: SingleChildScrollView(
-        controller: scrollController,
-        child: Column(
-          children: [
+          controller: scrollController,
+          child: Column(
+            children: [
 //Header
-            Container(
-              height: 80,
-              decoration: BoxDecoration(
-                color: colorName.withOpacity(0.2),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+              Container(
+                height: 80,
+                decoration: BoxDecoration(
+                  color: colorName.withOpacity(0.2),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
 //Title
-                  Text(
-                    widget.post.title.toString(),
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: colorName,
-                      fontSize: 36,
-                      fontWeight: FontWeight.bold,
+                    Text(
+                      widget.post.title.toString(),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: colorName,
+                        fontSize: 36,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
 //Image
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Container(
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(15.0)),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10.0),
-                  child: Image.network(
-                    widget.post.imageUrl.toString(),
-                    width: 480,
-                    height: 310,
-                    fit: BoxFit.cover,
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Container(
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(15.0)),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: Image.network(
+                      widget.post.imageUrl.toString(),
+                      width: 480,
+                      height: 310,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
-            ),
 //Description
-            SizedBox(
-              width: 480,
-              height: 100,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Text(
-                      widget.post.description.toString(),
-                      softWrap: true,
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Column(
+              SizedBox(
+                width: 480,
+                height: 100,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    FittedBox(
-                      fit: BoxFit.contain,
-//Solicitant Image
-                      child: CircleAvatar(
-                        backgroundColor: colorName.withOpacity(0.3),
-                        radius: 50,
-                        foregroundImage: _solicitantAvatarUrl != null
-                            ? NetworkImage(_solicitantAvatarUrl!)
-                            : null,
-                        child: Text(
-                          (_solicitantName.toString()[0].toUpperCase()),
-                          style: const TextStyle(fontSize: 42),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-//Solicitant Name
-                    SizedBox(
+                    Expanded(
                       child: Text(
-                        _solicitantName.toString(),
+                        widget.post.description.toString(),
+                        softWrap: true,
                         style: const TextStyle(fontSize: 16),
                       ),
-                    )
+                    ),
                   ],
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    FittedBox(
-                      fit: BoxFit.contain,
-//Owner Image
-                      child: CircleAvatar(
-                        backgroundColor: colorName.withOpacity(0.3),
-                        radius: 50,
-                        foregroundImage: _ownerAvatarUrl != null
-                            ? NetworkImage(_ownerAvatarUrl!)
-                            : null,
-                        child: Text(
-                          _ownerName != null
-                              ? _ownerName.toString()[0].toUpperCase()
-                              : '?',
-                          style: const TextStyle(fontSize: 42),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      FittedBox(
+                        fit: BoxFit.contain,
+//Solicitant Image
+                        child: CircleAvatar(
+                          backgroundColor: colorName.withOpacity(0.3),
+                          radius: 50,
+                          foregroundImage: _solicitantAvatarUrl != null
+                              ? NetworkImage(_solicitantAvatarUrl!)
+                              : null,
+                          child: Text(
+                            (_solicitantName.toString()[0].toUpperCase()),
+                            style: const TextStyle(fontSize: 42),
+                          ),
                         ),
                       ),
-                    ),
-//Owner Name
-                    SizedBox(
-                      child: Text(
-                        _ownerName != null ? _ownerName.toString() : ' ',
-                        style: const TextStyle(fontSize: 12),
+                      const SizedBox(
+                        height: 10,
                       ),
-                    )
-                  ],
-                ),
-              ],
-            ),
-//Date of Lending
-            const Row(
-              children: [
-                SizedBox(
-                  height: 30.0,
-                  width: 50.0,
-                  child: Text(
-                    'SEG',
-                    style: TextStyle(),
+//Solicitant Name
+                      SizedBox(
+                        child: Text(
+                          _solicitantName.toString(),
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      )
+                    ],
                   ),
-                )
-              ],
-            )
-          ],
-        ),
-      ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      FittedBox(
+                        fit: BoxFit.contain,
+//Owner Image
+                        child: CircleAvatar(
+                          backgroundColor: colorName.withOpacity(0.3),
+                          radius: 50,
+                          foregroundImage: _ownerAvatarUrl != null
+                              ? NetworkImage(_ownerAvatarUrl!)
+                              : null,
+                          child: Text(
+                            _ownerName != null
+                                ? _ownerName.toString()[0].toUpperCase()
+                                : '?',
+                            style: const TextStyle(fontSize: 42),
+                          ),
+                        ),
+                      ),
+//Owner Name
+                      SizedBox(
+                        child: Text(
+                          _ownerName != null ? _ownerName.toString() : ' ',
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+//Dates
+              PostCalendar(loanDate: widget.post.dateOfLending),
+              const SizedBox(height: 20),
+            ],
+          )),
     );
-
-    //Date of returning
   }
 }

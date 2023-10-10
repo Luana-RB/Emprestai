@@ -42,6 +42,8 @@ dependencies:
   fluro: ^2.0.5
   shared_preferences: ^2.2.1
   localstorage: ^4.0.1+4
+  table_calendar: ^3.0.9
+  intl: ^0.18.1
 
 
 dev_dependencies:
