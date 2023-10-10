@@ -1,6 +1,9 @@
 // ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
 import 'package:appteste/models/posts/post_generico.dart';
+import 'package:appteste/models/user/user.dart';
 import 'package:appteste/provider/posts_provider.dart';
+import 'package:appteste/provider/users_provider.dart';
+import 'package:appteste/views/post_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -28,7 +31,7 @@ class _PostsFormState extends State<PostsForm> {
     _formData['imageUrl'] = post.imageUrl!;
     _formData['description'] = post.description!;
     _formData['creatorName'] = post.creatorName!;
-    _formData['creatorProfileLink'] = post.creatorProfileLink!;
+    //_formData['creatorProfileLink'] = post.creatorProfileLink!;
     // _formData['creatorImageUrl'] = post.creatorImageUrl!;
     // _formData['ownerName'] = post.ownerName!;
     //_formData['ownerProfileLink'] = post.ownerProfileLink!;
@@ -67,7 +70,7 @@ class _PostsFormState extends State<PostsForm> {
       context: context,
       initialDate: selectedDate,
       firstDate: DateTime(2022),
-      lastDate: DateTime(2101), // Ajuste o último ano conforme necessário
+      lastDate: DateTime(2101),
     ).then((value) {
       setState(() {
         selectedDate = value!;
@@ -92,14 +95,15 @@ class _PostsFormState extends State<PostsForm> {
               final isValid = _form.currentState!.validate();
               if (isValid) {
                 _form.currentState!.save();
-//Find User ID
+//Find post ID
                 final postProvider =
                     Provider.of<PostsProvider>(context, listen: false);
                 final existingPost =
                     postProvider.findById(_formData['id']!.toString());
+                final Post thisPost;
 //Status Controller
                 var selectedStatus = _statusButtonController.selectedStatus;
-//Update user's data
+//Update post's data
                 if (existingPost != null) {
                   selectedStatus = _formData['status'].toString();
                   existingPost.setId = _formData['id']!.toString();
@@ -108,12 +112,11 @@ class _PostsFormState extends State<PostsForm> {
                   existingPost.setImageUrl = _formData['imageUrl']!.toString();
                   existingPost.setDescription =
                       _formData['description']!.toString();
-                  existingPost.setCreatorName =
-                      _formData['creatorName']!.toString();
                   // existingPost.setOwnerName= _formData['ownerName']!.toString();
                   existingPost.setDateOfLending = selectedDate;
                   //existingPost.setDateOfReturning = _formData['dateOfReturning']!.toString();
                   postProvider.notifyListeners();
+                  thisPost = existingPost;
                 } else {
                   selectedStatus = 'Solicitado';
 //if post doesn't exists yet, creat new post
@@ -130,8 +133,27 @@ class _PostsFormState extends State<PostsForm> {
                   );
                   postProvider.put(newPost);
                   postProvider.notifyListeners();
+                  thisPost = newPost;
                 }
-                Navigator.of(context).pop();
+                final usersProvider =
+                    Provider.of<UsersProvider>(context, listen: false);
+                final User? thisCreator = usersProvider.all.isNotEmpty
+                    ? usersProvider.all.firstWhere(
+                        (user) => user.name == thisPost.creatorName,
+                        orElse: () => User(name: 'null'),
+                      )
+                    : null;
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PostPage(
+                      post: thisPost,
+                      creator: thisCreator,
+                      nomeUsuario: widget.nomeUsuario,
+                    ),
+                  ),
+                );
+                // Navigator.pop(context);
               }
             },
           ),

@@ -91,10 +91,10 @@ class _LoginPageState extends State<LoginPage> {
 //Login Button
             ElevatedButton(
               onPressed: () async {
-                userLog ??= dummyUsers.values.firstWhere(
-                  (user) => user.email == emailController.text,
-                );
                 if (_formKey.currentState!.validate()) {
+                  userLog ??= dummyUsers.values.firstWhere(
+                    (user) => user.email == emailController.text,
+                  );
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(

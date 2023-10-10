@@ -24,28 +24,31 @@ class _ChatSelectionPageState extends State<ChatSelectionPage> {
     });
     switch (index) {
       case 0:
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) =>
                 MyProfilePage(nomeUsuario: widget.nomeUsuario),
           ),
         );
+        break;
       case 1:
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => MyHomePage(nomeUsuario: widget.nomeUsuario),
           ),
         );
+        break;
       case 2:
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) =>
                 ChatSelectionPage(nomeUsuario: widget.nomeUsuario),
           ),
         );
+        break;
     }
   }
 

@@ -7,11 +7,11 @@ class Post {
   String? imageUrl;
   String? description;
   String? creatorName;
-  String? creatorProfileLink;
-  String? creatorImageUrl;
+  //String? creatorProfileLink;
+  // String? creatorImageUrl;
   String? ownerName;
   //String? ownerProfileLink;
-  String? ownerImageUrl;
+  //String? ownerImageUrl;
   DateTime dateOfLending;
   //String? dateOfReturning;
 
@@ -22,11 +22,11 @@ class Post {
     required this.imageUrl,
     required this.description,
     required this.creatorName,
-    this.creatorProfileLink,
-    this.creatorImageUrl,
+    //this.creatorProfileLink,
+    //this.creatorImageUrl,
     this.ownerName,
     //this.ownerProfileLink,
-    this.ownerImageUrl,
+    //this.ownerImageUrl,
     required this.dateOfLending,
     //this.dateOfReturning,
   });

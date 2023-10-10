@@ -18,8 +18,8 @@ Map<String, User> dummyUsers = {
   '3': User(
     id: '3',
     name: 'Matheus',
-    email: 'teste',
-    password: 'senha',
+    email: 'e',
+    password: 'e',
     avatarUrl: null,
   ),
 };

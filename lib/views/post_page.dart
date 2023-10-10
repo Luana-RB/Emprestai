@@ -1,8 +1,10 @@
 import 'package:appteste/components/post_calendar.dart';
 import 'package:appteste/models/posts/post_generico.dart';
 import 'package:appteste/models/user/user.dart';
-import 'package:appteste/routes/app_routes.dart';
+import 'package:appteste/provider/users_provider.dart';
+import 'package:appteste/views/posts_form.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PostPage extends StatefulWidget {
   final Post post;
@@ -62,8 +64,14 @@ class _PostPageState extends State<PostPage> {
       default:
         colorName = Colors.black;
     }
-
-    bool isCurrentUserCreator = isCurrentUserPostCreator();
+    final usersProvider = Provider.of<UsersProvider>(context, listen: false);
+    //o creator é o user cujo nome é igual ao nome do criador do post, senão, é nulo
+    final User? creator = usersProvider.all.isNotEmpty
+        ? usersProvider.all.firstWhere(
+            (user) => user.name == widget.post.creatorName,
+            orElse: () => User(name: 'null'),
+          )
+        : null;
 
     return Scaffold(
       appBar: AppBar(
@@ -84,28 +92,34 @@ class _PostPageState extends State<PostPage> {
         centerTitle: true,
         actions: <Widget>[
 //Edit Button
-          if (isCurrentUserCreator)
-            IconButton(
-              icon: const Icon(
-                Icons.edit,
-                color: Colors.white,
-              ),
+          Visibility(
+            visible: widget.nomeUsuario == creator?.name,
+            child: IconButton(
+              icon: const Icon(Icons.edit),
+              color: Colors.white,
               onPressed: () {
-                Navigator.of(context).pushNamed(
-                  AppRoutes.POSTS_FORM,
-                  arguments: widget.post,
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        PostsForm(nomeUsuario: widget.nomeUsuario.toString()),
+                    settings: RouteSettings(
+                      arguments: widget.post,
+                    ),
+                  ),
                 );
               },
-            )
-          else
-//Chat Button
-            IconButton(
-              icon: const Icon(
-                Icons.chat,
-                color: Colors.white,
-              ),
+            ),
+          ),
+//Chat button
+          Visibility(
+            visible: widget.nomeUsuario != creator?.name,
+            child: IconButton(
+              icon: const Icon(Icons.chat),
+              color: Colors.white,
               onPressed: () {},
-            )
+            ),
+          ),
         ],
       ),
       body: SingleChildScrollView(

@@ -15,8 +15,8 @@ class PostTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final usersProvider = Provider.of<UsersProvider>(context, listen: false);
-    //o solicitante é o user cujo nome é igual ao nome do criador do post, senão, é nulo
-    final User? solicitant = usersProvider.all.isNotEmpty
+    //o creator é o user cujo nome é igual ao nome do criador do post, senão, é nulo
+    final User? creator = usersProvider.all.isNotEmpty
         ? usersProvider.all.firstWhere(
             (user) => user.name == post.creatorName,
             orElse: () => User(name: 'null'),
@@ -43,7 +43,8 @@ class PostTile extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) => PostPage(
               post: post,
-              creator: solicitant,
+              creator: creator,
+              nomeUsuario: nomeUsuario,
             ),
           ),
         );
@@ -83,12 +84,12 @@ class PostTile extends StatelessWidget {
                       const SizedBox(width: 150),
 //Edit
                       Visibility(
-                        visible: nomeUsuario == solicitant?.name,
+                        visible: nomeUsuario == creator?.name,
                         child: IconButton(
                           icon: const Icon(Icons.edit),
                           color: Colors.white30,
-                          onPressed: () {
-                            Navigator.push(
+                          onPressed: () async {
+                            await Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => PostsForm(
@@ -103,7 +104,7 @@ class PostTile extends StatelessWidget {
                       ),
 //Delete
                       Visibility(
-                        visible: nomeUsuario == solicitant?.name,
+                        visible: nomeUsuario == creator?.name,
                         child: IconButton(
                           icon: const Icon(Icons.delete),
                           color: Colors.white30,

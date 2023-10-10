@@ -41,8 +41,8 @@ class _PostsListState extends State<PostsList> {
 
 //Profile Panel
 class PostsPanel extends StatefulWidget {
-  final String nomeUsuario;
-  const PostsPanel({super.key, required this.nomeUsuario});
+  final String? nomeUsuario;
+  const PostsPanel({super.key, this.nomeUsuario});
 
   bool doesPostBelongToUser(User user, Post post) {
     return user.name == post.creatorName;
@@ -62,15 +62,32 @@ class _PostsPanelState extends State<PostsPanel> {
             widget.doesPostBelongToUser(User(name: widget.nomeUsuario), post))
         .toList();
 
-    return Scaffold(
-      body: Container(
-        color: const Color.fromARGB(255, 255, 224, 235),
-        child: ListView.builder(
-          itemCount: userPosts.length,
-          itemBuilder: (ctx, i) => PostTile(
-            post: userPosts[i],
-            nomeUsuario: widget.nomeUsuario.toString(),
-          ),
+    var filterPostsByStatus = posts.filterPostsByStatus;
+
+    List<Post> filteredUserPostsSolicitado =
+        filterPostsByStatus(userPosts, "Solicitado");
+    filteredUserPostsSolicitado = filteredUserPostsSolicitado.reversed.toList();
+
+    List<Post> filteredUserPostsEmprestado =
+        filterPostsByStatus(userPosts, "Emprestado");
+    filteredUserPostsEmprestado = filteredUserPostsEmprestado.reversed.toList();
+
+    List<Post> filteredUserPostsDevolvido =
+        filterPostsByStatus(userPosts, "Devolvido");
+    filteredUserPostsDevolvido = filteredUserPostsDevolvido.reversed.toList();
+
+    List<Post> allFilteredPosts = [
+      ...filteredUserPostsSolicitado,
+      ...filteredUserPostsEmprestado,
+      ...filteredUserPostsDevolvido,
+    ];
+    return Container(
+      color: const Color.fromARGB(255, 255, 224, 235),
+      child: ListView.builder(
+        itemCount: allFilteredPosts.length,
+        itemBuilder: (ctx, i) => PostTile(
+          post: allFilteredPosts[i],
+          nomeUsuario: widget.nomeUsuario.toString(),
         ),
       ),
     );
