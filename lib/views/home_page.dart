@@ -74,7 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
 //New Post
       floatingActionButton: FloatingActionButton(
-        focusColor: Colors.amberAccent,
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         onPressed: () {
           Navigator.of(context)
               .pushNamed(AppRoutes.POSTS_FORM, arguments: widget.nomeUsuario);

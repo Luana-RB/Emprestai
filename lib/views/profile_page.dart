@@ -1,5 +1,5 @@
 import 'package:appteste/appbar.dart';
-import 'package:appteste/home/home_page.dart';
+import 'package:appteste/views/home_page.dart';
 import 'package:appteste/image_helper.dart';
 import 'package:appteste/navigationbar.dart';
 import 'package:appteste/views/chat_selection_page.dart';
@@ -61,9 +61,9 @@ class _MyProfilePageState extends State<MyProfilePage> {
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 255, 224, 235),
-      appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(50),
-          child: AppBarPage(title: nomeUsuario)),
+      appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(50),
+          child: AppBarPage(title: "Perfil de Usuário")),
       drawer: const MyDrawer(),
       bottomNavigationBar: CustomBottomNavigationBar(
         selectedIndex: _selectedIndex,

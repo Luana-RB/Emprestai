@@ -86,7 +86,7 @@ class _PostPageState extends State<PostPage> {
           },
         ),
         title: Text(
-          widget.post.status.toString(),
+          widget.post.id.toString(),
           style: const TextStyle(color: Colors.white),
         ),
         centerTitle: true,

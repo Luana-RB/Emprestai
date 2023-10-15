@@ -6,7 +6,6 @@ import 'package:appteste/provider/users_provider.dart';
 import 'package:appteste/views/post_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
 
 class PostsForm extends StatefulWidget {
   const PostsForm({Key? key, required this.nomeUsuario}) : super(key: key);
@@ -82,6 +81,7 @@ class _PostsFormState extends State<PostsForm> {
   @override
   Widget build(BuildContext context) {
     const title = 'Create a Post';
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -96,32 +96,34 @@ class _PostsFormState extends State<PostsForm> {
               if (isValid) {
                 _form.currentState!.save();
 //Find post ID
+
                 final postProvider =
                     Provider.of<PostsProvider>(context, listen: false);
-                final existingPost =
-                    postProvider.findById(_formData['id']!.toString());
                 final Post thisPost;
 //Status Controller
                 var selectedStatus = _statusButtonController.selectedStatus;
 //Update post's data
-                if (existingPost != null) {
+                if (_formData['id'] != null) {
+                  final existingPost =
+                      postProvider.findById(_formData['id']!.toString());
                   selectedStatus = _formData['status'].toString();
-                  existingPost.setId = _formData['id']!.toString();
-                  existingPost.setTitle = _formData['title']!.toString();
+                  //existingPost.setId = _formData['id']!.toString();
+                  existingPost!.setTitle = _formData['title']!.toString();
                   existingPost.setStatus = selectedStatus;
                   existingPost.setImageUrl = _formData['imageUrl']!.toString();
                   existingPost.setDescription =
                       _formData['description']!.toString();
                   // existingPost.setOwnerName= _formData['ownerName']!.toString();
                   existingPost.setDateOfLending = selectedDate;
+
                   //existingPost.setDateOfReturning = _formData['dateOfReturning']!.toString();
                   postProvider.notifyListeners();
                   thisPost = existingPost;
                 } else {
-                  selectedStatus = 'Solicitado';
 //if post doesn't exists yet, creat new post
+                  selectedStatus = 'Solicitado';
                   final newPost = Post(
-                    id: _formData['id'].toString(),
+                    id: null,
                     title: _formData['title'].toString(),
                     status: selectedStatus,
                     imageUrl: _formData['imageUrl'].toString(),
@@ -166,15 +168,16 @@ class _PostsFormState extends State<PostsForm> {
           key: _form,
           child: Column(
             children: [
-//Id field
-              TextFormField(
-                initialValue: _formData['id'].toString(),
-                decoration: const InputDecoration(labelText: 'id'),
-                onSaved: (value) => _formData['id'] = value!,
-              ),
+// //Id field
+//               TextFormField(
+//                 enabled: false,
+//                 onSaved: (value) => _formData['id'] = value!,
+//               ),
 //Title field
               TextFormField(
-                initialValue: _formData['title'].toString(),
+                initialValue: _formData['title'] != null
+                    ? _formData['title'].toString()
+                    : '',
                 decoration: const InputDecoration(labelText: 'Title'),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
@@ -207,25 +210,44 @@ class _PostsFormState extends State<PostsForm> {
               ),
 //Image field
               TextFormField(
-                initialValue: _formData['imageUrl'].toString(),
-                decoration: const InputDecoration(labelText: 'imageUrl'),
+                initialValue: _formData['imageUrl'] != null
+                    ? _formData['imageUrl'].toString()
+                    : '',
+                decoration: const InputDecoration(labelText: 'image'),
                 onSaved: (value) => _formData['imageUrl'] = value!,
               ),
 //Description field
               TextFormField(
-                initialValue: _formData['description'].toString(),
+                initialValue: _formData['description'] != null
+                    ? _formData['description'].toString()
+                    : '',
                 decoration: const InputDecoration(labelText: 'Description'),
+                maxLines: null,
+                maxLength: 200,
                 onSaved: (value) => _formData['description'] = value!,
               ),
+              const SizedBox(height: 20),
+//Date field
               TextButton(
                 onPressed: () async {
                   _selectDate(context);
                 },
-                child: const Text('Selecionar Data de Empréstimo'),
-              ),
-              Text(
-                'Data selecionada: ${DateFormat('dd/MM/yyyy').format(selectedDate)}',
-              ) // Exemplo de exibição da data selecionada
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(
+                      Colors.pinkAccent), // Definindo a cor de fundo rosa
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0)),
+                  ),
+                ),
+                child: const Text(
+                  'Selecionar Data de Empréstimo',
+                  style: TextStyle(
+                      fontSize: 18,
+                      color: Colors
+                          .white), // Defina a cor do texto como branco para melhor contraste
+                ),
+              )
             ],
           ),
         ),

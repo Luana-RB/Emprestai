@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:appteste/data/dummy_posts.dart';
@@ -35,10 +34,6 @@ class PostsProvider extends ChangeNotifier {
 
   //verify if user is not null
   void put(Post post) {
-    if (post.id == null) {
-      return;
-    }
-
 //if post already exists, updates it
     if (post.id != null &&
         !post.id!.trim().isNotEmpty &&
@@ -47,8 +42,8 @@ class PostsProvider extends ChangeNotifier {
     }
 
 //if post doesn't exists yet, creats it
-    else {
-      final id = Random().nextDouble().toString();
+    if (post.id == null) {
+      final id = (_items.length + 1).toString();
       _items.putIfAbsent(
           id,
           () => Post(

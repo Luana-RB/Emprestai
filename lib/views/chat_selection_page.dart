@@ -1,6 +1,6 @@
 import 'package:appteste/appbar.dart';
 import 'package:appteste/components/chat_tile.dart';
-import 'package:appteste/home/home_page.dart';
+import 'package:appteste/views/home_page.dart';
 import 'package:appteste/navigationbar.dart';
 import 'package:appteste/provider/chat_users_provider.dart';
 import 'package:appteste/views/profile_page.dart';
