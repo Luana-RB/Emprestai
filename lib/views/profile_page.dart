@@ -78,18 +78,18 @@ class _MyProfilePageState extends State<MyProfilePage> {
                 padding: const EdgeInsets.all(8.0),
                 child:
                     ProfilePicture(initials: (nomeUsuario[0].toUpperCase()))),
-            const SizedBox(height: 10),
+            const SizedBox(height: 16),
 //Name
             Text(
               nomeUsuario,
-              style: const TextStyle(fontSize: 20),
+              style: const TextStyle(fontSize: 25),
               softWrap: true,
             ),
             const SizedBox(height: 70),
 //Panel Button
             Container(
-              width: 250,
-              height: 100,
+              width: MediaQuery.of(context).size.width * 0.9,
+              height: MediaQuery.of(context).size.height * 0.11,
               decoration: BoxDecoration(
                 color: Colors.pinkAccent,
                 borderRadius: BorderRadius.circular(10.0), // Borda arredondada
@@ -115,7 +115,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                   },
                   child: const Text(
                     'Painel de Empréstimos',
-                    style: TextStyle(fontSize: 20),
+                    style: TextStyle(fontSize: 20, color: Colors.white),
                   ),
                 ),
               ),
@@ -138,6 +138,21 @@ class ProfilePicture extends StatefulWidget {
 
 class _ProfilePictureState extends State<ProfilePicture> {
   File? _image;
+  @override
+  void initState() {
+    super.initState();
+    getImageFromSharedPreferences();
+  }
+
+  Future<void> getImageFromSharedPreferences() async {
+    final imageHelper = ImageHelper(context);
+    final XFile? imageFile = await imageHelper.getImageFromSharedPreferences();
+    if (imageFile != null) {
+      setState(() {
+        _image = File(imageFile.path);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -149,7 +164,7 @@ class _ProfilePictureState extends State<ProfilePicture> {
             fit: BoxFit.contain,
             child: CircleAvatar(
               backgroundColor: Colors.white.withOpacity(0.5),
-              radius: 64,
+              radius: 89,
               foregroundImage: _image != null ? FileImage(_image!) : null,
               child: Text(
                 widget.initials,
@@ -158,7 +173,7 @@ class _ProfilePictureState extends State<ProfilePicture> {
             ),
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 8),
         TextButton(
           onPressed: () async {
             final XFile? files = await imageHelper.pickImage();
@@ -168,6 +183,8 @@ class _ProfilePictureState extends State<ProfilePicture> {
                 cropStyle: CropStyle.circle,
               );
               if (croppedFile != null) {
+                imageHelper
+                    .saveImageToSharedPreferences(XFile(croppedFile.path));
                 setState(() {
                   _image = File(croppedFile.path);
                 });

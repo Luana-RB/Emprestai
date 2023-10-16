@@ -54,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
                           style: TextStyle(
                             fontFamily: 'Ubuntu',
                             fontWeight: FontWeight.bold,
-                            fontSize: 48,
+                            fontSize: 56,
                             color: Colors.pink,
                           ),
                         ),
@@ -130,7 +130,12 @@ class _LoginPageState extends State<LoginPage> {
                           await SharedPreferences.getInstance();
                       await prefs.setBool('isLoggedIn', true);
                     },
-                    child: const Text('Login'),
+                    child: const Text(
+                      'Login',
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
                   ),
                 ],
               ),

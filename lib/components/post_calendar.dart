@@ -22,7 +22,7 @@ final kFirstDay = DateTime(kToday.year, kToday.month - 3, kToday.day);
 final kLastDay = DateTime(kToday.year, kToday.month + 3, kToday.day);
 
 class _PostCalendarState extends State<PostCalendar> {
-  CalendarFormat _calendarFormat = CalendarFormat.month;
+  final CalendarFormat _calendarFormat = CalendarFormat.month;
   late DateTime _focusedDay;
   DateTime? _selectedDay;
   List<DateTime> selectedDates = [];
@@ -44,24 +44,20 @@ class _PostCalendarState extends State<PostCalendar> {
       selectedDayPredicate: (day) {
         return isSameDay(_selectedDay, day);
       },
-      onDaySelected: (selectedDay, focusedDay) {
-        if (!isSameDay(_selectedDay, selectedDay)) {
-          setState(() {
-            _selectedDay = selectedDay;
-            _focusedDay = focusedDay;
-          });
-        }
-      },
-      onFormatChanged: (format) {
-        if (_calendarFormat != format) {
-          setState(() {
-            _calendarFormat = format;
-          });
-        }
-      },
       onPageChanged: (focusedDay) {
         _focusedDay = focusedDay;
       },
+      calendarStyle: const CalendarStyle(
+        isTodayHighlighted: false,
+        selectedDecoration: BoxDecoration(
+          color: Colors.pinkAccent,
+          shape: BoxShape.circle,
+        ),
+        selectedTextStyle: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
     );
   }
 }

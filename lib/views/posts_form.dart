@@ -22,6 +22,7 @@ class StatusButtonController {
 class _PostsFormState extends State<PostsForm> {
   final _form = GlobalKey<FormState>();
   final Map<String, Object> _formData = {};
+
 //Load Data
   void _loadFormaData(Post post) {
     _formData['id'] = post.id!;
@@ -39,16 +40,16 @@ class _PostsFormState extends State<PostsForm> {
     //_formData['dateOfReturning'] = post.dateOfReturning!;
   }
 
+  @override
+  void initState() {
+    super.initState();
+  }
+
 // Status
   final StatusButtonController _statusButtonController =
       StatusButtonController();
   String selectedStatus = 'Solicitado';
   late DateTime selectedDate;
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   void didChangeDependencies() {
@@ -62,8 +63,8 @@ class _PostsFormState extends State<PostsForm> {
     }
     super.didChangeDependencies();
   }
-//Calendário
 
+//Calendário
   Future<DateTime?> _selectDate(BuildContext context) async {
     showDatePicker(
       context: context,
@@ -95,19 +96,19 @@ class _PostsFormState extends State<PostsForm> {
               final isValid = _form.currentState!.validate();
               if (isValid) {
                 _form.currentState!.save();
-//Find post ID
 
                 final postProvider =
                     Provider.of<PostsProvider>(context, listen: false);
                 final Post thisPost;
+
 //Status Controller
                 var selectedStatus = _statusButtonController.selectedStatus;
+
 //Update post's data
                 if (_formData['id'] != null) {
                   final existingPost =
                       postProvider.findById(_formData['id']!.toString());
                   selectedStatus = _formData['status'].toString();
-                  //existingPost.setId = _formData['id']!.toString();
                   existingPost!.setTitle = _formData['title']!.toString();
                   existingPost.setStatus = selectedStatus;
                   existingPost.setImageUrl = _formData['imageUrl']!.toString();
@@ -115,8 +116,8 @@ class _PostsFormState extends State<PostsForm> {
                       _formData['description']!.toString();
                   // existingPost.setOwnerName= _formData['ownerName']!.toString();
                   existingPost.setDateOfLending = selectedDate;
-
                   //existingPost.setDateOfReturning = _formData['dateOfReturning']!.toString();
+
                   postProvider.notifyListeners();
                   thisPost = existingPost;
                 } else {
@@ -137,6 +138,8 @@ class _PostsFormState extends State<PostsForm> {
                   postProvider.notifyListeners();
                   thisPost = newPost;
                 }
+
+//Find Creator's name/user
                 final usersProvider =
                     Provider.of<UsersProvider>(context, listen: false);
                 final User? thisCreator = usersProvider.all.isNotEmpty
@@ -145,6 +148,7 @@ class _PostsFormState extends State<PostsForm> {
                         orElse: () => User(name: 'null'),
                       )
                     : null;
+//Goes to post page after updated/created
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
@@ -168,52 +172,58 @@ class _PostsFormState extends State<PostsForm> {
           key: _form,
           child: Column(
             children: [
-// //Id field
-//               TextFormField(
-//                 enabled: false,
-//                 onSaved: (value) => _formData['id'] = value!,
-//               ),
-//Title field
-              TextFormField(
-                initialValue: _formData['title'] != null
-                    ? _formData['title'].toString()
-                    : '',
-                decoration: const InputDecoration(labelText: 'Title'),
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return ('Insert a valid title');
-                  }
-                  return null;
-                },
-                onSaved: (value) => _formData['title'] = value!,
-              ),
-//Status field
-              DropdownButtonFormField<String>(
-                value: selectedStatus,
-                onChanged: (newValue) {
-                  setState(() {
-                    selectedStatus = newValue!;
-                  });
-                },
-                items: ['Solicitado', 'Emprestado', 'Devolvido']
-                    .map<DropdownMenuItem<String>>(
-                      (String value) => DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      initialValue: _formData['title'] != null
+                          ? _formData['title'].toString()
+                          : '',
+                      decoration: const InputDecoration(labelText: 'Title'),
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return ('Insert a valid title');
+                        }
+                        return null;
+                      },
+                      onSaved: (value) => _formData['title'] = value!,
+                    ),
+                  ),
+                  const SizedBox(
+                      width: 20), // Adiciona um espaçamento entre os campos
+                  Expanded(
+                    child: DropdownButtonFormField<String>(
+                      value: selectedStatus,
+                      onChanged: (newValue) {
+                        setState(() {
+                          selectedStatus = newValue!;
+                        });
+                      },
+                      items: ['Solicitado', 'Emprestado', 'Devolvido']
+                          .map<DropdownMenuItem<String>>(
+                            (String value) => DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            ),
+                          )
+                          .toList(),
+                      onSaved: (value) => _formData['status'] = value!,
+                      decoration: const InputDecoration(
+                        labelText: 'Status',
                       ),
-                    )
-                    .toList(),
-                onSaved: (value) => _formData['status'] = value!,
-                decoration: const InputDecoration(
-                  labelText: 'Status',
-                ),
+                    ),
+                  ),
+                ],
               ),
 //Image field
               TextFormField(
                 initialValue: _formData['imageUrl'] != null
                     ? _formData['imageUrl'].toString()
                     : '',
-                decoration: const InputDecoration(labelText: 'image'),
+                decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.photo), labelText: 'image'),
                 onSaved: (value) => _formData['imageUrl'] = value!,
               ),
 //Description field

@@ -56,14 +56,14 @@ class PostTile extends StatelessWidget {
 //Post
           Container(
             color: Colors.white,
-            width: 500,
-            height: 290,
+            width: MediaQuery.of(context).size.width * 0.94,
+            height: MediaQuery.of(context).size.height * 0.35,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
 //PostHeader
                 Container(
-                  height: 50,
+                  height: MediaQuery.of(context).size.height * 0.055,
                   decoration: BoxDecoration(
                     color: colorName,
                   ),
@@ -81,7 +81,6 @@ class PostTile extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(width: 150),
 //Edit
                       Visibility(
                         visible: nomeUsuario == creator?.name,
@@ -121,7 +120,7 @@ class PostTile extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
 //Image
@@ -132,8 +131,8 @@ class PostTile extends StatelessWidget {
                           borderRadius: BorderRadius.circular(10.0),
                           child: Image.network(
                             post.imageUrl.toString(),
-                            width: 280,
-                            height: 210,
+                            width: MediaQuery.of(context).size.width * 0.5,
+                            height: MediaQuery.of(context).size.height * 0.25,
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -141,8 +140,8 @@ class PostTile extends StatelessWidget {
                       const SizedBox(width: 15),
 //Description
                       SizedBox(
-                        width: 170,
-                        height: 200,
+                        width: MediaQuery.of(context).size.width * 0.3,
+                        height: MediaQuery.of(context).size.height * 0.25,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,

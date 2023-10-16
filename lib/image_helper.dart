@@ -1,6 +1,10 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ImageHelper {
   final scrollController = ScrollController();
@@ -38,7 +42,7 @@ class ImageHelper {
         uiSettings: [
           AndroidUiSettings(
               toolbarTitle: 'Cropper',
-              toolbarColor: Colors.deepOrange,
+              toolbarColor: Colors.pink,
               toolbarWidgetColor: Colors.white,
               initAspectRatio: CropAspectRatioPreset.original,
               lockAspectRatio: false),
@@ -60,4 +64,26 @@ class ImageHelper {
           )
         ],
       );
+
+// Salva o arquivo em SharedPreferences
+  void saveImageToSharedPreferences(XFile file) async {
+    final prefs = await SharedPreferences.getInstance();
+    final bytes = await file.readAsBytes();
+    final encoded = base64Encode(bytes);
+    prefs.setString('image', encoded);
+  }
+
+  // Resgata o arquivo de SharedPreferences
+  Future<XFile?> getImageFromSharedPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    final encoded = prefs.getString('image');
+    if (encoded != null) {
+      final bytes = base64Decode(encoded);
+      final tempDir = await getTemporaryDirectory();
+      final file = File('${tempDir.path}/temp.png');
+      await file.writeAsBytes(bytes);
+      return XFile(file.path);
+    }
+    return null;
+  }
 }

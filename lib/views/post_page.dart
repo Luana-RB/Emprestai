@@ -30,15 +30,15 @@ class _PostPageState extends State<PostPage> {
   String? _ownerName;
 
   final scrollController = ScrollController();
+
   bool isCurrentUserPostCreator() {
     return widget.post.creatorName == widget.nomeUsuario;
   }
 
+//exemplo
   List<LoanData> loanDataList = [
-    LoanData(DateTime(2023, 9, 10),
-        DateTime(2023, 9, 15)), // Exemplo de empréstimo e devolução
-    LoanData(
-        DateTime(2023, 9, 20), null), // Exemplo de empréstimo sem devolução
+    LoanData(DateTime(2023, 9, 10), DateTime(2023, 9, 15)),
+    LoanData(DateTime(2023, 9, 20), null),
   ];
 
   @override
@@ -86,7 +86,7 @@ class _PostPageState extends State<PostPage> {
           },
         ),
         title: Text(
-          widget.post.id.toString(),
+          widget.post.status.toString(),
           style: const TextStyle(color: Colors.white),
         ),
         centerTitle: true,
@@ -170,7 +170,7 @@ class _PostPageState extends State<PostPage> {
                 width: 480,
                 height: 100,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Expanded(
@@ -204,9 +204,7 @@ class _PostPageState extends State<PostPage> {
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
+                      const SizedBox(height: 10),
 //Solicitant Name
                       SizedBox(
                         child: Text(
@@ -236,10 +234,11 @@ class _PostPageState extends State<PostPage> {
                           ),
                         ),
                       ),
+                      const SizedBox(height: 10),
 //Owner Name
                       SizedBox(
                         child: Text(
-                          _ownerName != null ? _ownerName.toString() : ' ',
+                          _ownerName != null ? _ownerName.toString() : '_',
                           style: const TextStyle(fontSize: 12),
                         ),
                       )
