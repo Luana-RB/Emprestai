@@ -11,6 +11,7 @@ import 'package:appteste/views/posts_list.dart';
 import 'package:appteste/views/profile_page.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,6 +19,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+
+  SystemChrome.setPreferredOrientations(
+          [DeviceOrientation.portraitUp]) // Defina a orientação vertical
+      .then((_) {
+    runApp(MyApp(isLoggedIn: isLoggedIn));
+  });
   runApp(MyApp(isLoggedIn: isLoggedIn));
 }
 

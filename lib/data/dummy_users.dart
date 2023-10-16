@@ -20,6 +20,6 @@ Map<String, User> dummyUsers = {
     name: 'Matheus',
     email: 'e',
     password: 'e',
-    avatarUrl: null,
+    avatarUrl: 'https://cdn-icons-png.flaticon.com/512/1468/1468166.png',
   ),
 };
