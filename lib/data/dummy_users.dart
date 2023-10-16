@@ -22,4 +22,11 @@ Map<String, User> dummyUsers = {
     password: 'e',
     avatarUrl: 'https://cdn-icons-png.flaticon.com/512/1468/1468166.png',
   ),
+  '4': User(
+    id: '4',
+    name: 'null',
+    email: 'n',
+    password: 'n',
+    avatarUrl: null,
+  ),
 };

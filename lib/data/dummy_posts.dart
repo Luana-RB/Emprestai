@@ -40,7 +40,7 @@ Map<String, Post> dummyPosts = {
     imageUrl:
         'https://photo-cdn2.icons8.com/lh0BX_8i5H_XJ1dZO4PtsHIrbcI_SnSaKz9RnQ8P-js/rs:fit:288:431/czM6Ly9pY29uczgu/bW9vc2UtcHJvZC5h/c3NldHMvYXNzZXRz/L3NhdGEvb3JpZ2lu/YWwvODQzL2Q5ZjVj/NTA5LTEyYjgtNDlm/OS05YWIzLWI2NzAz/OWY0ZDRmMy5qcGc.webp',
     description: 'Para decoração de uma porta de uma casa',
-    creatorName: 'Null',
+    creatorName: 'null',
     // creatorProfileLink: 'exemplo',
     //creatorImageUrl: '',
     //ownerName: '',

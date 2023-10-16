@@ -1,17 +1,13 @@
 import 'package:appteste/appbar.dart';
+import 'package:appteste/components/profile_picture.dart';
 import 'package:appteste/models/user/user.dart';
 import 'package:appteste/provider/users_provider.dart';
 import 'package:appteste/views/home_page.dart';
-import 'package:appteste/image_helper.dart';
 import 'package:appteste/navigationbar.dart';
 import 'package:appteste/views/chat_selection_page.dart';
 import 'package:appteste/views/lending_panel.dart';
 import 'package:flutter/material.dart';
-import 'dart:io';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MyProfilePage extends StatefulWidget {
   const MyProfilePage({Key? key, this.nomeUsuario}) : super(key: key);
@@ -90,6 +86,9 @@ class _MyProfilePageState extends State<MyProfilePage> {
                 child: ProfilePicture(
                   initials: userName[0].toUpperCase(),
                   userId: userId,
+                  color: Colors.white.withOpacity(0.5),
+                  size: 0.2,
+                  isSelect: true,
                 )),
             const SizedBox(height: 16),
 //Name
@@ -136,97 +135,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
           ],
         ),
       ),
-    );
-  }
-}
-
-//Profile picture getter
-class ProfilePicture extends StatefulWidget {
-  const ProfilePicture(
-      {Key? key, required this.initials, this.userImage, required this.userId})
-      : super(key: key);
-
-  final String? userImage;
-  final String initials;
-  final String userId;
-
-  @override
-  State<ProfilePicture> createState() => _ProfilePictureState();
-}
-
-class _ProfilePictureState extends State<ProfilePicture> {
-  late File? _image;
-  late ImageHelper imageHelper;
-  late SharedPreferences prefs;
-
-  @override
-  void initState() {
-    super.initState();
-    imageHelper = ImageHelper(context);
-    _image = null;
-    initPrefs();
-  }
-
-  Future<void> initPrefs() async {
-    prefs = await SharedPreferences.getInstance();
-    getImageFromSharedPreferences();
-  }
-
-  String getPrefsKey() {
-    return 'imagePath_${widget.userId}';
-  }
-
-  Future<void> getImageFromSharedPreferences() async {
-    final imagePath = prefs.getString(getPrefsKey());
-    if (imagePath != null) {
-      setState(() {
-        _image = File(imagePath);
-      });
-    }
-  }
-
-  Future<void> saveImagePathToPrefs(String path) async {
-    await prefs.setString(getPrefsKey(), path);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Center(
-          child: FittedBox(
-            fit: BoxFit.contain,
-            child: CircleAvatar(
-              backgroundColor: Colors.white.withOpacity(0.5),
-              radius: MediaQuery.of(context).size.width * 0.2,
-              foregroundImage: _image != null ? FileImage(_image!) : null,
-              child: Text(
-                widget.initials,
-                style: const TextStyle(fontSize: 48),
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(height: 8),
-        TextButton(
-          onPressed: () async {
-            final XFile? files = await imageHelper.pickImage();
-            if (files != null) {
-              final croppedFile = await imageHelper.crop(
-                file: files,
-                cropStyle: CropStyle.circle,
-              );
-              if (croppedFile != null) {
-                await saveImagePathToPrefs(croppedFile.path);
-                setState(() {
-                  _image = File(croppedFile.path);
-                });
-              }
-            }
-          },
-          child: const Text('Select Photo'),
-        )
-      ],
     );
   }
 }

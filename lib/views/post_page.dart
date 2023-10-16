@@ -1,4 +1,5 @@
 import 'package:appteste/components/post_calendar.dart';
+import 'package:appteste/components/profile_picture.dart';
 import 'package:appteste/models/posts/post_generico.dart';
 import 'package:appteste/models/user/user.dart';
 import 'package:appteste/provider/users_provider.dart';
@@ -24,7 +25,6 @@ class PostPage extends StatefulWidget {
 }
 
 class _PostPageState extends State<PostPage> {
-  String? _solicitantAvatarUrl;
   String? _ownerAvatarUrl;
   String? _solicitantName;
   String? _ownerName;
@@ -45,7 +45,6 @@ class _PostPageState extends State<PostPage> {
   void initState() {
     super.initState();
     scrollController.addListener(() {});
-    _solicitantAvatarUrl = widget.creator?.avatarUrl;
     _solicitantName = widget.creator?.name;
   }
 
@@ -190,20 +189,16 @@ class _PostPageState extends State<PostPage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       FittedBox(
-                        fit: BoxFit.contain,
+                          fit: BoxFit.contain,
 //Solicitant Image
-                        child: CircleAvatar(
-                          backgroundColor: colorName.withOpacity(0.3),
-                          radius: 50,
-                          foregroundImage: _solicitantAvatarUrl != null
-                              ? NetworkImage(_solicitantAvatarUrl!)
-                              : null,
-                          child: Text(
-                            (_solicitantName.toString()[0].toUpperCase()),
-                            style: const TextStyle(fontSize: 42),
-                          ),
-                        ),
-                      ),
+                          child: ProfilePicture(
+                            initials: creator!.name![0].toUpperCase(),
+                            userId: creator.id!,
+                            color: colorName,
+                            size: 0.13,
+                            isSelect: false,
+                          )),
+
                       const SizedBox(height: 10),
 //Solicitant Name
                       SizedBox(
