@@ -32,11 +32,7 @@ class _PostsFormState extends State<PostsForm> {
     _formData['imageUrl'] = post.imageUrl!;
     _formData['description'] = post.description!;
     _formData['creatorName'] = post.creatorId!;
-    //_formData['creatorProfileLink'] = post.creatorProfileLink!;
-    // _formData['creatorImageUrl'] = post.creatorImageUrl!;
-    _formData['ownerId'] = post.ownerId!;
-    //_formData['ownerProfileLink'] = post.ownerProfileLink!;
-    //_formData['ownerImageUrl'] = post.ownerImageUrl!;
+    _formData['ownerId'] = post.ownerId != null ? post.ownerId! : 'null';
     _formData['dateOfLending'] = post.dateOfLending;
     //_formData['dateOfReturning'] = post.dateOfReturning!;
   }
@@ -269,13 +265,15 @@ class _PostsFormState extends State<PostsForm> {
                 child: ListView.builder(
                   itemCount: displayedUsers.length,
                   itemBuilder: (ctx, i) => ListTile(
-                    title: Text(displayedUsers[i].name.toString()),
-                    onTap: () {
-                      selectedOwner = displayedUsers[i];
-                      _searchController.text =
-                          displayedUsers[i].name.toString();
-                    },
-                  ),
+                      title: Text(displayedUsers[i].name.toString()),
+                      onTap: () {
+                        selectedOwner = displayedUsers[i];
+                        _searchController.text =
+                            displayedUsers[i].name.toString();
+                        setState(() {
+                          displayedUsers = [];
+                        });
+                      }),
                 ),
               ),
 

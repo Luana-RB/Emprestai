@@ -1,5 +1,5 @@
+import 'package:appteste/routes/app_routes.dart';
 import 'package:appteste/views/posts_list.dart';
-import 'package:appteste/views/profile_page.dart';
 import 'package:flutter/material.dart';
 
 class LendingPanel extends StatefulWidget {
@@ -31,19 +31,29 @@ class _LendingPanelState extends State<LendingPanel> {
             color: Colors.white,
           ),
           onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    MyProfilePage(idUsuario: widget.idUsuario.toString()),
-              ),
-            );
+            Navigator.pop(context);
           },
         ),
         title: const Text(title, style: TextStyle(color: Colors.white)),
         centerTitle: true,
       ),
       body: PostsPanel(idUsuario: widget.idUsuario.toString()),
+//New Post
+      floatingActionButton: Align(
+        alignment: const Alignment(0.975, 0.975),
+        child: SizedBox(
+          width: 70, // Ajuste a largura conforme necessário
+          height: 70,
+          child: FloatingActionButton(
+            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+            onPressed: () {
+              Navigator.of(context)
+                  .pushNamed(AppRoutes.POSTS_FORM, arguments: widget.idUsuario);
+            },
+            child: const Icon(Icons.add, size: 40),
+          ),
+        ),
+      ),
     );
   }
 }

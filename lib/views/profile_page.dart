@@ -116,7 +116,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
               child: Center(
                 child: TextButton(
                   onPressed: () {
-                    Navigator.pushReplacement(
+                    Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => LendingPanel(idUsuario: userId),

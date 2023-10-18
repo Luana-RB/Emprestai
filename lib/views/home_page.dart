@@ -72,13 +72,20 @@ class _MyHomePageState extends State<MyHomePage> {
         idUsuario: widget.idUsuario.toString(),
       ),
 //New Post
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        onPressed: () {
-          Navigator.of(context)
-              .pushNamed(AppRoutes.POSTS_FORM, arguments: widget.idUsuario);
-        },
-        child: const Icon(Icons.add),
+      floatingActionButton: Align(
+        alignment: const Alignment(0.975, 0.975),
+        child: SizedBox(
+          width: 70, // Ajuste a largura conforme necessário
+          height: 70,
+          child: FloatingActionButton(
+            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+            onPressed: () {
+              Navigator.of(context)
+                  .pushNamed(AppRoutes.POSTS_FORM, arguments: widget.idUsuario);
+            },
+            child: const Icon(Icons.add, size: 40),
+          ),
+        ),
       ),
     );
   }
