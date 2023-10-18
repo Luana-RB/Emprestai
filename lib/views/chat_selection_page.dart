@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ChatSelectionPage extends StatefulWidget {
-  const ChatSelectionPage({super.key, this.nomeUsuario});
-  final String? nomeUsuario;
+  const ChatSelectionPage({super.key, this.idUsuario});
+  final String? idUsuario;
   @override
   State<ChatSelectionPage> createState() => _ChatSelectionPageState();
 }
@@ -27,8 +27,7 @@ class _ChatSelectionPageState extends State<ChatSelectionPage> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                MyProfilePage(nomeUsuario: widget.nomeUsuario),
+            builder: (context) => MyProfilePage(idUsuario: widget.idUsuario),
           ),
         );
         break;
@@ -36,7 +35,7 @@ class _ChatSelectionPageState extends State<ChatSelectionPage> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => MyHomePage(nomeUsuario: widget.nomeUsuario),
+            builder: (context) => MyHomePage(idUsuario: widget.idUsuario),
           ),
         );
         break;
@@ -45,7 +44,7 @@ class _ChatSelectionPageState extends State<ChatSelectionPage> {
           context,
           MaterialPageRoute(
             builder: (context) =>
-                ChatSelectionPage(nomeUsuario: widget.nomeUsuario),
+                ChatSelectionPage(idUsuario: widget.idUsuario),
           ),
         );
         break;

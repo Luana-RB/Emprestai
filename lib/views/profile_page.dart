@@ -10,8 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class MyProfilePage extends StatefulWidget {
-  const MyProfilePage({Key? key, this.nomeUsuario}) : super(key: key);
-  final String? nomeUsuario;
+  const MyProfilePage({Key? key, this.idUsuario}) : super(key: key);
+  final String? idUsuario;
 
   @override
   State<MyProfilePage> createState() => _MyProfilePageState();
@@ -30,8 +30,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                MyProfilePage(nomeUsuario: widget.nomeUsuario),
+            builder: (context) => MyProfilePage(idUsuario: widget.idUsuario),
           ),
         );
         break;
@@ -39,7 +38,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => MyHomePage(nomeUsuario: widget.nomeUsuario),
+            builder: (context) => MyHomePage(idUsuario: widget.idUsuario),
           ),
         );
         break;
@@ -48,7 +47,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
           context,
           MaterialPageRoute(
             builder: (context) =>
-                ChatSelectionPage(nomeUsuario: widget.nomeUsuario),
+                ChatSelectionPage(idUsuario: widget.idUsuario),
           ),
         );
         break;
@@ -60,8 +59,8 @@ class _MyProfilePageState extends State<MyProfilePage> {
     final usersProvider = Provider.of<UsersProvider>(context, listen: false);
     final User? thisUser = usersProvider.all.isNotEmpty
         ? usersProvider.all.firstWhere(
-            (user) => user.name == widget.nomeUsuario.toString(),
-            orElse: () => User(name: 'null'))
+            (user) => user.id == widget.idUsuario.toString(),
+            orElse: () => User(name: 'null', id: 'null'))
         : null;
     String userName = thisUser != null ? thisUser.name.toString() : 'null';
     String userId = thisUser != null ? thisUser.id.toString() : 'null';
@@ -120,8 +119,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            LendingPanel(nomeUsuario: userName),
+                        builder: (context) => LendingPanel(idUsuario: userId),
                       ),
                     );
                   },

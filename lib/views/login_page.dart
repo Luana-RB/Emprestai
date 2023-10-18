@@ -122,7 +122,7 @@ class _LoginPageState extends State<LoginPage> {
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
-                                MyHomePage(nomeUsuario: userLog?.name),
+                                MyHomePage(idUsuario: userLog?.id),
                           ),
                         );
                       }

@@ -64,10 +64,10 @@ class MyApp extends StatelessWidget {
         onGenerateRoute: (settings) {
           if (settings.name == AppRoutes.POSTS_FORM) {
             // Extrai o argumento do nome de usuário
-            final nomeUsuario = settings.arguments as String?;
+            final idUsuario = settings.arguments as String?;
             return MaterialPageRoute(
               builder: (context) =>
-                  PostsForm(nomeUsuario: nomeUsuario.toString()),
+                  PostsForm(idUsuario: idUsuario.toString()),
             );
           }
           return null;

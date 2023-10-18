@@ -8,21 +8,28 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class PostTile extends StatelessWidget {
-  const PostTile({super.key, required this.post, required this.nomeUsuario});
+  const PostTile({super.key, required this.post, required this.idUsuario});
   final Post post;
-  final String? nomeUsuario;
+  final String? idUsuario;
 
   @override
   Widget build(BuildContext context) {
     final usersProvider = Provider.of<UsersProvider>(context, listen: false);
-    //o creator é o user cujo nome é igual ao nome do criador do post, senão, é nulo
+    //Find User
+
+    final User? thisUser = usersProvider.findById(idUsuario.toString());
+    String userId = thisUser != null ? thisUser.id.toString() : 'null';
+
+    //o creator é o user cujo id é igual ao id do criador do post, senão, é nulo
     final User? creator = usersProvider.all.isNotEmpty
         ? usersProvider.all.firstWhere(
-            (user) => user.name == post.creatorName,
-            orElse: () => User(name: 'null'),
+            (user) => user.id == post.creatorId,
+            orElse: () => User(name: 'null', id: 'null'),
           )
         : null;
-    //final User owner = usersProvider.all.firstWhere((user) => user.name == post.ownerName,  orElse: () => null);
+    String creatorName = creator != null ? creator.name.toString() : 'null';
+    String creatorId = creator != null ? creator.id.toString() : 'null';
+
     final String status = post.status.toString();
     Color colorName;
     switch (status) {
@@ -44,7 +51,7 @@ class PostTile extends StatelessWidget {
             builder: (context) => PostPage(
               post: post,
               creator: creator,
-              nomeUsuario: nomeUsuario,
+              idUsuario: idUsuario,
             ),
           ),
         );
@@ -83,7 +90,7 @@ class PostTile extends StatelessWidget {
                       ),
 //Edit
                       Visibility(
-                        visible: nomeUsuario == creator?.name,
+                        visible: userId == creatorId,
                         child: IconButton(
                           icon: const Icon(Icons.edit),
                           color: Colors.white30,
@@ -91,8 +98,8 @@ class PostTile extends StatelessWidget {
                             await Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => PostsForm(
-                                    nomeUsuario: nomeUsuario.toString()),
+                                builder: (context) =>
+                                    PostsForm(idUsuario: idUsuario.toString()),
                                 settings: RouteSettings(
                                   arguments: post,
                                 ),
@@ -103,7 +110,7 @@ class PostTile extends StatelessWidget {
                       ),
 //Delete
                       Visibility(
-                        visible: nomeUsuario == creator?.name,
+                        visible: userId == creatorId,
                         child: IconButton(
                           icon: const Icon(Icons.delete),
                           color: Colors.white30,
@@ -159,7 +166,7 @@ class PostTile extends StatelessWidget {
                               child: InkWell(
                                 onTap: () {},
                                 child: Text(
-                                  post.creatorName.toString(),
+                                  creatorName,
                                   style: const TextStyle(color: Colors.black45),
                                 ),
                               ),

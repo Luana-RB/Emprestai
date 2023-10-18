@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class PostsForm extends StatefulWidget {
-  const PostsForm({Key? key, required this.nomeUsuario}) : super(key: key);
-  final String nomeUsuario;
+  const PostsForm({Key? key, required this.idUsuario}) : super(key: key);
+  final String idUsuario;
 
   @override
   State<PostsForm> createState() => _PostsFormState();
@@ -30,7 +30,7 @@ class _PostsFormState extends State<PostsForm> {
     _formData['status'] = post.status!;
     _formData['imageUrl'] = post.imageUrl!;
     _formData['description'] = post.description!;
-    _formData['creatorName'] = post.creatorName!;
+    _formData['creatorName'] = post.creatorId!;
     //_formData['creatorProfileLink'] = post.creatorProfileLink!;
     // _formData['creatorImageUrl'] = post.creatorImageUrl!;
     // _formData['ownerName'] = post.ownerName!;
@@ -82,6 +82,10 @@ class _PostsFormState extends State<PostsForm> {
   @override
   Widget build(BuildContext context) {
     const title = 'Create a Post';
+//Find User
+    final usersProvider = Provider.of<UsersProvider>(context, listen: false);
+    final User? thisUser = usersProvider.findById(widget.idUsuario.toString());
+    String userId = thisUser != null ? thisUser.id.toString() : 'null';
 
     return Scaffold(
       appBar: AppBar(
@@ -129,7 +133,7 @@ class _PostsFormState extends State<PostsForm> {
                     status: selectedStatus,
                     imageUrl: _formData['imageUrl'].toString(),
                     description: _formData['description'].toString(),
-                    creatorName: widget.nomeUsuario.toString(),
+                    creatorId: userId,
                     //ownerName: _formData['ownerName'].toString(),
                     dateOfLending: selectedDate,
                     //dateOfReturning: _formData['dateOfReturning'].toString(),
@@ -144,8 +148,8 @@ class _PostsFormState extends State<PostsForm> {
                     Provider.of<UsersProvider>(context, listen: false);
                 final User? thisCreator = usersProvider.all.isNotEmpty
                     ? usersProvider.all.firstWhere(
-                        (user) => user.name == thisPost.creatorName,
-                        orElse: () => User(name: 'null'),
+                        (user) => user.id == thisPost.creatorId,
+                        orElse: () => User(name: 'null', id: 'null'),
                       )
                     : null;
 //Goes to post page after updated/created
@@ -155,7 +159,7 @@ class _PostsFormState extends State<PostsForm> {
                     builder: (context) => PostPage(
                       post: thisPost,
                       creator: thisCreator,
-                      nomeUsuario: widget.nomeUsuario,
+                      idUsuario: widget.idUsuario,
                     ),
                   ),
                 );

@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:appteste/navigationbar.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, this.nomeUsuario});
-  final String? nomeUsuario;
+  const MyHomePage({super.key, this.idUsuario});
+  final String? idUsuario;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -27,8 +27,7 @@ class _MyHomePageState extends State<MyHomePage> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                MyProfilePage(nomeUsuario: widget.nomeUsuario),
+            builder: (context) => MyProfilePage(idUsuario: widget.idUsuario),
           ),
         );
         break;
@@ -36,7 +35,7 @@ class _MyHomePageState extends State<MyHomePage> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => MyHomePage(nomeUsuario: widget.nomeUsuario),
+            builder: (context) => MyHomePage(idUsuario: widget.idUsuario),
           ),
         );
         break;
@@ -45,7 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
           context,
           MaterialPageRoute(
             builder: (context) =>
-                ChatSelectionPage(nomeUsuario: widget.nomeUsuario),
+                ChatSelectionPage(idUsuario: widget.idUsuario),
           ),
         );
         break;
@@ -70,14 +69,14 @@ class _MyHomePageState extends State<MyHomePage> {
         onItemTapped: onTap,
       ),
       body: PostsList(
-        nomeUsuario: widget.nomeUsuario.toString(),
+        idUsuario: widget.idUsuario.toString(),
       ),
 //New Post
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         onPressed: () {
           Navigator.of(context)
-              .pushNamed(AppRoutes.POSTS_FORM, arguments: widget.nomeUsuario);
+              .pushNamed(AppRoutes.POSTS_FORM, arguments: widget.idUsuario);
         },
         child: const Icon(Icons.add),
       ),

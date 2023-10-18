@@ -6,7 +6,7 @@ class Post {
   String? title;
   String? imageUrl;
   String? description;
-  String? creatorName;
+  String? creatorId;
   //String? creatorProfileLink;
   // String? creatorImageUrl;
   String? ownerName;
@@ -21,7 +21,7 @@ class Post {
     required this.title,
     required this.imageUrl,
     required this.description,
-    required this.creatorName,
+    required this.creatorId,
     //this.creatorProfileLink,
     //this.creatorImageUrl,
     this.ownerName,
@@ -49,10 +49,6 @@ class Post {
 
   set setDescription(String newDescription) {
     description = newDescription;
-  }
-
-  set setCreatorName(String newCreatorName) {
-    creatorName = newCreatorName;
   }
 
   set setCreatorImageUrl(String newCreatorImageUrl) {

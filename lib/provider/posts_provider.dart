@@ -52,7 +52,7 @@ class PostsProvider extends ChangeNotifier {
                 title: post.title,
                 imageUrl: post.imageUrl,
                 description: post.description,
-                creatorName: post.creatorName,
+                creatorId: post.creatorId,
                 //creatorProfileLink: post.creatorProfileLink,
                 //creatorImageUrl: post.creatorImageUrl,
                 //ownerName: post.ownerName,

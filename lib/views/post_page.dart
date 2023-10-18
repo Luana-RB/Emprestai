@@ -11,11 +11,11 @@ class PostPage extends StatefulWidget {
   final Post post;
   final User? creator;
   final User? owner;
-  final String? nomeUsuario;
+  final String? idUsuario;
   const PostPage({
     super.key,
     required this.post,
-    this.nomeUsuario,
+    this.idUsuario,
     required this.creator,
     this.owner,
   });
@@ -32,7 +32,7 @@ class _PostPageState extends State<PostPage> {
   final scrollController = ScrollController();
 
   bool isCurrentUserPostCreator() {
-    return widget.post.creatorName == widget.nomeUsuario;
+    return widget.post.creatorId == widget.idUsuario;
   }
 
 //exemplo
@@ -63,14 +63,21 @@ class _PostPageState extends State<PostPage> {
       default:
         colorName = Colors.black;
     }
+
     final usersProvider = Provider.of<UsersProvider>(context, listen: false);
-    //o creator é o user cujo nome é igual ao nome do criador do post, senão, é nulo
+
+    //Find User
+    final User? thisUser = usersProvider.findById(widget.idUsuario.toString());
+    String userId = thisUser != null ? thisUser.id.toString() : 'null';
+
+    //o creator é o user cujo id é igual ao id do criador do post, senão, é nulo
     final User? creator = usersProvider.all.isNotEmpty
         ? usersProvider.all.firstWhere(
-            (user) => user.name == widget.post.creatorName,
-            orElse: () => User(name: 'null'),
+            (user) => user.id == widget.post.creatorId,
+            orElse: () => User(name: 'null', id: 'null'),
           )
         : null;
+    String creatorId = creator != null ? creator.id.toString() : 'null';
 
     return Scaffold(
       appBar: AppBar(
@@ -92,7 +99,7 @@ class _PostPageState extends State<PostPage> {
         actions: <Widget>[
 //Edit Button
           Visibility(
-            visible: widget.nomeUsuario == creator?.name,
+            visible: userId == creatorId,
             child: IconButton(
               icon: const Icon(Icons.edit),
               color: Colors.white,
@@ -101,7 +108,7 @@ class _PostPageState extends State<PostPage> {
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
-                        PostsForm(nomeUsuario: widget.nomeUsuario.toString()),
+                        PostsForm(idUsuario: userId.toString()),
                     settings: RouteSettings(
                       arguments: widget.post,
                     ),
@@ -112,7 +119,7 @@ class _PostPageState extends State<PostPage> {
           ),
 //Chat button
           Visibility(
-            visible: widget.nomeUsuario != creator?.name,
+            visible: userId != creatorId,
             child: IconButton(
               icon: const Icon(Icons.chat),
               color: Colors.white,
