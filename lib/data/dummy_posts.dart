@@ -11,7 +11,7 @@ Map<String, Post> dummyPosts = {
     creatorId: '3',
     //creatorProfileLink: 'exemplo',
     //creatorImageUrl: 'https://cdn-icons-png.flaticon.com/512/1468/1468166.png',
-    ownerName: 'exemplo',
+    ownerId: '2',
     //ownerProfileLink: 'exemplo',
     //ownerImageUrl: 'https://cdn-icons-png.flaticon.com/512/1468/1468166.png',
     dateOfLending: DateTime(2023, 10, 31),

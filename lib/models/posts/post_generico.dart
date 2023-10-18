@@ -9,7 +9,7 @@ class Post {
   String? creatorId;
   //String? creatorProfileLink;
   // String? creatorImageUrl;
-  String? ownerName;
+  String? ownerId;
   //String? ownerProfileLink;
   //String? ownerImageUrl;
   DateTime dateOfLending;
@@ -24,7 +24,7 @@ class Post {
     required this.creatorId,
     //this.creatorProfileLink,
     //this.creatorImageUrl,
-    this.ownerName,
+    this.ownerId,
     //this.ownerProfileLink,
     //this.ownerImageUrl,
     required this.dateOfLending,
@@ -54,9 +54,10 @@ class Post {
   set setCreatorImageUrl(String newCreatorImageUrl) {
     //creatorImageUrl = newCreatorImageUrl;
   }
-  set setOwnerName(String newOwnerName) {
-    //ownerName = newOwnerName;
+  set setOwnerId(String newOwnerId) {
+    ownerId = newOwnerId;
   }
+
   set setOwnerProfileLink(String newOwnerProfileLink) {
     //ownerProfileLink = newOwnerProfileLink;
   }

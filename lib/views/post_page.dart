@@ -9,15 +9,11 @@ import 'package:provider/provider.dart';
 
 class PostPage extends StatefulWidget {
   final Post post;
-  final User? creator;
-  final User? owner;
   final String? idUsuario;
   const PostPage({
     super.key,
     required this.post,
     this.idUsuario,
-    required this.creator,
-    this.owner,
   });
 
   @override
@@ -25,10 +21,6 @@ class PostPage extends StatefulWidget {
 }
 
 class _PostPageState extends State<PostPage> {
-  String? _ownerAvatarUrl;
-  String? _solicitantName;
-  String? _ownerName;
-
   final scrollController = ScrollController();
 
   bool isCurrentUserPostCreator() {
@@ -45,7 +37,6 @@ class _PostPageState extends State<PostPage> {
   void initState() {
     super.initState();
     scrollController.addListener(() {});
-    _solicitantName = widget.creator?.name;
   }
 
   @override
@@ -78,6 +69,16 @@ class _PostPageState extends State<PostPage> {
           )
         : null;
     String creatorId = creator != null ? creator.id.toString() : 'null';
+
+    //o owner é o user cujo id é igual ao id do owner do post, senão, é nulo
+    final User? owner = usersProvider.all.isNotEmpty
+        ? usersProvider.all.firstWhere(
+            (user) => user.id == widget.post.ownerId,
+            orElse: () => User(name: '?', id: 'null'),
+          )
+        : null;
+    String ownerName = owner != null ? owner.name.toString() : '?';
+    String ownerId = owner != null ? owner.id.toString() : 'null';
 
     return Scaffold(
       appBar: AppBar(
@@ -200,7 +201,7 @@ class _PostPageState extends State<PostPage> {
 //Solicitant Image
                           child: ProfilePicture(
                             initials: creator!.name![0].toUpperCase(),
-                            userId: creator.id!,
+                            userId: creatorId,
                             color: colorName,
                             size: 0.13,
                             isSelect: false,
@@ -210,7 +211,7 @@ class _PostPageState extends State<PostPage> {
 //Solicitant Name
                       SizedBox(
                         child: Text(
-                          _solicitantName.toString(),
+                          creator.name.toString(),
                           style: const TextStyle(fontSize: 16),
                         ),
                       )
@@ -220,28 +221,22 @@ class _PostPageState extends State<PostPage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       FittedBox(
-                        fit: BoxFit.contain,
+                          fit: BoxFit.contain,
+
 //Owner Image
-                        child: CircleAvatar(
-                          backgroundColor: colorName.withOpacity(0.3),
-                          radius: 50,
-                          foregroundImage: _ownerAvatarUrl != null
-                              ? NetworkImage(_ownerAvatarUrl!)
-                              : null,
-                          child: Text(
-                            _ownerName != null
-                                ? _ownerName.toString()[0].toUpperCase()
-                                : '?',
-                            style: const TextStyle(fontSize: 42),
-                          ),
-                        ),
-                      ),
+                          child: ProfilePicture(
+                            initials: ownerName[0].toUpperCase(),
+                            userId: ownerId,
+                            color: colorName,
+                            size: 0.13,
+                            isSelect: false,
+                          )),
                       const SizedBox(height: 10),
 //Owner Name
                       SizedBox(
                         child: Text(
-                          _ownerName != null ? _ownerName.toString() : '_',
-                          style: const TextStyle(fontSize: 12),
+                          ownerName,
+                          style: const TextStyle(fontSize: 16),
                         ),
                       )
                     ],

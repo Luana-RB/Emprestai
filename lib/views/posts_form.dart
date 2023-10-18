@@ -22,6 +22,7 @@ class StatusButtonController {
 class _PostsFormState extends State<PostsForm> {
   final _form = GlobalKey<FormState>();
   final Map<String, Object> _formData = {};
+  List<User> displayedUsers = [];
 
 //Load Data
   void _loadFormaData(Post post) {
@@ -33,7 +34,7 @@ class _PostsFormState extends State<PostsForm> {
     _formData['creatorName'] = post.creatorId!;
     //_formData['creatorProfileLink'] = post.creatorProfileLink!;
     // _formData['creatorImageUrl'] = post.creatorImageUrl!;
-    // _formData['ownerName'] = post.ownerName!;
+    _formData['ownerId'] = post.ownerId!;
     //_formData['ownerProfileLink'] = post.ownerProfileLink!;
     //_formData['ownerImageUrl'] = post.ownerImageUrl!;
     _formData['dateOfLending'] = post.dateOfLending;
@@ -43,6 +44,7 @@ class _PostsFormState extends State<PostsForm> {
   @override
   void initState() {
     super.initState();
+    displayedUsers = [];
   }
 
 // Status
@@ -79,13 +81,26 @@ class _PostsFormState extends State<PostsForm> {
     return null;
   }
 
+//Owner search
+
+  final TextEditingController _searchController = TextEditingController();
+  User? selectedOwner;
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    const title = 'Create a Post';
+    const title = '';
 //Find User
     final usersProvider = Provider.of<UsersProvider>(context, listen: false);
     final User? thisUser = usersProvider.findById(widget.idUsuario.toString());
     String userId = thisUser != null ? thisUser.id.toString() : 'null';
+
+    final UsersProvider users = Provider.of(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -118,9 +133,11 @@ class _PostsFormState extends State<PostsForm> {
                   existingPost.setImageUrl = _formData['imageUrl']!.toString();
                   existingPost.setDescription =
                       _formData['description']!.toString();
-                  // existingPost.setOwnerName= _formData['ownerName']!.toString();
                   existingPost.setDateOfLending = selectedDate;
                   //existingPost.setDateOfReturning = _formData['dateOfReturning']!.toString();
+                  if (selectedOwner != null) {
+                    existingPost.setOwnerId = selectedOwner!.id.toString();
+                  }
 
                   postProvider.notifyListeners();
                   thisPost = existingPost;
@@ -134,7 +151,7 @@ class _PostsFormState extends State<PostsForm> {
                     imageUrl: _formData['imageUrl'].toString(),
                     description: _formData['description'].toString(),
                     creatorId: userId,
-                    //ownerName: _formData['ownerName'].toString(),
+                    ownerId: selectedOwner?.id,
                     dateOfLending: selectedDate,
                     //dateOfReturning: _formData['dateOfReturning'].toString(),
                   );
@@ -143,22 +160,12 @@ class _PostsFormState extends State<PostsForm> {
                   thisPost = newPost;
                 }
 
-//Find Creator's name/user
-                final usersProvider =
-                    Provider.of<UsersProvider>(context, listen: false);
-                final User? thisCreator = usersProvider.all.isNotEmpty
-                    ? usersProvider.all.firstWhere(
-                        (user) => user.id == thisPost.creatorId,
-                        orElse: () => User(name: 'null', id: 'null'),
-                      )
-                    : null;
 //Goes to post page after updated/created
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) => PostPage(
                       post: thisPost,
-                      creator: thisCreator,
                       idUsuario: widget.idUsuario,
                     ),
                   ),
@@ -241,6 +248,37 @@ class _PostsFormState extends State<PostsForm> {
                 onSaved: (value) => _formData['description'] = value!,
               ),
               const SizedBox(height: 20),
+//Owner field
+              TextField(
+                controller: _searchController,
+                decoration: const InputDecoration(
+                  hintText: 'Pesquisar usuário',
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    displayedUsers = users.all
+                        .where((user) => user.name!
+                            .toLowerCase()
+                            .contains(value.toLowerCase()))
+                        .toList();
+                  });
+                },
+              ),
+              const SizedBox(height: 20),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: displayedUsers.length,
+                  itemBuilder: (ctx, i) => ListTile(
+                    title: Text(displayedUsers[i].name.toString()),
+                    onTap: () {
+                      selectedOwner = displayedUsers[i];
+                      _searchController.text =
+                          displayedUsers[i].name.toString();
+                    },
+                  ),
+                ),
+              ),
+
 //Date field
               TextButton(
                 onPressed: () async {

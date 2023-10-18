@@ -10,6 +10,22 @@ class UsersProvider extends ChangeNotifier {
     return [..._items.values];
   }
 
+  List<String> get allNames {
+    List<String> names = [];
+    _items.forEach((key, user) {
+      names.add(user.name.toString());
+    });
+    return names;
+  }
+
+  List<String> get allIds {
+    List<String> ids = [];
+    _items.forEach((key, user) {
+      ids.add(user.id.toString());
+    });
+    return ids;
+  }
+
 //retorna o tamanho
   int get count {
     return _items.length;

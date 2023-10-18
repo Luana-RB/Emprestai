@@ -50,7 +50,6 @@ class PostTile extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) => PostPage(
               post: post,
-              creator: creator,
               idUsuario: idUsuario,
             ),
           ),

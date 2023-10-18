@@ -71,3 +71,15 @@ class UserTile extends StatelessWidget {
     );
   }
 }
+
+class UserNameListTile extends StatelessWidget {
+  const UserNameListTile({super.key, required this.user});
+  final String user;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(user),
+    );
+  }
+}
