@@ -13,7 +13,7 @@ class Post {
   //String? ownerProfileLink;
   //String? ownerImageUrl;
   DateTime dateOfLending;
-  //String? dateOfReturning;
+  DateTime? dateOfReturning;
 
   Post({
     this.id,
@@ -28,7 +28,7 @@ class Post {
     //this.ownerProfileLink,
     //this.ownerImageUrl,
     required this.dateOfLending,
-    //this.dateOfReturning,
+    this.dateOfReturning,
   });
 
   set setId(String newId) {
@@ -68,7 +68,7 @@ class Post {
     dateOfLending = newDateOfLending;
   }
 
-  set setDateOfReturning(String newDateOfReturning) {
-    //dateOfReturning = newDateOfReturning;
+  set setDateOfReturning(DateTime newDateOfReturning) {
+    dateOfReturning = newDateOfReturning;
   }
 }

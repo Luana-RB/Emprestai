@@ -1,3 +1,7 @@
+// ignore_for_file: unnecessary_null_comparison
+
+import 'dart:io';
+
 import 'package:appteste/models/posts/post_generico.dart';
 import 'package:appteste/models/user/user.dart';
 import 'package:appteste/provider/posts_provider.dart';
@@ -6,6 +10,7 @@ import 'package:appteste/views/post_page.dart';
 import 'package:appteste/views/posts_form.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PostTile extends StatelessWidget {
   const PostTile({super.key, required this.post, required this.idUsuario});
@@ -31,7 +36,11 @@ class PostTile extends StatelessWidget {
     String creatorId = creator != null ? creator.id.toString() : 'null';
 
     final String status = post.status.toString();
+
     Color colorName;
+
+    File? image;
+
     switch (status) {
       case 'Solicitado':
         colorName = Colors.pinkAccent;
@@ -135,14 +144,19 @@ class PostTile extends StatelessWidget {
                             borderRadius: BorderRadius.circular(15.0)),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10.0),
-                          child: Image.network(
-                            post.imageUrl.toString(),
-                            width: MediaQuery.of(context).size.width * 0.5,
-                            height: MediaQuery.of(context).size.height * 0.25,
-                            fit: BoxFit.cover,
-                          ),
+                          child: image != null
+                              ? Image.file(
+                                  image,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.5,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.25,
+                                  fit: BoxFit.cover,
+                                )
+                              : getImageFromPath(post.id.toString()) as Widget?,
                         ),
                       ),
+
                       const SizedBox(width: 15),
 //Description
                       SizedBox(
@@ -183,4 +197,14 @@ class PostTile extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<FileImage?> getImageFromPath(postId) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final prefsKey = 'imagePath_$postId';
+  final imagePath = prefs.getString(prefsKey);
+  if (imagePath != null) {
+    return FileImage(File(imagePath));
+  }
+  return null;
 }

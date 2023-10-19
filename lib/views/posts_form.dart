@@ -1,10 +1,12 @@
 // ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+import 'package:appteste/components/post_picture.dart';
 import 'package:appteste/models/posts/post_generico.dart';
 import 'package:appteste/models/user/user.dart';
 import 'package:appteste/provider/posts_provider.dart';
 import 'package:appteste/provider/users_provider.dart';
 import 'package:appteste/views/post_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:provider/provider.dart';
 
 class PostsForm extends StatefulWidget {
@@ -34,7 +36,8 @@ class _PostsFormState extends State<PostsForm> {
     _formData['creatorName'] = post.creatorId!;
     _formData['ownerId'] = post.ownerId != null ? post.ownerId! : 'null';
     _formData['dateOfLending'] = post.dateOfLending;
-    //_formData['dateOfReturning'] = post.dateOfReturning!;
+    _formData['dateOfReturning'] =
+        post.dateOfReturning != null ? post.dateOfReturning! : 'null';
   }
 
   @override
@@ -47,7 +50,8 @@ class _PostsFormState extends State<PostsForm> {
   final StatusButtonController _statusButtonController =
       StatusButtonController();
   String selectedStatus = 'Solicitado';
-  late DateTime selectedDate;
+  late DateTime selectedLendingDate;
+  late DateTime? selectedReturningDate;
 
   @override
   void didChangeDependencies() {
@@ -55,30 +59,57 @@ class _PostsFormState extends State<PostsForm> {
     if (post != null) {
       _loadFormaData(post);
       selectedStatus = _formData['status'].toString();
-      selectedDate = post.dateOfLending;
+      selectedLendingDate = post.dateOfLending;
+      selectedReturningDate = post.dateOfReturning;
     } else {
-      selectedDate = DateTime.now();
+      selectedLendingDate = DateTime.now();
+      selectedReturningDate = null;
     }
     super.didChangeDependencies();
   }
 
 //Calendário
-  Future<DateTime?> _selectDate(BuildContext context) async {
-    showDatePicker(
+  Future<DateTime?> _selectLendingDate(BuildContext context) async {
+    DateTime? selectedDate = await showDatePicker(
       context: context,
-      initialDate: selectedDate,
+      initialDate: selectedLendingDate,
       firstDate: DateTime(2022),
       lastDate: DateTime(2101),
-    ).then((value) {
+    );
+    if (selectedDate != null) {
       setState(() {
-        selectedDate = value!;
+        selectedLendingDate = selectedDate;
       });
-    });
-    return null;
+    }
+    return selectedDate;
+  }
+
+  Future<DateTime?> _selectReturningDate(BuildContext context) async {
+    DateTime? selectedDate = await showDatePicker(
+      context: context,
+      initialDate: selectedReturningDate ?? DateTime.now(),
+      firstDate: DateTime(2022),
+      lastDate: DateTime(2101),
+    );
+    if (selectedDate != null) {
+      if (selectedDate.isBefore(selectedLendingDate)) {
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+                'O dia da devolução não pode ser anterior ao dia de empréstimo.'),
+          ),
+        );
+      } else {
+        setState(() {
+          selectedReturningDate = selectedDate;
+        });
+      }
+    }
+    return selectedDate;
   }
 
 //Owner search
-
   final TextEditingController _searchController = TextEditingController();
   User? selectedOwner;
 
@@ -129,8 +160,10 @@ class _PostsFormState extends State<PostsForm> {
                   existingPost.setImageUrl = _formData['imageUrl']!.toString();
                   existingPost.setDescription =
                       _formData['description']!.toString();
-                  existingPost.setDateOfLending = selectedDate;
-                  //existingPost.setDateOfReturning = _formData['dateOfReturning']!.toString();
+                  existingPost.setDateOfLending = selectedLendingDate;
+                  if (selectedReturningDate != null) {
+                    existingPost.setDateOfReturning = selectedReturningDate!;
+                  }
                   if (selectedOwner != null) {
                     existingPost.setOwnerId = selectedOwner!.id.toString();
                   }
@@ -148,8 +181,8 @@ class _PostsFormState extends State<PostsForm> {
                     description: _formData['description'].toString(),
                     creatorId: userId,
                     ownerId: selectedOwner?.id,
-                    dateOfLending: selectedDate,
-                    //dateOfReturning: _formData['dateOfReturning'].toString(),
+                    dateOfLending: selectedLendingDate,
+                    dateOfReturning: selectedReturningDate,
                   );
                   postProvider.put(newPost);
                   postProvider.notifyListeners();
@@ -188,18 +221,18 @@ class _PostsFormState extends State<PostsForm> {
                       initialValue: _formData['title'] != null
                           ? _formData['title'].toString()
                           : '',
-                      decoration: const InputDecoration(labelText: 'Title'),
+                      decoration: const InputDecoration(labelText: 'Titulo'),
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return ('Insert a valid title');
+                          return ('Insira um título');
                         }
                         return null;
                       },
                       onSaved: (value) => _formData['title'] = value!,
                     ),
                   ),
-                  const SizedBox(
-                      width: 20), // Adiciona um espaçamento entre os campos
+                  const SizedBox(width: 20),
+// Status
                   Expanded(
                     child: DropdownButtonFormField<String>(
                       value: selectedStatus,
@@ -225,66 +258,61 @@ class _PostsFormState extends State<PostsForm> {
                 ],
               ),
 //Image field
-              TextFormField(
-                initialValue: _formData['imageUrl'] != null
-                    ? _formData['imageUrl'].toString()
-                    : '',
-                decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.photo), labelText: 'image'),
-                onSaved: (value) => _formData['imageUrl'] = value!,
-              ),
+              PostPicture(postId: _formData['id'].toString()),
 //Description field
               TextFormField(
                 initialValue: _formData['description'] != null
                     ? _formData['description'].toString()
                     : '',
-                decoration: const InputDecoration(labelText: 'Description'),
+                decoration: const InputDecoration(labelText: 'Descrição'),
                 maxLines: null,
                 maxLength: 200,
                 onSaved: (value) => _formData['description'] = value!,
               ),
               const SizedBox(height: 20),
 //Owner field
-              TextField(
-                controller: _searchController,
-                decoration: const InputDecoration(
-                  hintText: 'Pesquisar usuário',
+              TypeAheadField<User>(
+                textFieldConfiguration: TextFieldConfiguration(
+                  controller: _searchController,
+                  decoration: InputDecoration(
+                    hintText: 'Pesquisar nome do dono (se houver)',
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 20.0, vertical: 15.0),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ),
                 ),
-                onChanged: (value) {
+                suggestionsCallback: (pattern) {
+                  return users.all
+                      .where((user) => user.name!
+                          .toLowerCase()
+                          .contains(pattern.toLowerCase()))
+                      .toList()
+                    ..sort((a, b) =>
+                        a.name!.toLowerCase().compareTo(b.name!.toLowerCase()));
+                },
+                itemBuilder: (context, User suggestion) {
+                  return ListTile(
+                    title: Text(suggestion.name.toString()),
+                  );
+                },
+                onSuggestionSelected: (User suggestion) {
                   setState(() {
-                    displayedUsers = users.all
-                        .where((user) => user.name!
-                            .toLowerCase()
-                            .contains(value.toLowerCase()))
-                        .toList();
+                    selectedOwner = suggestion;
+                    _searchController.text = suggestion.name.toString();
                   });
                 },
               ),
-              const SizedBox(height: 20),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: displayedUsers.length,
-                  itemBuilder: (ctx, i) => ListTile(
-                      title: Text(displayedUsers[i].name.toString()),
-                      onTap: () {
-                        selectedOwner = displayedUsers[i];
-                        _searchController.text =
-                            displayedUsers[i].name.toString();
-                        setState(() {
-                          displayedUsers = [];
-                        });
-                      }),
-                ),
-              ),
-
-//Date field
+              const SizedBox(height: 15),
+//Lending date field
               TextButton(
                 onPressed: () async {
-                  _selectDate(context);
+                  _selectLendingDate(context);
                 },
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(
-                      Colors.pinkAccent), // Definindo a cor de fundo rosa
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.pinkAccent),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0)),
@@ -292,10 +320,26 @@ class _PostsFormState extends State<PostsForm> {
                 ),
                 child: const Text(
                   'Selecionar Data de Empréstimo',
-                  style: TextStyle(
-                      fontSize: 18,
-                      color: Colors
-                          .white), // Defina a cor do texto como branco para melhor contraste
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                ),
+              ),
+              const SizedBox(height: 6),
+//Returning date field
+              TextButton(
+                onPressed: () async {
+                  _selectReturningDate(context);
+                },
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.pinkAccent),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0)),
+                  ),
+                ),
+                child: const Text(
+                  'Selecionar Data de Devolução',
+                  style: TextStyle(fontSize: 18, color: Colors.white),
                 ),
               )
             ],
