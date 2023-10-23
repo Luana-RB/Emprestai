@@ -1,7 +1,6 @@
 // ignore_for_file: unnecessary_null_comparison
 
-import 'dart:io';
-
+import 'package:appteste/components/post_picture.dart';
 import 'package:appteste/models/posts/post_generico.dart';
 import 'package:appteste/models/user/user.dart';
 import 'package:appteste/provider/posts_provider.dart';
@@ -10,36 +9,39 @@ import 'package:appteste/views/post_page.dart';
 import 'package:appteste/views/posts_form.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class PostTile extends StatelessWidget {
+class PostTile extends StatefulWidget {
   const PostTile({super.key, required this.post, required this.idUsuario});
   final Post post;
   final String? idUsuario;
 
   @override
+  State<PostTile> createState() => _PostTileState();
+}
+
+class _PostTileState extends State<PostTile> {
+  @override
   Widget build(BuildContext context) {
     final usersProvider = Provider.of<UsersProvider>(context, listen: false);
     //Find User
 
-    final User? thisUser = usersProvider.findById(idUsuario.toString());
+    final User? thisUser = usersProvider.findById(widget.idUsuario.toString());
     String userId = thisUser != null ? thisUser.id.toString() : 'null';
 
     //o creator é o user cujo id é igual ao id do criador do post, senão, é nulo
     final User? creator = usersProvider.all.isNotEmpty
         ? usersProvider.all.firstWhere(
-            (user) => user.id == post.creatorId,
+            (user) => user.id == widget.post.creatorId,
             orElse: () => User(name: 'null', id: 'null'),
           )
         : null;
     String creatorName = creator != null ? creator.name.toString() : 'null';
     String creatorId = creator != null ? creator.id.toString() : 'null';
 
-    final String status = post.status.toString();
+    final String status = widget.post.status.toString();
+    final String id = widget.post.id.toString();
 
     Color colorName;
-
-    File? image;
 
     switch (status) {
       case 'Solicitado':
@@ -58,8 +60,8 @@ class PostTile extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => PostPage(
-              post: post,
-              idUsuario: idUsuario,
+              post: widget.post,
+              idUsuario: widget.idUsuario,
             ),
           ),
         );
@@ -88,7 +90,7 @@ class PostTile extends StatelessWidget {
                       const SizedBox(width: 10),
 //Title
                       Text(
-                        post.title.toString(),
+                        widget.post.title.toString(),
                         textAlign: TextAlign.left,
                         style: const TextStyle(
                           color: Colors.white,
@@ -96,6 +98,7 @@ class PostTile extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
+                      Text(id),
 //Edit
                       Visibility(
                         visible: userId == creatorId,
@@ -106,10 +109,10 @@ class PostTile extends StatelessWidget {
                             await Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    PostsForm(idUsuario: idUsuario.toString()),
+                                builder: (context) => PostsForm(
+                                    idUsuario: widget.idUsuario.toString()),
                                 settings: RouteSettings(
-                                  arguments: post,
+                                  arguments: widget.post,
                                 ),
                               ),
                             );
@@ -124,7 +127,7 @@ class PostTile extends StatelessWidget {
                           color: Colors.white30,
                           onPressed: () {
                             Provider.of<PostsProvider>(context, listen: false)
-                                .remove(post);
+                                .remove(widget.post);
                           },
                         ),
                       ),
@@ -144,16 +147,14 @@ class PostTile extends StatelessWidget {
                             borderRadius: BorderRadius.circular(15.0)),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10.0),
-                          child: image != null
-                              ? Image.file(
-                                  image,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.5,
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.25,
-                                  fit: BoxFit.cover,
-                                )
-                              : getImageFromPath(post.id.toString()) as Widget?,
+                          child: FittedBox(
+                              fit: BoxFit.contain,
+                              child: PostPicture(
+                                postId: id,
+                                isSelect: true,
+                                width: 0.45,
+                                height: 0.25,
+                              )),
                         ),
                       ),
 
@@ -168,7 +169,7 @@ class PostTile extends StatelessWidget {
                           children: [
                             Expanded(
                               child: Text(
-                                post.description.toString(),
+                                widget.post.description.toString(),
                                 softWrap: true,
                               ),
                             ),
@@ -197,14 +198,4 @@ class PostTile extends StatelessWidget {
       ),
     );
   }
-}
-
-Future<FileImage?> getImageFromPath(postId) async {
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  final prefsKey = 'imagePath_$postId';
-  final imagePath = prefs.getString(prefsKey);
-  if (imagePath != null) {
-    return FileImage(File(imagePath));
-  }
-  return null;
 }

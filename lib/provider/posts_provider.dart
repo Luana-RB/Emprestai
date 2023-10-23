@@ -50,16 +50,11 @@ class PostsProvider extends ChangeNotifier {
                 id: id,
                 status: post.status,
                 title: post.title,
-                imageUrl: post.imageUrl,
                 description: post.description,
                 creatorId: post.creatorId,
-                //creatorProfileLink: post.creatorProfileLink,
-                //creatorImageUrl: post.creatorImageUrl,
-                //ownerName: post.ownerName,
-                //ownerProfileLink: post.ownerProfileLink,
-                //ownerImageUrl: post.ownerImageUrl,
+                ownerId: post.ownerId,
                 dateOfLending: post.dateOfLending,
-                //dateOfReturning: post.dateOfReturning,
+                dateOfReturning: post.dateOfReturning,
               ));
     }
     notifyListeners();

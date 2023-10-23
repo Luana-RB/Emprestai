@@ -4,7 +4,7 @@ class Post {
   String? id;
   String? status;
   String? title;
-  String? imageUrl;
+
   String? description;
   String? creatorId;
   //String? creatorProfileLink;
@@ -19,7 +19,6 @@ class Post {
     this.id,
     this.status,
     required this.title,
-    required this.imageUrl,
     required this.description,
     required this.creatorId,
     //this.creatorProfileLink,
@@ -41,10 +40,6 @@ class Post {
 
   set setTitle(String newTitle) {
     title = newTitle;
-  }
-
-  set setImageUrl(String newImageUrl) {
-    imageUrl = newImageUrl;
   }
 
   set setDescription(String newDescription) {

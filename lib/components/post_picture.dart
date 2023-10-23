@@ -6,9 +6,18 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PostPicture extends StatefulWidget {
-  const PostPicture({Key? key, required this.postId}) : super(key: key);
+  const PostPicture({
+    Key? key,
+    required this.postId,
+    required this.isSelect,
+    required this.height,
+    required this.width,
+  }) : super(key: key);
 
   final String postId;
+  final bool isSelect;
+  final double height;
+  final double width;
 
   @override
   State<PostPicture> createState() => _PostPictureState();
@@ -49,34 +58,57 @@ class _PostPictureState extends State<PostPicture> {
     await prefs.setString(getPrefsKey(), path);
   }
 
-  FileImage? getImageFromPath() {
-    final prefsKey = 'imagePath_${widget.postId}';
-    final imagePath = prefs.getString(prefsKey);
-    if (imagePath != null) {
-      return FileImage(File(imagePath));
-    }
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () async {
-        final XFile? files = await imageHelper.pickImage();
-        if (files != null) {
-          final croppedFile = await imageHelper.crop(
-            file: files,
-            cropStyle: CropStyle.circle,
-          );
-          if (croppedFile != null) {
-            await saveImagePathToPrefs(croppedFile.path);
-            setState(() {
-              _image = File(croppedFile.path);
-            });
-          }
-        }
-      },
-      child: const Text('Selecione Imagem Demonstrativa'),
+    return Column(
+      children: [
+        widget.isSelect
+            ? Center(
+                //child: FittedBox(
+                //fit: BoxFit.contain,
+                child: Container(
+                  width: MediaQuery.of(context).size.width * widget.width,
+                  height: MediaQuery.of(context).size.height * widget.height,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10.0),
+                    image: _image != null
+                        ? DecorationImage(
+                            image: FileImage(_image!),
+                            fit: BoxFit.cover,
+                          )
+                        : null,
+                  ),
+                  child: Text(
+                    widget.isSelect != true ? 'sem' : '',
+                    style: const TextStyle(fontSize: 12),
+                  ),
+                ),
+                // ),
+              )
+            : const SizedBox(width: 10),
+        const SizedBox(height: 8),
+        widget.isSelect
+            ? const SizedBox.shrink()
+            : TextButton(
+                onPressed: () async {
+                  final XFile? files = await imageHelper.pickImage();
+                  if (files != null) {
+                    final croppedFile = await imageHelper.crop(
+                      file: files,
+                      cropStyle: CropStyle.rectangle,
+                    );
+                    if (croppedFile != null) {
+                      await saveImagePathToPrefs(croppedFile.path);
+                      setState(() {
+                        _image = File(croppedFile.path);
+                      });
+                    }
+                  }
+                },
+                child: const Text('Select Photo'),
+              )
+      ],
     );
   }
 }

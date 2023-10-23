@@ -47,7 +47,7 @@ class _ProfilePictureState extends State<ProfilePicture> {
   }
 
   String getPrefsKey() {
-    return 'imagePath_${widget.userId}';
+    return 'imagePath_u${widget.userId}';
   }
 
   Future<void> getImageFromSharedPreferences() async {

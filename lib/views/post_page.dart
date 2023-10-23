@@ -1,4 +1,5 @@
 import 'package:appteste/components/post_calendar.dart';
+import 'package:appteste/components/post_picture.dart';
 import 'package:appteste/components/profile_picture.dart';
 import 'package:appteste/models/posts/post_generico.dart';
 import 'package:appteste/models/user/user.dart';
@@ -163,12 +164,14 @@ class _PostPageState extends State<PostPage> {
                       BoxDecoration(borderRadius: BorderRadius.circular(15.0)),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10.0),
-                    child: Image.network(
-                      widget.post.imageUrl.toString(),
-                      width: 480,
-                      height: 310,
-                      fit: BoxFit.cover,
-                    ),
+                    child: FittedBox(
+                        fit: BoxFit.contain,
+                        child: PostPicture(
+                          postId: widget.post.id.toString(),
+                          isSelect: true,
+                          width: 0.9,
+                          height: 0.4,
+                        )),
                   ),
                 ),
               ),

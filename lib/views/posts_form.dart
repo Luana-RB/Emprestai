@@ -31,7 +31,6 @@ class _PostsFormState extends State<PostsForm> {
     _formData['id'] = post.id!;
     _formData['title'] = post.title!;
     _formData['status'] = post.status!;
-    _formData['imageUrl'] = post.imageUrl!;
     _formData['description'] = post.description!;
     _formData['creatorName'] = post.creatorId!;
     _formData['ownerId'] = post.ownerId != null ? post.ownerId! : 'null';
@@ -157,7 +156,7 @@ class _PostsFormState extends State<PostsForm> {
                   selectedStatus = _formData['status'].toString();
                   existingPost!.setTitle = _formData['title']!.toString();
                   existingPost.setStatus = selectedStatus;
-                  existingPost.setImageUrl = _formData['imageUrl']!.toString();
+                  // existingPost.setImageUrl = _formData['imageUrl']!.toString();
                   existingPost.setDescription =
                       _formData['description']!.toString();
                   existingPost.setDateOfLending = selectedLendingDate;
@@ -177,7 +176,6 @@ class _PostsFormState extends State<PostsForm> {
                     id: null,
                     title: _formData['title'].toString(),
                     status: selectedStatus,
-                    imageUrl: _formData['imageUrl'].toString(),
                     description: _formData['description'].toString(),
                     creatorId: userId,
                     ownerId: selectedOwner?.id,
@@ -258,7 +256,12 @@ class _PostsFormState extends State<PostsForm> {
                 ],
               ),
 //Image field
-              PostPicture(postId: _formData['id'].toString()),
+              PostPicture(
+                postId: _formData['id'].toString(),
+                isSelect: false,
+                width: 0.5,
+                height: 0.25,
+              ),
 //Description field
               TextFormField(
                 initialValue: _formData['description'] != null

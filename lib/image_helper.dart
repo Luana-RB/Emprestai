@@ -39,13 +39,15 @@ class ImageHelper {
         cropStyle: cropStyle,
         sourcePath: file.path,
         compressQuality: 100,
+        aspectRatio: const CropAspectRatio(ratioX: 4, ratioY: 5),
         uiSettings: [
           AndroidUiSettings(
               toolbarTitle: 'Cropper',
               toolbarColor: Colors.pink,
               toolbarWidgetColor: Colors.white,
               initAspectRatio: CropAspectRatioPreset.original,
-              lockAspectRatio: false),
+              lockAspectRatio: true),
+
           IOSUiSettings(
             title: 'Cropper',
           ),
