@@ -1,17 +1,14 @@
-//import 'package:flutter/material.dart';
+import 'dart:convert';
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Post {
   String? id;
   String? status;
   String? title;
-
   String? description;
   String? creatorId;
-  //String? creatorProfileLink;
-  // String? creatorImageUrl;
   String? ownerId;
-  //String? ownerProfileLink;
-  //String? ownerImageUrl;
   DateTime dateOfLending;
   DateTime? dateOfReturning;
 
@@ -21,11 +18,7 @@ class Post {
     required this.title,
     required this.description,
     required this.creatorId,
-    //this.creatorProfileLink,
-    //this.creatorImageUrl,
     this.ownerId,
-    //this.ownerProfileLink,
-    //this.ownerImageUrl,
     required this.dateOfLending,
     this.dateOfReturning,
   });
@@ -46,24 +39,69 @@ class Post {
     description = newDescription;
   }
 
-  set setCreatorImageUrl(String newCreatorImageUrl) {
-    //creatorImageUrl = newCreatorImageUrl;
-  }
   set setOwnerId(String newOwnerId) {
     ownerId = newOwnerId;
   }
 
-  set setOwnerProfileLink(String newOwnerProfileLink) {
-    //ownerProfileLink = newOwnerProfileLink;
-  }
-  set setOwnerImageUrl(String newOwnerImageUrl) {
-    //ownerImageUrl = newOwnerImageUrl;
-  }
   set setDateOfLending(DateTime newDateOfLending) {
     dateOfLending = newDateOfLending;
   }
 
   set setDateOfReturning(DateTime newDateOfReturning) {
     dateOfReturning = newDateOfReturning;
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'status': status,
+      'title': title,
+      'description': description,
+      'creatorId': creatorId,
+      'ownerId': ownerId,
+      'dateOfLending': dateOfLending.toIso8601String(),
+      'dateOfReturning': dateOfReturning?.toIso8601String(),
+    };
+  }
+
+  factory Post.fromJson(Map<String, dynamic> json) {
+    return Post(
+      id: json['id'],
+      status: json['status'],
+      title: json['title'],
+      description: json['description'],
+      creatorId: json['creatorId'],
+      ownerId: json['ownerId'],
+      dateOfLending: DateTime.parse(json['dateOfLending']),
+      dateOfReturning: json['dateOfReturning'] != null
+          ? DateTime.parse(json['dateOfReturning'])
+          : null,
+    );
+  }
+}
+
+class PostStorage {
+  late SharedPreferences _prefs;
+
+  Future<void> initPrefs() async {
+    _prefs = await SharedPreferences.getInstance();
+  }
+
+  Future<void> savePost(Post post) async {
+    final posts = _prefs.getStringList('posts') ?? [];
+    final postJson = json.encode(post.toJson());
+    posts.add(postJson);
+    await _prefs.setStringList('posts', posts);
+  }
+
+  List<Post> getPosts() {
+    final posts = _prefs.getStringList('posts');
+    if (posts != null) {
+      return posts
+          .map((postJson) => Post.fromJson(json.decode(postJson)))
+          .toList();
+    } else {
+      return [];
+    }
   }
 }
