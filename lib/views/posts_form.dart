@@ -1,4 +1,4 @@
-// ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member, use_build_context_synchronously
 import 'package:appteste/components/post_picture.dart';
 import 'package:appteste/models/posts/post_generico.dart';
 import 'package:appteste/models/user/user.dart';
@@ -64,6 +64,9 @@ class _PostsFormState extends State<PostsForm> {
       selectedLendingDate = DateTime.now();
       selectedReturningDate = null;
     }
+    // Carrega os posts do SharedPreferences
+    Provider.of<PostsProvider>(context, listen: false)
+        .loadPostsFromSharedPreferences();
     super.didChangeDependencies();
   }
 
@@ -92,7 +95,6 @@ class _PostsFormState extends State<PostsForm> {
     );
     if (selectedDate != null) {
       if (selectedDate.isBefore(selectedLendingDate)) {
-        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text(
@@ -137,7 +139,7 @@ class _PostsFormState extends State<PostsForm> {
 //Save Button
           IconButton(
             icon: const Icon(Icons.save),
-            onPressed: () {
+            onPressed: () async {
               final isValid = _form.currentState!.validate();
               if (isValid) {
                 _form.currentState!.save();
@@ -156,7 +158,6 @@ class _PostsFormState extends State<PostsForm> {
                   selectedStatus = _formData['status'].toString();
                   existingPost!.setTitle = _formData['title']!.toString();
                   existingPost.setStatus = selectedStatus;
-                  // existingPost.setImageUrl = _formData['imageUrl']!.toString();
                   existingPost.setDescription =
                       _formData['description']!.toString();
                   existingPost.setDateOfLending = selectedLendingDate;
@@ -166,11 +167,12 @@ class _PostsFormState extends State<PostsForm> {
                   if (selectedOwner != null) {
                     existingPost.setOwnerId = selectedOwner!.id.toString();
                   }
-
                   postProvider.notifyListeners();
+                  await postProvider.savePostToSharedPreferences(existingPost);
                   thisPost = existingPost;
-                } else {
+
 //if post doesn't exists yet, creat new post
+                } else {
                   selectedStatus = 'Solicitado';
                   final newPost = Post(
                     id: null,
@@ -184,6 +186,7 @@ class _PostsFormState extends State<PostsForm> {
                   );
                   postProvider.put(newPost);
                   postProvider.notifyListeners();
+                  await postProvider.savePostToSharedPreferences(newPost);
                   thisPost = newPost;
                 }
 
@@ -197,7 +200,6 @@ class _PostsFormState extends State<PostsForm> {
                     ),
                   ),
                 );
-                // Navigator.pop(context);
               }
             },
           ),

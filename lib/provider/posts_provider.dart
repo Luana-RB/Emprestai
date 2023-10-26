@@ -28,9 +28,7 @@ class PostsProvider extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     final postsJson = prefs.getStringList('posts');
     if (postsJson != null) {
-      posts = postsJson
-          .map((postJson) => Post.fromJson(json.decode(postJson)))
-          .toList();
+      posts = postsJson.map((postJson) => Post.fromJson(postJson)).toList();
     }
     return posts;
   }
@@ -38,7 +36,7 @@ class PostsProvider extends ChangeNotifier {
   // Adiciona um post ao SharedPreferences e atualiza o _items
   Future<void> addPostToSharedPreferences(Post post) async {
     _items[post.id!] = post;
-    await savePostsToSharedPreferences();
+    await savePostToSharedPreferences(post);
     notifyListeners();
   }
 
@@ -99,12 +97,8 @@ class PostsProvider extends ChangeNotifier {
   // Salva o post no SharedPreferences
   Future<void> savePostToSharedPreferences(Post post) async {
     final prefs = await SharedPreferences.getInstance();
-    List<String> postsJson = prefs.getStringList('posts') ?? [];
-    final postJson = json.encode(post.toJson());
-    if (postsJson.contains(postJson)) {
-      postsJson.remove(postJson);
-    }
-    postsJson.add(postJson);
+    List<String> postsJson =
+        _items.values.map((post) => json.encode(post.toJson())).toList();
     await prefs.setStringList('posts', postsJson);
   }
 

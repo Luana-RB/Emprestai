@@ -9,6 +9,7 @@ import 'package:appteste/views/post_page.dart';
 import 'package:appteste/views/posts_form.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PostTile extends StatefulWidget {
   const PostTile({super.key, required this.post, required this.idUsuario});
@@ -20,26 +21,55 @@ class PostTile extends StatefulWidget {
 }
 
 class _PostTileState extends State<PostTile> {
+  late Post _fetchedPost;
+  late SharedPreferences prefs;
+  @override
+  void initState() {
+    super.initState();
+    _fetchedPost = widget.post;
+    initPrefs();
+  }
+
+  Future<void> initPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+    await getPostFromSharedPreferences();
+  }
+
+  Future<void> getPostFromSharedPreferences() async {
+    final postJson = prefs.getString(getPrefsKey());
+    if (postJson != null) {
+      final post = Post.fromJson(postJson);
+      setState(() {
+        _fetchedPost = post;
+      });
+    }
+  }
+
+  String getPrefsKey() {
+    return 'post_${widget.post.id}';
+  }
+
   @override
   Widget build(BuildContext context) {
+    final String status = _fetchedPost.status ?? "";
+    final String id = _fetchedPost.id ?? "";
+    final String title = _fetchedPost.title ?? "";
+    final String description = _fetchedPost.description ?? "";
+    final String creatorId = _fetchedPost.creatorId ?? "";
     final usersProvider = Provider.of<UsersProvider>(context, listen: false);
-    //Find User
 
+    //Find User
     final User? thisUser = usersProvider.findById(widget.idUsuario.toString());
     String userId = thisUser != null ? thisUser.id.toString() : 'null';
 
     //o creator é o user cujo id é igual ao id do criador do post, senão, é nulo
     final User? creator = usersProvider.all.isNotEmpty
         ? usersProvider.all.firstWhere(
-            (user) => user.id == widget.post.creatorId,
+            (user) => user.id == creatorId,
             orElse: () => User(name: 'null', id: 'null'),
           )
         : null;
     String creatorName = creator != null ? creator.name.toString() : 'null';
-    String creatorId = creator != null ? creator.id.toString() : 'null';
-
-    final String status = widget.post.status.toString();
-    final String id = widget.post.id.toString();
 
     Color colorName;
 
@@ -60,7 +90,7 @@ class _PostTileState extends State<PostTile> {
           context,
           MaterialPageRoute(
             builder: (context) => PostPage(
-              post: widget.post,
+              post: _fetchedPost,
               idUsuario: widget.idUsuario,
             ),
           ),
@@ -90,7 +120,7 @@ class _PostTileState extends State<PostTile> {
                       const SizedBox(width: 10),
 //Title
                       Text(
-                        widget.post.title.toString(),
+                        title,
                         textAlign: TextAlign.left,
                         style: const TextStyle(
                           color: Colors.white,
@@ -112,7 +142,7 @@ class _PostTileState extends State<PostTile> {
                                 builder: (context) => PostsForm(
                                     idUsuario: widget.idUsuario.toString()),
                                 settings: RouteSettings(
-                                  arguments: widget.post,
+                                  arguments: _fetchedPost,
                                 ),
                               ),
                             );
@@ -127,7 +157,7 @@ class _PostTileState extends State<PostTile> {
                           color: Colors.white30,
                           onPressed: () {
                             Provider.of<PostsProvider>(context, listen: false)
-                                .remove(widget.post);
+                                .remove(_fetchedPost);
                           },
                         ),
                       ),
@@ -169,7 +199,7 @@ class _PostTileState extends State<PostTile> {
                           children: [
                             Expanded(
                               child: Text(
-                                widget.post.description.toString(),
+                                description,
                                 softWrap: true,
                               ),
                             ),

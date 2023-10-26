@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:shared_preferences/shared_preferences.dart';
-
 class Post {
   String? id;
   String? status;
@@ -51,7 +49,7 @@ class Post {
     dateOfReturning = newDateOfReturning;
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toMap() {
     return {
       'id': id,
       'status': status,
@@ -59,49 +57,29 @@ class Post {
       'description': description,
       'creatorId': creatorId,
       'ownerId': ownerId,
-      'dateOfLending': dateOfLending.toIso8601String(),
-      'dateOfReturning': dateOfReturning?.toIso8601String(),
+      'dateOfLending': dateOfLending.millisecondsSinceEpoch,
+      'dateOfReturning': dateOfReturning != null
+          ? dateOfReturning!.millisecondsSinceEpoch
+          : null,
     };
   }
 
-  factory Post.fromJson(Map<String, dynamic> json) {
+  factory Post.fromMap(Map<String, dynamic> map) {
     return Post(
-      id: json['id'],
-      status: json['status'],
-      title: json['title'],
-      description: json['description'],
-      creatorId: json['creatorId'],
-      ownerId: json['ownerId'],
-      dateOfLending: DateTime.parse(json['dateOfLending']),
-      dateOfReturning: json['dateOfReturning'] != null
-          ? DateTime.parse(json['dateOfReturning'])
+      id: map['id'],
+      status: map['status'],
+      title: map['title'],
+      description: map['description'],
+      creatorId: map['creatorId'],
+      ownerId: map['ownerId'],
+      dateOfLending: DateTime.fromMillisecondsSinceEpoch(map['dateOfLending']),
+      dateOfReturning: map['dateOfReturning'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(map['dateOfReturning'])
           : null,
     );
   }
-}
 
-class PostStorage {
-  late SharedPreferences _prefs;
+  String toJson() => json.encode(toMap());
 
-  Future<void> initPrefs() async {
-    _prefs = await SharedPreferences.getInstance();
-  }
-
-  Future<void> savePost(Post post) async {
-    final posts = _prefs.getStringList('posts') ?? [];
-    final postJson = json.encode(post.toJson());
-    posts.add(postJson);
-    await _prefs.setStringList('posts', posts);
-  }
-
-  List<Post> getPosts() {
-    final posts = _prefs.getStringList('posts');
-    if (posts != null) {
-      return posts
-          .map((postJson) => Post.fromJson(json.decode(postJson)))
-          .toList();
-    } else {
-      return [];
-    }
-  }
+  factory Post.fromJson(String source) => Post.fromMap(json.decode(source));
 }
