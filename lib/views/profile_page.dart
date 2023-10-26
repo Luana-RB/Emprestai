@@ -70,7 +70,9 @@ class _MyProfilePageState extends State<MyProfilePage> {
       appBar: const PreferredSize(
           preferredSize: Size.fromHeight(50),
           child: AppBarPage(title: "Perfil de Usuário")),
-      drawer: const MyDrawer(),
+      drawer: MyDrawer(
+        idUsuario: widget.idUsuario,
+      ),
       bottomNavigationBar: CustomBottomNavigationBar(
         selectedIndex: _selectedIndex,
         onItemTapped: onTap,
@@ -119,7 +121,10 @@ class _MyProfilePageState extends State<MyProfilePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => LendingPanel(idUsuario: userId),
+                        builder: (context) => LendingPanel(
+                          idUsuario: userId,
+                          fromHomePage: false,
+                        ),
                       ),
                     );
                   },

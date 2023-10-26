@@ -11,10 +11,12 @@ import 'package:provider/provider.dart';
 class PostPage extends StatefulWidget {
   final Post post;
   final String? idUsuario;
+  final bool fromHomePage;
   const PostPage({
     super.key,
     required this.post,
     this.idUsuario,
+    required this.fromHomePage,
   });
 
   @override
@@ -109,8 +111,10 @@ class _PostPageState extends State<PostPage> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        PostsForm(idUsuario: userId.toString()),
+                    builder: (context) => PostsForm(
+                      idUsuario: userId.toString(),
+                      fromHomePage: widget.fromHomePage,
+                    ),
                     settings: RouteSettings(
                       arguments: widget.post,
                     ),

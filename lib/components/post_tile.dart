@@ -1,5 +1,7 @@
 // ignore_for_file: unnecessary_null_comparison
 
+import 'dart:convert';
+
 import 'package:appteste/components/post_picture.dart';
 import 'package:appteste/models/posts/post_generico.dart';
 import 'package:appteste/models/user/user.dart';
@@ -12,9 +14,14 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PostTile extends StatefulWidget {
-  const PostTile({super.key, required this.post, required this.idUsuario});
   final Post post;
   final String? idUsuario;
+  final bool fromHomePage;
+  const PostTile(
+      {super.key,
+      required this.post,
+      required this.idUsuario,
+      required this.fromHomePage});
 
   @override
   State<PostTile> createState() => _PostTileState();
@@ -23,6 +30,8 @@ class PostTile extends StatefulWidget {
 class _PostTileState extends State<PostTile> {
   late Post _fetchedPost;
   late SharedPreferences prefs;
+
+//estado inicial, post que mostra é o post repassado
   @override
   void initState() {
     super.initState();
@@ -30,23 +39,28 @@ class _PostTileState extends State<PostTile> {
     initPrefs();
   }
 
+//busca o post inicial
   Future<void> initPrefs() async {
     prefs = await SharedPreferences.getInstance();
     await getPostFromSharedPreferences();
   }
 
+//busca a key
+  String getPrefsKey() {
+    return 'post_${_fetchedPost.id}';
+  }
+
+//busca post pela key
   Future<void> getPostFromSharedPreferences() async {
     final postJson = prefs.getString(getPrefsKey());
     if (postJson != null) {
-      final post = Post.fromJson(postJson);
+      Map<String, dynamic> decodedPost =
+          jsonDecode(getPrefsKey()); //decodifica o post pela String
+      Post post = Post.fromJson(decodedPost);
       setState(() {
-        _fetchedPost = post;
+        _fetchedPost = post; //muda post para post buscado
       });
     }
-  }
-
-  String getPrefsKey() {
-    return 'post_${widget.post.id}';
   }
 
   @override
@@ -92,6 +106,7 @@ class _PostTileState extends State<PostTile> {
             builder: (context) => PostPage(
               post: _fetchedPost,
               idUsuario: widget.idUsuario,
+              fromHomePage: widget.fromHomePage,
             ),
           ),
         );
@@ -140,7 +155,9 @@ class _PostTileState extends State<PostTile> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => PostsForm(
-                                    idUsuario: widget.idUsuario.toString()),
+                                  idUsuario: widget.idUsuario.toString(),
+                                  fromHomePage: widget.fromHomePage,
+                                ),
                                 settings: RouteSettings(
                                   arguments: _fetchedPost,
                                 ),

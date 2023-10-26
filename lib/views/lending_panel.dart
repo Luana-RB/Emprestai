@@ -1,10 +1,11 @@
-import 'package:appteste/routes/app_routes.dart';
+import 'package:appteste/views/posts_form.dart';
 import 'package:appteste/views/posts_list.dart';
 import 'package:flutter/material.dart';
 
 class LendingPanel extends StatefulWidget {
-  const LendingPanel({super.key, this.idUsuario});
+  const LendingPanel({super.key, this.idUsuario, required this.fromHomePage});
   final String? idUsuario;
+  final bool fromHomePage;
 
   @override
   State<LendingPanel> createState() => _LendingPanelState();
@@ -37,7 +38,10 @@ class _LendingPanelState extends State<LendingPanel> {
         title: const Text(title, style: TextStyle(color: Colors.white)),
         centerTitle: true,
       ),
-      body: PostsPanel(idUsuario: widget.idUsuario.toString()),
+      body: PostsPanel(
+        idUsuario: widget.idUsuario.toString(),
+        fromHomePage: false,
+      ),
 //New Post
       floatingActionButton: Align(
         alignment: const Alignment(0.975, 0.975),
@@ -47,8 +51,14 @@ class _LendingPanelState extends State<LendingPanel> {
           child: FloatingActionButton(
             backgroundColor: Theme.of(context).colorScheme.inversePrimary,
             onPressed: () {
-              Navigator.of(context)
-                  .pushNamed(AppRoutes.POSTS_FORM, arguments: widget.idUsuario);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PostsForm(
+                      idUsuario: widget.idUsuario.toString(),
+                      fromHomePage: false),
+                ),
+              );
             },
             child: const Icon(Icons.add, size: 40),
           ),

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class Post {
   String? id;
   String? status;
@@ -7,7 +5,7 @@ class Post {
   String? description;
   String? creatorId;
   String? ownerId;
-  DateTime dateOfLending;
+  DateTime? dateOfLending;
   DateTime? dateOfReturning;
 
   Post({
@@ -49,7 +47,7 @@ class Post {
     dateOfReturning = newDateOfReturning;
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
       'id': id,
       'status': status,
@@ -57,29 +55,25 @@ class Post {
       'description': description,
       'creatorId': creatorId,
       'ownerId': ownerId,
-      'dateOfLending': dateOfLending.millisecondsSinceEpoch,
-      'dateOfReturning': dateOfReturning != null
-          ? dateOfReturning!.millisecondsSinceEpoch
-          : null,
+      'dateOfLending': dateOfLending?.toIso8601String(),
+      'dateOfReturning': dateOfReturning?.toIso8601String(),
     };
   }
 
-  factory Post.fromMap(Map<String, dynamic> map) {
+  factory Post.fromJson(Map<String, dynamic> json) {
     return Post(
-      id: map['id'],
-      status: map['status'],
-      title: map['title'],
-      description: map['description'],
-      creatorId: map['creatorId'],
-      ownerId: map['ownerId'],
-      dateOfLending: DateTime.fromMillisecondsSinceEpoch(map['dateOfLending']),
-      dateOfReturning: map['dateOfReturning'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['dateOfReturning'])
+      id: json['id'],
+      status: json['status'],
+      title: json['title'],
+      description: json['description'],
+      creatorId: json['creatorId'],
+      ownerId: json['ownerId'],
+      dateOfLending: json['dateOfLending'] != null
+          ? DateTime.parse(json['dateOfLending'])
+          : null,
+      dateOfReturning: json['dateOfReturning'] != null
+          ? DateTime.parse(json['dateOfReturning'])
           : null,
     );
   }
-
-  String toJson() => json.encode(toMap());
-
-  factory Post.fromJson(String source) => Post.fromMap(json.decode(source));
 }

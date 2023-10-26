@@ -28,6 +28,7 @@ class _PostPictureState extends State<PostPicture> {
   late ImageHelper imageHelper;
   late SharedPreferences prefs;
 
+//estado inicial
   @override
   void initState() {
     super.initState();
@@ -36,24 +37,29 @@ class _PostPictureState extends State<PostPicture> {
     initPrefs();
   }
 
+//busca imagem inicial
   Future<void> initPrefs() async {
     prefs = await SharedPreferences.getInstance();
     getImageFromSharedPreferences();
   }
 
+//busca key
   String getPrefsKey() {
     return 'imagePath_${widget.postId}';
   }
 
+//busca string pela key
   Future<void> getImageFromSharedPreferences() async {
     final imagePath = prefs.getString(getPrefsKey());
     if (imagePath != null) {
       setState(() {
+        //se string for diferente de nula, muda o estado para a imagem
         _image = File(imagePath);
       });
     }
   }
 
+//salva o novo string no key
   Future<void> saveImagePathToPrefs(String path) async {
     await prefs.setString(getPrefsKey(), path);
   }

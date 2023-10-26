@@ -4,14 +4,18 @@ import 'package:appteste/models/posts/post_generico.dart';
 import 'package:appteste/models/user/user.dart';
 import 'package:appteste/provider/posts_provider.dart';
 import 'package:appteste/provider/users_provider.dart';
-import 'package:appteste/views/post_page.dart';
+import 'package:appteste/views/home_page.dart';
+import 'package:appteste/views/lending_panel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:provider/provider.dart';
 
 class PostsForm extends StatefulWidget {
-  const PostsForm({Key? key, required this.idUsuario}) : super(key: key);
+  const PostsForm(
+      {Key? key, required this.idUsuario, required this.fromHomePage})
+      : super(key: key);
   final String idUsuario;
+  final bool fromHomePage;
 
   @override
   State<PostsForm> createState() => _PostsFormState();
@@ -34,7 +38,7 @@ class _PostsFormState extends State<PostsForm> {
     _formData['description'] = post.description!;
     _formData['creatorName'] = post.creatorId!;
     _formData['ownerId'] = post.ownerId != null ? post.ownerId! : 'null';
-    _formData['dateOfLending'] = post.dateOfLending;
+    _formData['dateOfLending'] = post.dateOfLending!;
     _formData['dateOfReturning'] =
         post.dateOfReturning != null ? post.dateOfReturning! : 'null';
   }
@@ -58,7 +62,7 @@ class _PostsFormState extends State<PostsForm> {
     if (post != null) {
       _loadFormaData(post);
       selectedStatus = _formData['status'].toString();
-      selectedLendingDate = post.dateOfLending;
+      selectedLendingDate = post.dateOfLending!;
       selectedReturningDate = post.dateOfReturning;
     } else {
       selectedLendingDate = DateTime.now();
@@ -66,7 +70,7 @@ class _PostsFormState extends State<PostsForm> {
     }
     // Carrega os posts do SharedPreferences
     Provider.of<PostsProvider>(context, listen: false)
-        .loadPostsFromSharedPreferences();
+        .getListFromSharedPreferences();
     super.didChangeDependencies();
   }
 
@@ -146,7 +150,6 @@ class _PostsFormState extends State<PostsForm> {
 
                 final postProvider =
                     Provider.of<PostsProvider>(context, listen: false);
-                final Post thisPost;
 
 //Status Controller
                 var selectedStatus = _statusButtonController.selectedStatus;
@@ -154,9 +157,9 @@ class _PostsFormState extends State<PostsForm> {
 //Update post's data
                 if (_formData['id'] != null) {
                   final existingPost =
-                      postProvider.findById(_formData['id']!.toString());
+                      await postProvider.findById(_formData['id']!.toString());
                   selectedStatus = _formData['status'].toString();
-                  existingPost!.setTitle = _formData['title']!.toString();
+                  existingPost.setTitle = _formData['title']!.toString();
                   existingPost.setStatus = selectedStatus;
                   existingPost.setDescription =
                       _formData['description']!.toString();
@@ -169,7 +172,6 @@ class _PostsFormState extends State<PostsForm> {
                   }
                   postProvider.notifyListeners();
                   await postProvider.savePostToSharedPreferences(existingPost);
-                  thisPost = existingPost;
 
 //if post doesn't exists yet, creat new post
                 } else {
@@ -187,19 +189,29 @@ class _PostsFormState extends State<PostsForm> {
                   postProvider.put(newPost);
                   postProvider.notifyListeners();
                   await postProvider.savePostToSharedPreferences(newPost);
-                  thisPost = newPost;
                 }
-
-//Goes to post page after updated/created
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => PostPage(
-                      post: thisPost,
-                      idUsuario: widget.idUsuario,
+//Goes to homePage/lendingPannel after updated/created
+                if (widget.fromHomePage) {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          MyHomePage(idUsuario: userId.toString()),
                     ),
-                  ),
-                );
+                    (route) => false,
+                  );
+                } else {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => LendingPanel(
+                        idUsuario: userId.toString(),
+                        fromHomePage: false,
+                      ),
+                    ),
+                    (route) => false,
+                  );
+                }
               }
             },
           ),

@@ -11,7 +11,7 @@ class LoanData {
 class PostCalendar extends StatefulWidget {
   const PostCalendar({super.key, required this.loanDate, this.returnDate});
   //List<LoanData> loanDataList;
-  final DateTime loanDate;
+  final DateTime? loanDate;
   final DateTime? returnDate;
 
   @override
