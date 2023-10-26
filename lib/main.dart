@@ -6,8 +6,8 @@ import 'package:appteste/routes/app_routes.dart';
 import 'package:appteste/views/chat_page.dart';
 import 'package:appteste/views/chat_selection_page.dart';
 import 'package:appteste/views/login_page.dart';
+import 'package:appteste/views/options_page.dart';
 import 'package:appteste/views/posts_form.dart';
-import 'package:appteste/views/posts_list.dart';
 import 'package:appteste/views/profile_page.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
@@ -55,19 +55,22 @@ class MyApp extends StatelessWidget {
         ),
         home: isLoggedIn ? const MyHomePage() : const LoginPage(),
         routes: {
-          AppRoutes.POSTS_LIST: (context) => const PostsList(),
+          //AppRoutes.POSTS_LIST: (context) => const PostsList(),
           AppRoutes.PROFILE_PAGE: (_) => const MyProfilePage(),
           AppRoutes.CHAT_SELECTION: (_) => const ChatSelectionPage(),
           AppRoutes.CHAT_PAGE: (_) => const ChatPage(),
           AppRoutes.HOME: (_) => const MyHomePage(),
+          AppRoutes.OPTIONS: (_) => const OptionsPage(),
         },
         onGenerateRoute: (settings) {
           if (settings.name == AppRoutes.POSTS_FORM) {
             // Extrai o argumento do nome de usuário
             final idUsuario = settings.arguments as String?;
             return MaterialPageRoute(
-              builder: (context) =>
-                  PostsForm(idUsuario: idUsuario.toString()),
+              builder: (context) => PostsForm(
+                idUsuario: idUsuario.toString(),
+                fromHomePage: true,
+              ),
             );
           }
           return null;

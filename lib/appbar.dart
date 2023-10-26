@@ -1,10 +1,12 @@
 import 'package:appteste/views/login_page.dart';
+import 'package:appteste/views/options_page.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppBarPage extends StatelessWidget {
   const AppBarPage({super.key, required this.title});
   final String title;
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -26,7 +28,8 @@ class AppBarPage extends StatelessWidget {
 }
 
 class MyDrawer extends StatelessWidget {
-  const MyDrawer({super.key});
+  const MyDrawer({super.key, this.idUsuario});
+  final String? idUsuario;
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +55,14 @@ class MyDrawer extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                OptionsPage(idUsuario: idUsuario),
+                          ));
+                    },
                     icon: const Icon(Icons.settings, size: 40)),
               ),
 //Sair

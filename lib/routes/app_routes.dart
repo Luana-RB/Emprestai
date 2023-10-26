@@ -10,5 +10,6 @@ class AppRoutes {
   static const String POST_PAGE = '/post-page';
   static const CHAT_PAGE = '/chat-page';
   static const SPLASH = '/splash';
+  static const OPTIONS = '/options';
   //var PROFILES = '/profile/$user';
 }

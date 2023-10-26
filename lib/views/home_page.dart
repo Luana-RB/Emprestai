@@ -51,6 +51,11 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  // Método para recarregar a lista de posts
+  void reloadPostsList() {
+    setState(() {});
+  }
+
   @override
   void initState() {
     super.initState();
@@ -63,13 +68,15 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: const PreferredSize(
           preferredSize: Size.fromHeight(50), child: AppBarPage(title: title)),
-      drawer: const MyDrawer(),
+      drawer: MyDrawer(idUsuario: widget.idUsuario),
       bottomNavigationBar: CustomBottomNavigationBar(
         selectedIndex: _selectedIndex,
         onItemTapped: onTap,
       ),
       body: PostsList(
+        key: UniqueKey(),
         idUsuario: widget.idUsuario.toString(),
+        fromHomePage: true,
       ),
 //New Post
       floatingActionButton: Align(
@@ -81,7 +88,11 @@ class _MyHomePageState extends State<MyHomePage> {
             backgroundColor: Theme.of(context).colorScheme.inversePrimary,
             onPressed: () {
               Navigator.of(context)
-                  .pushNamed(AppRoutes.POSTS_FORM, arguments: widget.idUsuario);
+                  .pushNamed(AppRoutes.POSTS_FORM, arguments: widget.idUsuario)
+                  .then((value) {
+                // Recarrega a lista de posts ao retornar da tela de formulário
+                reloadPostsList();
+              });
             },
             child: const Icon(Icons.add, size: 40),
           ),
