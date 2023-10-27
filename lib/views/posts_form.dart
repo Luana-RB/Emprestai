@@ -1,6 +1,6 @@
 // ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member, use_build_context_synchronously
-import 'package:appteste/components/post_picture.dart';
-import 'package:appteste/models/posts/post_generico.dart';
+import 'package:appteste/components/images/post_picture.dart';
+import 'package:appteste/models/posts/post_object.dart';
 import 'package:appteste/models/user/user.dart';
 import 'package:appteste/provider/posts_provider.dart';
 import 'package:appteste/provider/users_provider.dart';
@@ -201,7 +201,7 @@ class _PostsFormState extends State<PostsForm> {
                     (route) => false,
                   );
                 } else {
-                  Navigator.pushAndRemoveUntil(
+                  Navigator.pop(
                     context,
                     MaterialPageRoute(
                       builder: (context) => LendingPanel(
@@ -209,7 +209,6 @@ class _PostsFormState extends State<PostsForm> {
                         fromHomePage: false,
                       ),
                     ),
-                    (route) => false,
                   );
                 }
               }

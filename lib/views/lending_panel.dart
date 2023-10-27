@@ -1,5 +1,6 @@
 import 'package:appteste/views/posts_form.dart';
-import 'package:appteste/views/posts_list.dart';
+import 'package:appteste/components/posts_list.dart';
+import 'package:appteste/views/profile_page.dart';
 import 'package:flutter/material.dart';
 
 class LendingPanel extends StatefulWidget {
@@ -32,7 +33,14 @@ class _LendingPanelState extends State<LendingPanel> {
             color: Colors.white,
           ),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MyProfilePage(
+                  idUsuario: widget.idUsuario.toString(),
+                ),
+              ),
+            );
           },
         ),
         title: const Text(title, style: TextStyle(color: Colors.white)),

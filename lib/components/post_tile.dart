@@ -2,8 +2,8 @@
 
 import 'dart:convert';
 
-import 'package:appteste/components/post_picture.dart';
-import 'package:appteste/models/posts/post_generico.dart';
+import 'package:appteste/components/images/post_picture.dart';
+import 'package:appteste/models/posts/post_object.dart';
 import 'package:appteste/models/user/user.dart';
 import 'package:appteste/provider/posts_provider.dart';
 import 'package:appteste/provider/users_provider.dart';
@@ -143,7 +143,7 @@ class _PostTileState extends State<PostTile> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Text(id),
+
 //Edit
                       Visibility(
                         visible: userId == creatorId,

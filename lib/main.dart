@@ -1,5 +1,4 @@
 import 'package:appteste/views/home_page.dart';
-import 'package:appteste/provider/chat_users_provider.dart';
 import 'package:appteste/provider/posts_provider.dart';
 import 'package:appteste/provider/users_provider.dart';
 import 'package:appteste/routes/app_routes.dart';
@@ -42,9 +41,6 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<PostsProvider>(
           create: (ctx) => PostsProvider(),
-        ),
-        ChangeNotifierProvider<ChatUsersProvider>(
-          create: (ctx) => ChatUsersProvider(),
         ),
       ],
       child: MaterialApp(

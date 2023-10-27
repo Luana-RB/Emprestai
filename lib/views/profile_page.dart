@@ -1,9 +1,9 @@
-import 'package:appteste/appbar.dart';
-import 'package:appteste/components/profile_picture.dart';
+import 'package:appteste/components/appbar.dart';
+import 'package:appteste/components/images/profile_picture.dart';
 import 'package:appteste/models/user/user.dart';
 import 'package:appteste/provider/users_provider.dart';
 import 'package:appteste/views/home_page.dart';
-import 'package:appteste/navigationbar.dart';
+import 'package:appteste/components/navigationbar.dart';
 import 'package:appteste/views/chat_selection_page.dart';
 import 'package:appteste/views/lending_panel.dart';
 import 'package:flutter/material.dart';
@@ -98,7 +98,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
               style: const TextStyle(fontSize: 25),
               softWrap: true,
             ),
-            const SizedBox(height: 70),
+            const SizedBox(height: 40),
 //Panel Button
             Container(
               width: MediaQuery.of(context).size.width * 0.9,

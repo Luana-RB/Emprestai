@@ -1,4 +1,4 @@
-import 'package:appteste/models/posts/post_generico.dart';
+import 'package:appteste/models/posts/post_object.dart';
 
 Map<String, Post> dummyPosts = {
   // '1': Post(

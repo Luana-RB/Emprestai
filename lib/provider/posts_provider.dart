@@ -1,60 +1,50 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
-import 'package:appteste/models/posts/post_generico.dart';
+import 'package:appteste/models/posts/post_object.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PostsProvider extends ChangeNotifier {
 //Lista
-
-//salva a lista de strings
-  void saveListToSharedPreferences(List<String> listaString) async {
+//salva a lista de post encodados para string
+  Future<void> saveListToSharedPreferences(List<Post> posts) async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.setStringList("listaString", listaString);
+    final List<String> postStrings =
+        posts.map((post) => jsonEncode(post)).toList();
+    await prefs.setStringList("postList", postStrings);
   }
 
-//busca a lista de strings
-  Future<List<String>> getListFromSharedPreferences() async {
+//busca a lista de strings e decoda para post
+  Future<List<Post>> getListFromSharedPreferences() async {
     final prefs = await SharedPreferences.getInstance();
-    List<String>? listaString = prefs.getStringList("listaString");
-    return listaString ?? [];
+    List<String>? listaString = prefs.getStringList("postList");
+    if (listaString == null || listaString.isEmpty) {
+      return [];
+    }
+    List<Post> posts = [];
+    for (String item in listaString) {
+      Map<String, dynamic> decodedPost = jsonDecode(item);
+      Post post = Post.fromJson(decodedPost);
+      posts.add(post);
+    }
+    return posts;
   }
 
 //Valores
-
-  // Retorna todos os valores decodificados
-  Future<List<Post>> decodePostsFromSharedPreferences(
-      List<String> listaString) async {
-    List<Post> decodedPosts = [];
-    for (int i = 0; i < listaString.length; i++) {
-      String jsonString = await SharedPreferences.getInstance()
-          .then((prefs) => prefs.getString(listaString[i]) ?? '');
-
-      // Verifica se jsonString é um JSON válido antes de decodificar
-      if (jsonString.isNotEmpty) {
-        dynamic decodedData = jsonDecode(jsonString);
-        if (decodedData is Map<String, dynamic>) {
-          Post post = Post.fromJson(decodedData);
-          decodedPosts.add(post);
-        }
-      }
-    }
-    return decodedPosts;
+//Retorna os valores dos posts
+  Future<List<Post>> getAll() async {
+    List<Post> allPosts = await getListFromSharedPreferences();
+    return allPosts;
   }
 
-  Future<List<Post>> get all async {
-    final List<String> listaString = await getListFromSharedPreferences();
-    return decodePostsFromSharedPreferences(listaString);
-  }
-
-//returns lenght
+//Retorna o tamanho da lista / quantos posts tem
   Future<int> getCount() async {
-    List<String> lista = await getListFromSharedPreferences();
+    List<Post> lista = await getListFromSharedPreferences();
     return lista.length;
   }
 
-// Retorna posts com base nos índices
+//Retorna post baseado no índice
   Future<Post> byIndex(int i) async {
-    List<Post> allPosts = await all;
+    List<Post> allPosts = await getAll();
     if (i >= 0 && i < allPosts.length) {
       return allPosts[i];
     } else {
@@ -62,8 +52,9 @@ class PostsProvider extends ChangeNotifier {
     }
   }
 
+//Retorna post baseado no Id
   Future<Post> findById(String id) async {
-    List<Post> allPosts = await all;
+    List<Post> allPosts = await getAll();
     return allPosts.firstWhere(
       (post) => post.id == id,
       orElse: () => Post(
@@ -74,29 +65,58 @@ class PostsProvider extends ChangeNotifier {
     );
   }
 
-//returns posts filtered by their status
+//Retorna posts baseados no status
   List<Post> filterPostsByStatus(List<Post> posts, String status) {
     return posts.where((post) => post.status == status).toList();
   }
 
+//Estado de post
+//Acionar
   void put(Post post) async {
-    // Gere um novo ID para o post
-    int count = await getCount();
-    String id = (count + 1).toString();
-    post.id = id;
-    // Adiciona ele na lista
-    savePostToSharedPreferences(post);
+    if (post.id != null) {
+      // Se o ID do post já existe, atualize-o
+      await updatePost(post);
+    } else {
+      // Se o ID do post não existe, crie um novo
+      int count = await getCount();
+      String id = (count + 1).toString();
+      post.id = id;
+      savePostToSharedPreferences(post);
+    }
     notifyListeners();
   }
 
-  // Salva o post no SharedPreferences
+// Atualize o post existente com os novos dados
+  Future<void> updatePost(Post post) async {
+    final List<Post> allPosts = await getAll();
+    for (int i = 0; i < allPosts.length; i++) {
+      if (allPosts[i].id == post.id) {
+        allPosts[i] =
+            post; // Substitui o post antigo pelo post atualizado na lista
+        await saveListToSharedPreferences(allPosts); // Salva a lista atualizada
+        break;
+      }
+    }
+    notifyListeners();
+  }
+
+// Salva o post no SharedPreferences
   Future<void> savePostToSharedPreferences(Post post) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString("post${post.id}", jsonEncode(post));
-    List<String> lista =
-        await getListFromSharedPreferences(); // Espera a operação assíncrona
-    lista.add("post${post.id}");
-    saveListToSharedPreferences(lista);
+    List<Post> lista = await getListFromSharedPreferences();
+    int existingIndex = lista.indexWhere((element) => element.id == post.id);
+    if (existingIndex != -1) {
+      lista[existingIndex] = post;
+    } else {
+      lista.add(post);
+    }
+    await saveListToSharedPreferences(lista);
+  }
+
+//Deleta post
+  void remove(Post post) {
+    removePostFromSharedPreferences(post);
   }
 
 // Remove o post do SharedPreferences
@@ -104,12 +124,11 @@ class PostsProvider extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     if (prefs.containsKey("post${post.id}")) {
       prefs.remove("post${post.id}");
-      //list
-      List<String> lista = await getListFromSharedPreferences();
-      lista.remove("post${post.id}");
-      saveListToSharedPreferences(lista);
+      List<Post> lista = await getListFromSharedPreferences();
+      lista.removeWhere((element) => element.id == post.id);
+      await saveListToSharedPreferences(lista);
+      notifyListeners();
     }
-    notifyListeners();
   }
 
 //Busca post
@@ -121,12 +140,5 @@ class PostsProvider extends ChangeNotifier {
       return Post.fromJson(decodedPost);
     }
     return null;
-  }
-
-  void remove(Post post) {
-    if (post.id != null) {
-      removePostFromSharedPreferences(post);
-      notifyListeners();
-    }
   }
 }

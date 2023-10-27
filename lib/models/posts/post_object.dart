@@ -7,6 +7,7 @@ class Post {
   String? ownerId;
   DateTime? dateOfLending;
   DateTime? dateOfReturning;
+  String? imagePath;
 
   Post({
     this.id,
@@ -17,6 +18,7 @@ class Post {
     this.ownerId,
     required this.dateOfLending,
     this.dateOfReturning,
+    this.imagePath,
   });
 
   set setId(String newId) {

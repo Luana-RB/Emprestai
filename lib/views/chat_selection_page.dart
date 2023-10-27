@@ -1,8 +1,8 @@
-import 'package:appteste/appbar.dart';
+import 'package:appteste/components/appbar.dart';
 import 'package:appteste/components/chat_tile.dart';
+import 'package:appteste/provider/users_provider.dart';
 import 'package:appteste/views/home_page.dart';
-import 'package:appteste/navigationbar.dart';
-import 'package:appteste/provider/chat_users_provider.dart';
+import 'package:appteste/components/navigationbar.dart';
 import 'package:appteste/views/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -54,7 +54,7 @@ class _ChatSelectionPageState extends State<ChatSelectionPage> {
   @override
   Widget build(BuildContext context) {
     String title = "Bate-papos";
-    final ChatUsersProvider chatUsers = Provider.of(context);
+    final UsersProvider chatUsers = Provider.of(context);
 
     return Scaffold(
       appBar: PreferredSize(

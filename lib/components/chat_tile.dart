@@ -1,5 +1,5 @@
 import 'package:appteste/models/user/user.dart';
-import 'package:appteste/provider/chat_users_provider.dart';
+import 'package:appteste/provider/users_provider.dart';
 import 'package:appteste/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -57,7 +57,7 @@ class ChatTile extends StatelessWidget {
                 ).then(
                   (confirmed) {
                     if (confirmed) {
-                      Provider.of<ChatUsersProvider>(context, listen: false)
+                      Provider.of<UsersProvider>(context, listen: false)
                           .remove(user);
                     }
                   },

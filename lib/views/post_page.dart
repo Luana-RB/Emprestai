@@ -1,7 +1,7 @@
 import 'package:appteste/components/post_calendar.dart';
-import 'package:appteste/components/post_picture.dart';
-import 'package:appteste/components/profile_picture.dart';
-import 'package:appteste/models/posts/post_generico.dart';
+import 'package:appteste/components/images/post_picture.dart';
+import 'package:appteste/components/images/profile_picture.dart';
+import 'package:appteste/models/posts/post_object.dart';
 import 'package:appteste/models/user/user.dart';
 import 'package:appteste/provider/users_provider.dart';
 import 'package:appteste/views/posts_form.dart';

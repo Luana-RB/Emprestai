@@ -1,6 +1,6 @@
 //Profile picture getter
 import 'dart:io';
-import 'package:appteste/image_helper.dart';
+import 'package:appteste/components/images/image_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';

@@ -1,5 +1,5 @@
 import 'package:appteste/components/post_tile.dart';
-import 'package:appteste/models/posts/post_generico.dart';
+import 'package:appteste/models/posts/post_object.dart';
 import 'package:appteste/models/user/user.dart';
 import 'package:appteste/provider/posts_provider.dart';
 import 'package:appteste/provider/users_provider.dart';
@@ -20,13 +20,12 @@ class _PostsListState extends State<PostsList> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Post>>(
-      future: Provider.of<PostsProvider>(context).all,
+      future: Provider.of<PostsProvider>(context).getAll(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(
             body: Center(
-              child:
-                  CircularProgressIndicator(), // ou outro widget de carregamento
+              child: CircularProgressIndicator(),
             ),
           );
         } else if (snapshot.hasError) {
@@ -81,13 +80,12 @@ class _PostsPanelState extends State<PostsPanel> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Post>>(
-      future: Provider.of<PostsProvider>(context).all,
+      future: Provider.of<PostsProvider>(context).getAll(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(
             body: Center(
-              child:
-                  CircularProgressIndicator(), // ou outro widget de carregamento
+              child: CircularProgressIndicator(),
             ),
           );
         } else if (snapshot.hasError) {

@@ -1,10 +1,10 @@
-import 'package:appteste/appbar.dart';
+import 'package:appteste/components/appbar.dart';
 import 'package:appteste/routes/app_routes.dart';
 import 'package:appteste/views/chat_selection_page.dart';
-import 'package:appteste/views/posts_list.dart';
+import 'package:appteste/components/posts_list.dart';
 import 'package:appteste/views/profile_page.dart';
 import 'package:flutter/material.dart';
-import 'package:appteste/navigationbar.dart';
+import 'package:appteste/components/navigationbar.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, this.idUsuario});
