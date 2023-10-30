@@ -1,11 +1,8 @@
 import 'dart:io';
 import 'package:appteste/components/images/image_helper.dart';
-import 'package:appteste/models/posts/post_object.dart';
-import 'package:appteste/provider/posts_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PostPicture extends StatefulWidget {
@@ -30,42 +27,26 @@ class _PostPictureState extends State<PostPicture> {
   late File? _image;
   late ImageHelper imageHelper;
   late SharedPreferences prefs;
-  late Post post;
 
-//estado inicial
   @override
   void initState() {
     super.initState();
     imageHelper = ImageHelper(context);
     _image = null;
-    post = Post(
-        id: null,
-        imagePath: null,
-        title: '',
-        description: '',
-        creatorId: '',
-        dateOfLending: DateTime.now());
     initPrefs();
-    _image = post.imagePath != null ? File(post.imagePath!) : null;
   }
 
-//busca imagem inicial
   Future<void> initPrefs() async {
     prefs = await SharedPreferences.getInstance();
-    // ignore: use_build_context_synchronously
-    post = await Provider.of<PostsProvider>(context, listen: false)
-        .findById(widget.postId);
     getImageFromSharedPreferences();
   }
 
-//busca key
   String getPrefsKey() {
     return 'imagePath_${widget.postId}';
   }
 
-//busca string pela key
   Future<void> getImageFromSharedPreferences() async {
-    final imagePath = post.imagePath;
+    final imagePath = prefs.getString(getPrefsKey());
     if (imagePath != null) {
       setState(() {
         _image = File(imagePath);
@@ -73,9 +54,7 @@ class _PostPictureState extends State<PostPicture> {
     }
   }
 
-//salva o novo string no key
   Future<void> saveImagePathToPrefs(String path) async {
-    post.imagePath = path;
     await prefs.setString(getPrefsKey(), path);
   }
 
