@@ -163,7 +163,7 @@ class _PostPageState extends State<PostPage> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: headerTextColor,
-                        fontSize: 36,
+                        fontSize: 30,
                         fontWeight: FontWeight.bold,
                       ),
                     ),

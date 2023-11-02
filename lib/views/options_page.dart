@@ -16,7 +16,6 @@ class OptionsPageState extends State<OptionsPage> {
 
   String selectedLanguage = 'pt';
   bool receiveNotifications = true;
-  String contactMethod = 'telefone';
 
   @override
   void initState() {
@@ -33,8 +32,6 @@ class OptionsPageState extends State<OptionsPage> {
           _prefs.getString('$_prefsKey-selectedLanguage') ?? 'pt';
       receiveNotifications =
           _prefs.getBool('$_prefsKey-receiveNotifications') ?? true;
-      contactMethod =
-          _prefs.getString('$_prefsKey-contactMethod') ?? 'telefone';
     });
   }
 
@@ -42,15 +39,15 @@ class OptionsPageState extends State<OptionsPage> {
     await _prefs.setString('$_prefsKey-selectedLanguage', selectedLanguage);
     await _prefs.setBool(
         '$_prefsKey-receiveNotifications', receiveNotifications);
-    await _prefs.setString('$_prefsKey-contactMethod', contactMethod);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        foregroundColor: Theme.of(context).colorScheme.secondary,
         title: Text(
-          'Opções do Aplicativo',
+          'Configurações',
           style: TextStyle(color: Theme.of(context).colorScheme.secondary),
         ),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -88,27 +85,6 @@ class OptionsPageState extends State<OptionsPage> {
                 receiveNotifications = value;
               });
             },
-          ),
-          ListTile(
-            title: Text('Formas de Contato',
-                style:
-                    TextStyle(color: Theme.of(context).colorScheme.secondary)),
-            trailing: DropdownButton<String>(
-              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
-              value: contactMethod,
-              onChanged: (String? newValue) {
-                setState(() {
-                  contactMethod = newValue!;
-                });
-              },
-              items: <String>['telefone', 'e-mail']
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-            ),
           ),
           ListTile(
             title: const Text(

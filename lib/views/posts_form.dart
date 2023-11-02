@@ -229,6 +229,7 @@ class _PostsFormState extends State<PostsForm> {
                 children: [
                   Expanded(
                     child: TextFormField(
+                      maxLength: 20,
                       style: TextStyle(
                           color: Theme.of(context).colorScheme.secondary),
                       initialValue: _formData['title'] != null

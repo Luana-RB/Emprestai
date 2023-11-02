@@ -84,7 +84,8 @@ class _PostTileState extends State<PostTile> {
           )
         : null;
     String creatorName = creator != null ? creator.name.toString() : 'null';
-
+    DateTime now = DateTime.now();
+    DateTime today = DateTime(now.year, now.month, now.day);
     Color colorName;
 
     switch (status) {
@@ -130,57 +131,75 @@ class _PostTileState extends State<PostTile> {
                     color: colorName,
                   ),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       const SizedBox(width: 10),
+                      Visibility(
+                          visible: (_fetchedPost.dateOfReturning != null
+                                  ? DateTime(
+                                          _fetchedPost.dateOfReturning!.year,
+                                          _fetchedPost.dateOfReturning!.month,
+                                          _fetchedPost.dateOfReturning!.day)
+                                      .isBefore(today)
+                                  : false) &&
+                              (_fetchedPost.status != 'Devolvido'),
+                          child: const Icon(Icons.timer)),
+                      const SizedBox(width: 25),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
 //Title
-                      Text(
-                        title,
-                        textAlign: TextAlign.left,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                          Text(
+                            title,
+                            textAlign: TextAlign.left,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
 
 //Edit
-                      Visibility(
-                        visible: userId == creatorId,
-                        child: IconButton(
-                          icon: const Icon(Icons.edit),
-                          color: Colors.white30,
-                          onPressed: () async {
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => PostsForm(
-                                  idUsuario: widget.idUsuario.toString(),
-                                  fromHomePage: widget.fromHomePage,
-                                ),
-                                settings: RouteSettings(
-                                  arguments: _fetchedPost,
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
+                          Visibility(
+                            visible: userId == creatorId,
+                            child: IconButton(
+                              icon: const Icon(Icons.edit),
+                              color: Colors.white30,
+                              onPressed: () async {
+                                await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PostsForm(
+                                      idUsuario: widget.idUsuario.toString(),
+                                      fromHomePage: widget.fromHomePage,
+                                    ),
+                                    settings: RouteSettings(
+                                      arguments: _fetchedPost,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
 //Delete
-                      Visibility(
-                        visible: userId == creatorId,
-                        child: IconButton(
-                          icon: const Icon(Icons.delete),
-                          color: Colors.white30,
-                          onPressed: () {
-                            Provider.of<PostsProvider>(context, listen: false)
-                                .remove(_fetchedPost);
-                          },
-                        ),
+                          Visibility(
+                            visible: userId == creatorId,
+                            child: IconButton(
+                              icon: const Icon(Icons.delete),
+                              color: Colors.white30,
+                              onPressed: () {
+                                Provider.of<PostsProvider>(context,
+                                        listen: false)
+                                    .remove(_fetchedPost);
+                              },
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
                 ),
+
 //Post Body
                 Padding(
                   padding: const EdgeInsets.all(15.0),

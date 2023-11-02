@@ -64,6 +64,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
         : null;
     String userName = thisUser != null ? thisUser.name.toString() : 'null';
     String userId = thisUser != null ? thisUser.id.toString() : 'null';
+    String userEmail = thisUser != null ? thisUser.email.toString() : 'null';
 
     const String title = 'Perfil de Usuário';
     return Scaffold(
@@ -95,6 +96,14 @@ class _MyProfilePageState extends State<MyProfilePage> {
               userName,
               style: TextStyle(
                   fontSize: 25, color: Theme.of(context).colorScheme.secondary),
+              softWrap: true,
+            ),
+            const SizedBox(height: 2),
+//Email/telefone
+            Text(
+              userEmail,
+              style: TextStyle(
+                  fontSize: 16, color: Theme.of(context).colorScheme.secondary),
               softWrap: true,
             ),
             const SizedBox(height: 40),
