@@ -114,11 +114,11 @@ class _PostTileState extends State<PostTile> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const SizedBox(height: 50),
+          const SizedBox(height: 20),
 //Post
           Container(
-            color: Colors.white,
-            width: MediaQuery.of(context).size.width * 0.94,
+            color: Theme.of(context).colorScheme.tertiary,
+            width: MediaQuery.of(context).size.width * 1,
             height: MediaQuery.of(context).size.height * 0.35,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -184,58 +184,69 @@ class _PostTileState extends State<PostTile> {
 //Post Body
                 Padding(
                   padding: const EdgeInsets.all(15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                  child: Container(
+                    color: Theme.of(context).colorScheme.tertiary,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
 //Image
-                      Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15.0)),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10.0),
-                          child: FittedBox(
-                              fit: BoxFit.contain,
-                              child: PostPicture(
-                                postId: id,
-                                isSelect: true,
-                                width: 0.45,
-                                height: 0.25,
-                              )),
-                        ),
-                      ),
-
-                      const SizedBox(width: 15),
-//Description
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.3,
-                        height: MediaQuery.of(context).size.height * 0.25,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                description,
-                                softWrap: true,
-                              ),
+                        Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15.0)),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10.0),
+                            child: Container(
+                              color: Theme.of(context).colorScheme.tertiary,
+                              child: FittedBox(
+                                  fit: BoxFit.contain,
+                                  child: PostPicture(
+                                    postId: id,
+                                    isSelect: true,
+                                    width: 0.45,
+                                    height: 0.25,
+                                  )),
                             ),
-
-//Creator's name
-                            Align(
-                              alignment: Alignment.bottomRight,
-                              child: InkWell(
-                                onTap: () {},
+                          ),
+                        ),
+                        const SizedBox(width: 15),
+//Description
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.3,
+                          height: MediaQuery.of(context).size.height * 0.25,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
                                 child: Text(
-                                  creatorName,
-                                  style: const TextStyle(color: Colors.black45),
+                                  description,
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary),
+                                  softWrap: true,
                                 ),
                               ),
-                            ),
-                          ],
+//Creator's name
+                              Align(
+                                alignment: Alignment.bottomRight,
+                                child: InkWell(
+                                  onTap: () {},
+                                  child: Text(
+                                    creatorName,
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ],

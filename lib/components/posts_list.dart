@@ -45,7 +45,7 @@ class _PostsListState extends State<PostsList> {
 
           return Scaffold(
             body: Container(
-              color: const Color.fromARGB(255, 255, 224, 235),
+              color: Theme.of(context).colorScheme.background,
               child: ListView.builder(
                 itemCount: filteredPosts.length,
                 itemBuilder: (ctx, i) => PostTile(
@@ -133,7 +133,7 @@ class _PostsPanelState extends State<PostsPanel> {
 
           return Scaffold(
             body: Container(
-              color: const Color.fromARGB(255, 255, 224, 235),
+              color: Theme.of(context).colorScheme.background,
               child: ListView.builder(
                 itemCount: allFilteredPosts.length,
                 itemBuilder: (ctx, i) => PostTile(

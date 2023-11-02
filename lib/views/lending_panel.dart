@@ -26,11 +26,11 @@ class _LendingPanelState extends State<LendingPanel> {
     const String title = 'Painel de Empréstimo';
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.pinkAccent,
+        backgroundColor: Theme.of(context).colorScheme.onTertiary,
         leading: IconButton(
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back,
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.secondary,
           ),
           onPressed: () {
             Navigator.pushReplacement(
@@ -43,7 +43,8 @@ class _LendingPanelState extends State<LendingPanel> {
             );
           },
         ),
-        title: const Text(title, style: TextStyle(color: Colors.white)),
+        title: Text(title,
+            style: TextStyle(color: Theme.of(context).colorScheme.secondary)),
         centerTitle: true,
       ),
       body: PostsPanel(
@@ -57,7 +58,7 @@ class _LendingPanelState extends State<LendingPanel> {
           width: 70, // Ajuste a largura conforme necessário
           height: 70,
           child: FloatingActionButton(
-            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+            backgroundColor: Theme.of(context).colorScheme.secondary,
             onPressed: () {
               Navigator.push(
                 context,
@@ -68,7 +69,11 @@ class _LendingPanelState extends State<LendingPanel> {
                 ),
               );
             },
-            child: const Icon(Icons.add, size: 40),
+            child: Icon(
+              Icons.add,
+              size: 40,
+              color: Theme.of(context).colorScheme.background,
+            ),
           ),
         ),
       ),

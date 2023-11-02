@@ -76,12 +76,14 @@ class _ProfilePictureState extends State<ProfilePicture> {
               foregroundImage: _image != null ? FileImage(_image!) : null,
               child: Text(
                 widget.initials,
-                style: const TextStyle(fontSize: 48),
+                style: TextStyle(
+                    fontSize: 48,
+                    color: Theme.of(context).colorScheme.background),
               ),
             ),
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 6),
         widget.isSelect
             ? TextButton(
                 onPressed: () async {
@@ -99,7 +101,11 @@ class _ProfilePictureState extends State<ProfilePicture> {
                     }
                   }
                 },
-                child: const Text('Select Photo'),
+                child: Text(
+                  'Select Photo',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.primary),
+                ),
               )
             : const SizedBox.shrink(),
       ],

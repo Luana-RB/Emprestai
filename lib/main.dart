@@ -46,9 +46,29 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Emprestaí',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.pinkAccent),
+          colorScheme: ColorScheme.fromSeed(
+              seedColor: Colors.pinkAccent,
+              primary: Colors.pinkAccent,
+              secondary: Colors.black,
+              tertiary: Colors.white,
+              onTertiary: const Color.fromARGB(255, 255, 174, 189),
+              background: const Color.fromARGB(255, 255, 224, 235),
+              shadow: Colors.black54),
           useMaterial3: true,
         ),
+        darkTheme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(
+              seedColor: Colors.pinkAccent,
+              inversePrimary: const Color.fromARGB(255, 55, 55, 55),
+              primary: Colors.pinkAccent,
+              secondary: Colors.white,
+              tertiary: const Color.fromARGB(255, 55, 55, 55),
+              onTertiary: const Color.fromARGB(255, 55, 55, 55),
+              background: const Color.fromARGB(255, 34, 34, 34),
+              shadow: Colors.black54),
+          useMaterial3: true,
+        ),
+        themeMode: ThemeMode.system,
         home: isLoggedIn ? const MyHomePage() : const LoginPage(),
         routes: {
           //AppRoutes.POSTS_LIST: (context) => const PostsList(),

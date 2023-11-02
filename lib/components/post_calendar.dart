@@ -9,10 +9,15 @@ class LoanData {
 }
 
 class PostCalendar extends StatefulWidget {
-  const PostCalendar({super.key, required this.loanDate, this.returnDate});
+  const PostCalendar(
+      {super.key,
+      required this.loanDate,
+      this.returnDate,
+      required this.color});
   //List<LoanData> loanDataList;
   final DateTime? loanDate;
   final DateTime? returnDate;
+  final Color color;
 
   @override
   State<PostCalendar> createState() => _PostCalendarState();
@@ -37,26 +42,29 @@ class _PostCalendarState extends State<PostCalendar> {
 
   @override
   Widget build(BuildContext context) {
-    return TableCalendar(
-      firstDay: kFirstDay,
-      lastDay: kLastDay,
-      focusedDay: _focusedDay,
-      calendarFormat: _calendarFormat,
-      selectedDayPredicate: (day) {
-        return isSameDay(_selectedDay, day);
-      },
-      onPageChanged: (focusedDay) {
-        _focusedDay = focusedDay;
-      },
-      calendarStyle: const CalendarStyle(
-        isTodayHighlighted: false,
-        selectedDecoration: BoxDecoration(
-          color: Colors.pinkAccent,
-          shape: BoxShape.circle,
-        ),
-        selectedTextStyle: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
+    return Container(
+      color: Theme.of(context).colorScheme.tertiary,
+      child: TableCalendar(
+        firstDay: kFirstDay,
+        lastDay: kLastDay,
+        focusedDay: _focusedDay,
+        calendarFormat: _calendarFormat,
+        selectedDayPredicate: (day) {
+          return isSameDay(_selectedDay, day);
+        },
+        onPageChanged: (focusedDay) {
+          _focusedDay = focusedDay;
+        },
+        calendarStyle: CalendarStyle(
+          isTodayHighlighted: false,
+          selectedDecoration: BoxDecoration(
+            color: widget.color,
+            shape: BoxShape.circle,
+          ),
+          selectedTextStyle: TextStyle(
+            color: Theme.of(context).colorScheme.secondary,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );

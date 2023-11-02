@@ -68,7 +68,6 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: const PreferredSize(
           preferredSize: Size.fromHeight(50), child: AppBarPage(title: title)),
-      drawer: MyDrawer(idUsuario: widget.idUsuario),
       bottomNavigationBar: CustomBottomNavigationBar(
         selectedIndex: _selectedIndex,
         onItemTapped: onTap,
@@ -82,19 +81,19 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: Align(
         alignment: const Alignment(0.975, 0.975),
         child: SizedBox(
-          width: 70, // Ajuste a largura conforme necessário
+          width: 70,
           height: 70,
           child: FloatingActionButton(
-            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+            backgroundColor: Theme.of(context).colorScheme.secondary,
             onPressed: () {
               Navigator.of(context)
                   .pushNamed(AppRoutes.POSTS_FORM, arguments: widget.idUsuario)
                   .then((value) {
-                // Recarrega a lista de posts ao retornar da tela de formulário
                 reloadPostsList();
               });
             },
-            child: const Icon(Icons.add, size: 40),
+            child: Icon(Icons.add,
+                size: 40, color: Theme.of(context).colorScheme.background),
           ),
         ),
       ),

@@ -4,90 +4,54 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppBarPage extends StatelessWidget {
-  const AppBarPage({super.key, required this.title});
+  const AppBarPage({super.key, required this.title, this.idUsuario});
   final String title;
-
+  final String? idUsuario;
   @override
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      title: Text(title),
+      title: Text(title,
+          style: TextStyle(color: Theme.of(context).colorScheme.secondary)),
       centerTitle: true,
-      leading: Builder(
-        builder: (BuildContext context) {
-          return IconButton(
-            icon: const Icon(Icons.menu),
-            onPressed: () {
-              Scaffold.of(context).openDrawer(); // Abre o drawer (menu lateral)
-            },
-          );
-        },
-      ),
-    );
-  }
-}
-
-class MyDrawer extends StatelessWidget {
-  const MyDrawer({super.key, this.idUsuario});
-  final String? idUsuario;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-        width: MediaQuery.of(context).size.width * 0.4,
-        child: Drawer(
-          child: Column(
-            children: <Widget>[
-              Container(
-                height: 100,
-                color: Colors.pinkAccent,
-                child: const Center(
-                  child: Text(
-                    'Menu',
+      automaticallyImplyLeading: false,
+      actions: <Widget>[
+        Container(
+          padding: const EdgeInsets.fromLTRB(0, 16, 10, 20),
+          child: DropdownButton<String>(
+            underline: Container(),
+            icon: Icon(Icons.settings,
+                color: Theme.of(context).colorScheme.secondary.withOpacity(0.6),
+                size: 23),
+            items: <String>['Configuração', 'Sair'].map((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value,
                     style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.white,
-                    ),
+                        color: Theme.of(context).colorScheme.secondary)),
+              );
+            }).toList(),
+            onChanged: (String? newValue) async {
+              if (newValue == 'Configuração') {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => OptionsPage(idUsuario: idUsuario),
+                    ));
+              } else if (newValue == 'Sair') {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LoginPage(),
                   ),
-                ),
-              ),
-//Configurações
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                OptionsPage(idUsuario: idUsuario),
-                          ));
-                    },
-                    icon: const Icon(Icons.settings, size: 40)),
-              ),
-//Sair
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextButton(
-                  onPressed: () async {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const LoginPage(),
-                      ),
-                    );
-                    SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-                    await prefs.setBool('isLoggedIn', false);
-                  },
-                  child: const Text('Sair',
-                      style: TextStyle(
-                        fontSize: 18,
-                      )),
-                ),
-              )
-            ],
+                );
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                await prefs.setBool('isLoggedIn', false);
+              }
+            },
           ),
-        ));
+        ),
+      ],
+    );
   }
 }

@@ -65,14 +65,11 @@ class _MyProfilePageState extends State<MyProfilePage> {
     String userName = thisUser != null ? thisUser.name.toString() : 'null';
     String userId = thisUser != null ? thisUser.id.toString() : 'null';
 
+    const String title = 'Perfil de Usuário';
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 224, 235),
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: const PreferredSize(
-          preferredSize: Size.fromHeight(50),
-          child: AppBarPage(title: "Perfil de Usuário")),
-      drawer: MyDrawer(
-        idUsuario: widget.idUsuario,
-      ),
+          preferredSize: Size.fromHeight(50), child: AppBarPage(title: title)),
       bottomNavigationBar: CustomBottomNavigationBar(
         selectedIndex: _selectedIndex,
         onItemTapped: onTap,
@@ -87,7 +84,8 @@ class _MyProfilePageState extends State<MyProfilePage> {
                 child: ProfilePicture(
                   initials: userName[0].toUpperCase(),
                   userId: userId,
-                  color: Colors.white.withOpacity(0.5),
+                  color:
+                      Theme.of(context).colorScheme.secondary.withOpacity(0.5),
                   size: 0.2,
                   isSelect: true,
                 )),
@@ -95,7 +93,8 @@ class _MyProfilePageState extends State<MyProfilePage> {
 //Name
             Text(
               userName,
-              style: const TextStyle(fontSize: 25),
+              style: TextStyle(
+                  fontSize: 25, color: Theme.of(context).colorScheme.secondary),
               softWrap: true,
             ),
             const SizedBox(height: 40),
@@ -104,11 +103,11 @@ class _MyProfilePageState extends State<MyProfilePage> {
               width: MediaQuery.of(context).size.width * 0.9,
               height: MediaQuery.of(context).size.height * 0.11,
               decoration: BoxDecoration(
-                color: Colors.pinkAccent,
+                color: Theme.of(context).colorScheme.primary,
                 borderRadius: BorderRadius.circular(10.0), // Borda arredondada
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
+                    color: Theme.of(context).colorScheme.shadow,
                     spreadRadius: 2,
                     blurRadius: 4,
                     offset: const Offset(0, 2),

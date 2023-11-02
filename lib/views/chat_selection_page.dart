@@ -60,7 +60,6 @@ class _ChatSelectionPageState extends State<ChatSelectionPage> {
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(50),
           child: AppBarPage(title: title)),
-      drawer: MyDrawer(idUsuario: widget.idUsuario),
       bottomNavigationBar: CustomBottomNavigationBar(
         selectedIndex: _selectedIndex,
         onItemTapped: onTap,

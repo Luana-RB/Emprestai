@@ -57,6 +57,16 @@ class _PostPageState extends State<PostPage> {
       default:
         colorName = Colors.black;
     }
+    Color headerColor;
+    Color headerTextColor;
+    if (Theme.of(context).colorScheme.background ==
+        const Color.fromARGB(255, 34, 34, 34)) {
+      headerColor = Theme.of(context).colorScheme.tertiary;
+      headerTextColor = Theme.of(context).colorScheme.secondary;
+    } else {
+      headerColor = colorName.withOpacity(0.2);
+      headerTextColor = colorName;
+    }
 
     final usersProvider = Provider.of<UsersProvider>(context, listen: false);
 
@@ -142,7 +152,7 @@ class _PostPageState extends State<PostPage> {
               Container(
                 height: 80,
                 decoration: BoxDecoration(
-                  color: colorName.withOpacity(0.2),
+                  color: headerColor,
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -152,7 +162,7 @@ class _PostPageState extends State<PostPage> {
                       widget.post.title.toString(),
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: colorName,
+                        color: headerTextColor,
                         fontSize: 36,
                         fontWeight: FontWeight.bold,
                       ),
@@ -188,11 +198,11 @@ class _PostPageState extends State<PostPage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Expanded(
-                      child: Text(
-                        widget.post.description.toString(),
-                        softWrap: true,
-                        style: const TextStyle(fontSize: 16),
-                      ),
+                      child: Text(widget.post.description.toString(),
+                          softWrap: true,
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: Theme.of(context).colorScheme.secondary)),
                     ),
                   ],
                 ),
@@ -219,7 +229,9 @@ class _PostPageState extends State<PostPage> {
                       SizedBox(
                         child: Text(
                           creator.name.toString(),
-                          style: const TextStyle(fontSize: 16),
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: Theme.of(context).colorScheme.secondary),
                         ),
                       )
                     ],
@@ -243,16 +255,19 @@ class _PostPageState extends State<PostPage> {
                       SizedBox(
                         child: Text(
                           ownerName,
-                          style: const TextStyle(fontSize: 16),
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: Theme.of(context).colorScheme.secondary),
                         ),
                       )
                     ],
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 20),
 //Dates
-              PostCalendar(loanDate: widget.post.dateOfLending),
+              PostCalendar(
+                  loanDate: widget.post.dateOfLending, color: colorName),
               const SizedBox(height: 20),
             ],
           )),

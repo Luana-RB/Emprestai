@@ -29,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+      backgroundColor: Theme.of(context).colorScheme.tertiary,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -44,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
                   Container(
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15.0),
-                        color: Colors.white60),
+                        color: Theme.of(context).colorScheme.onTertiary),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10.0),
                       child: const Padding(
@@ -55,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
                             fontFamily: 'Ubuntu',
                             fontWeight: FontWeight.bold,
                             fontSize: 56,
-                            color: Colors.pink,
+                            color: Colors.pinkAccent,
                           ),
                         ),
                       ),
@@ -66,6 +66,8 @@ class _LoginPageState extends State<LoginPage> {
                   Column(
                     children: [
                       TextFormField(
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.secondary),
                         controller: emailController,
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
@@ -78,14 +80,19 @@ class _LoginPageState extends State<LoginPage> {
                             return ('Usuário não existe');
                           }
                         },
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           labelText: 'Email',
-                          prefixIcon: Icon(Icons.person),
+                          labelStyle: TextStyle(
+                              color: Theme.of(context).colorScheme.primary),
+                          prefixIcon: Icon(Icons.person,
+                              color: Theme.of(context).colorScheme.secondary),
                         ),
                       ),
                       const SizedBox(height: 10),
                       // Password Form
                       TextFormField(
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.secondary),
                         controller: passwordController,
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
@@ -103,9 +110,12 @@ class _LoginPageState extends State<LoginPage> {
                           }
                         },
                         obscureText: true,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           labelText: 'Senha',
-                          prefixIcon: Icon(Icons.lock),
+                          labelStyle: TextStyle(
+                              color: Theme.of(context).colorScheme.primary),
+                          prefixIcon: Icon(Icons.lock,
+                              color: Theme.of(context).colorScheme.secondary),
                         ),
                       ),
                     ],
@@ -130,11 +140,11 @@ class _LoginPageState extends State<LoginPage> {
                           await SharedPreferences.getInstance();
                       await prefs.setBool('isLoggedIn', true);
                     },
-                    child: const Text(
+                    child: Text(
                       'Login',
                       style: TextStyle(
-                        fontSize: 18,
-                      ),
+                          fontSize: 18,
+                          color: Theme.of(context).colorScheme.primary),
                     ),
                   ),
                 ],

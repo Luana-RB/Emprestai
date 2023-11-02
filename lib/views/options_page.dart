@@ -14,7 +14,6 @@ class OptionsPageState extends State<OptionsPage> {
   late String _prefsKey;
   late String userId;
 
-  bool isDarkMode = false;
   String selectedLanguage = 'pt';
   bool receiveNotifications = true;
   String contactMethod = 'telefone';
@@ -30,7 +29,6 @@ class OptionsPageState extends State<OptionsPage> {
   Future<void> _loadSettings() async {
     _prefs = await SharedPreferences.getInstance();
     setState(() {
-      isDarkMode = _prefs.getBool('$_prefsKey-isDarkMode') ?? false;
       selectedLanguage =
           _prefs.getString('$_prefsKey-selectedLanguage') ?? 'pt';
       receiveNotifications =
@@ -41,7 +39,6 @@ class OptionsPageState extends State<OptionsPage> {
   }
 
   Future<void> _saveSettings() async {
-    await _prefs.setBool('$_prefsKey-isDarkMode', isDarkMode);
     await _prefs.setString('$_prefsKey-selectedLanguage', selectedLanguage);
     await _prefs.setBool(
         '$_prefsKey-receiveNotifications', receiveNotifications);
@@ -52,22 +49,20 @@ class OptionsPageState extends State<OptionsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Opções do Aplicativo'),
+        title: Text(
+          'Opções do Aplicativo',
+          style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+        ),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: ListView(
         children: <Widget>[
-          SwitchListTile(
-            title: const Text('Modo Escuro'),
-            value: isDarkMode,
-            onChanged: (value) {
-              setState(() {
-                isDarkMode = value;
-              });
-            },
-          ),
           ListTile(
-            title: const Text('Língua'),
+            title: Text('Língua',
+                style:
+                    TextStyle(color: Theme.of(context).colorScheme.secondary)),
             trailing: DropdownButton<String>(
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
               value: selectedLanguage,
               onChanged: (String? newValue) {
                 setState(() {
@@ -84,7 +79,9 @@ class OptionsPageState extends State<OptionsPage> {
             ),
           ),
           SwitchListTile(
-            title: const Text('Notificações'),
+            title: Text('Notificações',
+                style:
+                    TextStyle(color: Theme.of(context).colorScheme.secondary)),
             value: receiveNotifications,
             onChanged: (value) {
               setState(() {
@@ -93,8 +90,11 @@ class OptionsPageState extends State<OptionsPage> {
             },
           ),
           ListTile(
-            title: const Text('Formas de Contato'),
+            title: Text('Formas de Contato',
+                style:
+                    TextStyle(color: Theme.of(context).colorScheme.secondary)),
             trailing: DropdownButton<String>(
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
               value: contactMethod,
               onChanged: (String? newValue) {
                 setState(() {
@@ -122,11 +122,12 @@ class OptionsPageState extends State<OptionsPage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         onPressed: () {
           _saveSettings();
           Navigator.pop(context);
         },
-        child: const Icon(Icons.save),
+        child: Icon(Icons.save, color: Theme.of(context).colorScheme.primary),
       ),
     );
   }

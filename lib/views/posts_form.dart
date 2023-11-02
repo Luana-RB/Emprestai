@@ -142,7 +142,7 @@ class _PostsFormState extends State<PostsForm> {
         actions: [
 //Save Button
           IconButton(
-            icon: const Icon(Icons.save),
+            icon: const Icon(Icons.save, color: Colors.black),
             onPressed: () async {
               final isValid = _form.currentState!.validate();
               if (isValid) {
@@ -229,10 +229,15 @@ class _PostsFormState extends State<PostsForm> {
                 children: [
                   Expanded(
                     child: TextFormField(
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary),
                       initialValue: _formData['title'] != null
                           ? _formData['title'].toString()
                           : '',
-                      decoration: const InputDecoration(labelText: 'Titulo'),
+                      decoration: InputDecoration(
+                          labelText: 'Titulo',
+                          labelStyle: TextStyle(
+                              color: Theme.of(context).colorScheme.primary)),
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
                           return ('Insira um título');
@@ -246,6 +251,8 @@ class _PostsFormState extends State<PostsForm> {
 // Status
                   Expanded(
                     child: DropdownButtonFormField<String>(
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary),
                       value: selectedStatus,
                       onChanged: (newValue) {
                         setState(() {
@@ -261,26 +268,25 @@ class _PostsFormState extends State<PostsForm> {
                           )
                           .toList(),
                       onSaved: (value) => _formData['status'] = value!,
-                      decoration: const InputDecoration(
-                        labelText: 'Status',
-                      ),
+                      decoration: InputDecoration(
+                          labelText: 'Status',
+                          labelStyle: TextStyle(
+                              color: Theme.of(context).colorScheme.primary)),
                     ),
                   ),
                 ],
               ),
-//Image field
-              PostPicture(
-                postId: _formData['id'].toString(),
-                isSelect: false,
-                width: 0.5,
-                height: 0.25,
-              ),
 //Description field
               TextFormField(
+                style:
+                    TextStyle(color: Theme.of(context).colorScheme.secondary),
                 initialValue: _formData['description'] != null
                     ? _formData['description'].toString()
                     : '',
-                decoration: const InputDecoration(labelText: 'Descrição'),
+                decoration: InputDecoration(
+                    labelText: 'Descrição',
+                    labelStyle: TextStyle(
+                        color: Theme.of(context).colorScheme.primary)),
                 maxLines: null,
                 maxLength: 200,
                 onSaved: (value) => _formData['description'] = value!,
@@ -289,9 +295,13 @@ class _PostsFormState extends State<PostsForm> {
 //Owner field
               TypeAheadField<User>(
                 textFieldConfiguration: TextFieldConfiguration(
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.secondary),
                   controller: _searchController,
                   decoration: InputDecoration(
                     hintText: 'Pesquisar nome do dono (se houver)',
+                    hintStyle: TextStyle(
+                        color: Theme.of(context).colorScheme.secondary),
                     contentPadding: const EdgeInsets.symmetric(
                         horizontal: 20.0, vertical: 15.0),
                     border: OutlineInputBorder(
@@ -310,7 +320,11 @@ class _PostsFormState extends State<PostsForm> {
                 },
                 itemBuilder: (context, User suggestion) {
                   return ListTile(
-                    title: Text(suggestion.name.toString()),
+                    title: Text(
+                      suggestion.name.toString(),
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary),
+                    ),
                   );
                 },
                 onSuggestionSelected: (User suggestion) {
@@ -334,9 +348,11 @@ class _PostsFormState extends State<PostsForm> {
                         borderRadius: BorderRadius.circular(10.0)),
                   ),
                 ),
-                child: const Text(
+                child: Text(
                   'Selecionar Data de Empréstimo',
-                  style: TextStyle(fontSize: 18, color: Colors.white),
+                  style: TextStyle(
+                      fontSize: 18,
+                      color: Theme.of(context).colorScheme.background),
                 ),
               ),
               const SizedBox(height: 6),
@@ -353,11 +369,20 @@ class _PostsFormState extends State<PostsForm> {
                         borderRadius: BorderRadius.circular(10.0)),
                   ),
                 ),
-                child: const Text(
+                child: Text(
                   'Selecionar Data de Devolução',
-                  style: TextStyle(fontSize: 18, color: Colors.white),
+                  style: TextStyle(
+                      fontSize: 18,
+                      color: Theme.of(context).colorScheme.background),
                 ),
-              )
+              ),
+//Image field
+              PostPicture(
+                postId: _formData['id'].toString(),
+                isSelect: false,
+                width: 0.5,
+                height: 0.25,
+              ),
             ],
           ),
         ),
