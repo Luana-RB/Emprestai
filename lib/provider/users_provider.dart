@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 
 class UsersProvider extends ChangeNotifier {
   final Map<String, User> _items = {...dummyUsers};
-//retorna os valores
+//retorns values
   List<User> get all {
     return [..._items.values];
   }
@@ -26,12 +26,12 @@ class UsersProvider extends ChangeNotifier {
     return ids;
   }
 
-//retorna o tamanho
+//returns size
   int get count {
     return _items.length;
   }
 
-//retorna o valor baseado no índice
+//retorns values based on index
   User byIndex(int i) {
     return _items.values.elementAt(i);
   }
@@ -61,7 +61,6 @@ class UsersProvider extends ChangeNotifier {
                 name: user.name,
                 email: user.email,
                 password: user.password,
-                avatarUrl: user.avatarUrl,
               ));
     }
     notifyListeners();

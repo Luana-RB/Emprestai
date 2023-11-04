@@ -31,7 +31,6 @@ class _PostTileState extends State<PostTile> {
   late Post _fetchedPost;
   late SharedPreferences prefs;
 
-//estado inicial, post que mostra é o post repassado
   @override
   void initState() {
     super.initState();
@@ -39,26 +38,26 @@ class _PostTileState extends State<PostTile> {
     initPrefs();
   }
 
-//busca o post inicial
+//Gets post
   Future<void> initPrefs() async {
     prefs = await SharedPreferences.getInstance();
     await getPostFromSharedPreferences();
   }
 
-//busca a key
+//Gets key
   String getPrefsKey() {
     return 'post_${_fetchedPost.id}';
   }
 
-//busca post pela key
+//Gets post by the key
   Future<void> getPostFromSharedPreferences() async {
     final postJson = prefs.getString(getPrefsKey());
     if (postJson != null) {
       Map<String, dynamic> decodedPost =
-          jsonDecode(getPrefsKey()); //decodifica o post pela String
+          jsonDecode(getPrefsKey()); //decodes post by the key
       Post post = Post.fromJson(decodedPost);
       setState(() {
-        _fetchedPost = post; //muda post para post buscado
+        _fetchedPost = post; //changes post to the fetched post
       });
     }
   }
@@ -76,7 +75,7 @@ class _PostTileState extends State<PostTile> {
     final User? thisUser = usersProvider.findById(widget.idUsuario.toString());
     String userId = thisUser != null ? thisUser.id.toString() : 'null';
 
-    //o creator é o user cujo id é igual ao id do criador do post, senão, é nulo
+    //the creator is the user whose id is the id of the post creator, or else, is null
     final User? creator = usersProvider.all.isNotEmpty
         ? usersProvider.all.firstWhere(
             (user) => user.id == creatorId,
@@ -188,9 +187,40 @@ class _PostTileState extends State<PostTile> {
                               icon: const Icon(Icons.delete),
                               color: Colors.white30,
                               onPressed: () {
-                                Provider.of<PostsProvider>(context,
-                                        listen: false)
-                                    .remove(_fetchedPost);
+                                showDialog(
+                                  context: context,
+                                  builder: (ctx) => AlertDialog(
+                                    title: const Text('Excluir Post'),
+                                    content: const Text('Tem certeza?'),
+                                    actions: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.of(context)
+                                                    .pop(false),
+                                            child: const Text('Não'),
+                                          ),
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.of(context).pop(true),
+                                            child: const Text('Sim'),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ).then(
+                                  (confirmed) {
+                                    if (confirmed) {
+                                      Provider.of<PostsProvider>(context,
+                                              listen: false)
+                                          .remove(_fetchedPost);
+                                    }
+                                  },
+                                );
                               },
                             ),
                           ),

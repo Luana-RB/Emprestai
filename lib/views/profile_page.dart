@@ -99,7 +99,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
               softWrap: true,
             ),
             const SizedBox(height: 2),
-//Email/telefone
+//Email
             Text(
               userEmail,
               style: TextStyle(
@@ -113,7 +113,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
               height: MediaQuery.of(context).size.height * 0.11,
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.primary,
-                borderRadius: BorderRadius.circular(10.0), // Borda arredondada
+                borderRadius: BorderRadius.circular(10.0),
                 boxShadow: [
                   BoxShadow(
                     color: Theme.of(context).colorScheme.shadow,

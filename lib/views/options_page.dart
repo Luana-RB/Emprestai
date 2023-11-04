@@ -91,9 +91,7 @@ class OptionsPageState extends State<OptionsPage> {
               'Apagar Conta do Usuário',
               style: TextStyle(color: Colors.red),
             ),
-            onTap: () {
-              // Adicione aqui a lógica para apagar a conta do usuário
-            },
+            onTap: () {},
           ),
         ],
       ),

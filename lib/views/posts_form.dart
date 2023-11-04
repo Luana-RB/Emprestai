@@ -68,13 +68,13 @@ class _PostsFormState extends State<PostsForm> {
       selectedLendingDate = DateTime.now();
       selectedReturningDate = null;
     }
-    // Carrega os posts do SharedPreferences
+    //Loads posts from SharedPreferences
     Provider.of<PostsProvider>(context, listen: false)
         .getListFromSharedPreferences();
     super.didChangeDependencies();
   }
 
-//Calendário
+//Calendar
   Future<DateTime?> _selectLendingDate(BuildContext context) async {
     DateTime? selectedDate = await showDatePicker(
       context: context,

@@ -4,8 +4,8 @@ import 'package:appteste/models/posts/post_object.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PostsProvider extends ChangeNotifier {
-//Lista
-//salva a lista de post encodados para string
+//List
+//saves the list of encoded post to string
   Future<void> saveListToSharedPreferences(List<Post> posts) async {
     final prefs = await SharedPreferences.getInstance();
     final List<String> postStrings =
@@ -13,7 +13,7 @@ class PostsProvider extends ChangeNotifier {
     await prefs.setStringList("postList", postStrings);
   }
 
-//busca a lista de strings e decoda para post
+//gets string list and decodes to post
   Future<List<Post>> getListFromSharedPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     List<String>? listaString = prefs.getStringList("postList");
@@ -29,20 +29,20 @@ class PostsProvider extends ChangeNotifier {
     return posts;
   }
 
-//Valores
-//Retorna os valores dos posts
+//Values
+//Retorns all posts values
   Future<List<Post>> getAll() async {
     List<Post> allPosts = await getListFromSharedPreferences();
     return allPosts;
   }
 
-//Retorna o tamanho da lista / quantos posts tem
+//Retorns list size/how many posts it has
   Future<int> getCount() async {
     List<Post> lista = await getListFromSharedPreferences();
     return lista.length;
   }
 
-//Retorna post baseado no índice
+//Retorns post based on index
   Future<Post> byIndex(int i) async {
     List<Post> allPosts = await getAll();
     if (i >= 0 && i < allPosts.length) {
@@ -52,7 +52,7 @@ class PostsProvider extends ChangeNotifier {
     }
   }
 
-//Retorna post baseado no Id
+//Retorns post based on Id
   Future<Post> findById(String id) async {
     List<Post> allPosts = await getAll();
     return allPosts.firstWhere(
@@ -65,19 +65,19 @@ class PostsProvider extends ChangeNotifier {
     );
   }
 
-//Retorna posts baseados no status
+//Retorns posts based on status
   List<Post> filterPostsByStatus(List<Post> posts, String status) {
     return posts.where((post) => post.status == status).toList();
   }
 
-//Estado de post
-//Acionar
+//Post state
+//Add
   void put(Post post) async {
     if (post.id != null) {
-      // Se o ID do post já existe, atualize-o
+      // If ID already exists, updates it
       await updatePost(post);
     } else {
-      // Se o ID do post não existe, crie um novo
+      // If ID doesn't exist, creates it
       int count = await getCount();
       String id = (count + 1).toString();
       post.id = id;
@@ -86,21 +86,20 @@ class PostsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-// Atualize o post existente com os novos dados
+// Updates post with the new data
   Future<void> updatePost(Post post) async {
     final List<Post> allPosts = await getAll();
     for (int i = 0; i < allPosts.length; i++) {
       if (allPosts[i].id == post.id) {
-        allPosts[i] =
-            post; // Substitui o post antigo pelo post atualizado na lista
-        await saveListToSharedPreferences(allPosts); // Salva a lista atualizada
+        allPosts[i] = post;
+        await saveListToSharedPreferences(allPosts); // Saves updated list
         break;
       }
     }
     notifyListeners();
   }
 
-// Salva o post no SharedPreferences
+// Saves post in SharedPreferences
   Future<void> savePostToSharedPreferences(Post post) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString("post${post.id}", jsonEncode(post));
@@ -114,12 +113,12 @@ class PostsProvider extends ChangeNotifier {
     await saveListToSharedPreferences(lista);
   }
 
-//Deleta post
+//Deletes post
   void remove(Post post) {
     removePostFromSharedPreferences(post);
   }
 
-// Remove o post do SharedPreferences
+// Removes post from SharedPreferences
   Future<void> removePostFromSharedPreferences(Post post) async {
     final prefs = await SharedPreferences.getInstance();
     if (prefs.containsKey("post${post.id}")) {
@@ -131,7 +130,7 @@ class PostsProvider extends ChangeNotifier {
     }
   }
 
-//Busca post
+//Gets post
   Future<Post?> getPostFromSharedPreferences(Post post) async {
     final prefs = await SharedPreferences.getInstance();
     String? postString = prefs.getString("post${post.id}");

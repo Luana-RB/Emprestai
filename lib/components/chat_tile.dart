@@ -10,12 +10,8 @@ class ChatTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final avatar = user.avatarUrl == null || user.avatarUrl!.isEmpty
-        ? const CircleAvatar(child: Icon(Icons.person_2))
-        : CircleAvatar(backgroundImage: NetworkImage(user.avatarUrl!));
     //User UI
     return ListTile(
-      leading: avatar,
       title: Text(user.name ?? 'Name'),
       subtitle: const Text('Mensagem'),
       onTap: () {
@@ -28,7 +24,7 @@ class ChatTile extends StatelessWidget {
         width: 100,
         child: Row(
           children: [
-            //Delete Button
+//Delete Button
             IconButton(
               icon: const Icon(Icons.delete),
               color: Colors.redAccent,

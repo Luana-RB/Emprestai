@@ -6,27 +6,23 @@ Map<String, User> dummyUsers = {
     name: 'Maria',
     email: 'mnoro@ucs.br',
     password: 'password',
-    avatarUrl: 'https://cdn-icons-png.flaticon.com/512/1468/1468166.png',
   ),
   '2': User(
     id: '2',
     name: 'Luana',
     email: 'lrbassanesi@ucs.br',
     password: 'password',
-    avatarUrl: null,
   ),
   '3': User(
     id: '3',
     name: 'Matheus',
-    email: 'e',
+    email: 'mcmetz@ucs.br',
     password: 'e',
-    avatarUrl: 'https://cdn-icons-png.flaticon.com/512/1468/1468166.png',
   ),
   '4': User(
     id: '4',
     name: 'null',
     email: 'n',
     password: 'n',
-    avatarUrl: null,
   ),
 };

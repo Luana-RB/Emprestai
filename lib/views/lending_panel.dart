@@ -55,7 +55,7 @@ class _LendingPanelState extends State<LendingPanel> {
       floatingActionButton: Align(
         alignment: const Alignment(0.975, 0.975),
         child: SizedBox(
-          width: 70, // Ajuste a largura conforme necessário
+          width: 70,
           height: 70,
           child: FloatingActionButton(
             backgroundColor: Theme.of(context).colorScheme.secondary,

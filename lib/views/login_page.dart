@@ -104,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
                           );
 
                           if (userLog?.password == value) {
-                            return null; // Senha válida
+                            return null;
                           } else {
                             return 'Senha incorreta';
                           }

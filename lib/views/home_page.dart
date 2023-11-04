@@ -51,7 +51,6 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  // Método para recarregar a lista de posts
   void reloadPostsList() {
     setState(() {});
   }
@@ -77,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
         idUsuario: widget.idUsuario.toString(),
         fromHomePage: true,
       ),
-//New Post
+//New Post Button
       floatingActionButton: Align(
         alignment: const Alignment(0.975, 0.975),
         child: SizedBox(

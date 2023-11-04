@@ -1,4 +1,3 @@
-//Profile picture getter
 import 'dart:io';
 import 'package:appteste/components/images/image_helper.dart';
 import 'package:flutter/material.dart';

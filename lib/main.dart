@@ -20,7 +20,7 @@ void main() async {
   bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
 
   SystemChrome.setPreferredOrientations(
-          [DeviceOrientation.portraitUp]) // Defina a orientação vertical
+          [DeviceOrientation.portraitUp]) // Defines as vertical
       .then((_) {
     runApp(MyApp(isLoggedIn: isLoggedIn));
   });
@@ -71,7 +71,6 @@ class MyApp extends StatelessWidget {
         themeMode: ThemeMode.system,
         home: isLoggedIn ? const MyHomePage() : const LoginPage(),
         routes: {
-          //AppRoutes.POSTS_LIST: (context) => const PostsList(),
           AppRoutes.PROFILE_PAGE: (_) => const MyProfilePage(),
           AppRoutes.CHAT_SELECTION: (_) => const ChatSelectionPage(),
           AppRoutes.CHAT_PAGE: (_) => const ChatPage(),
@@ -80,7 +79,6 @@ class MyApp extends StatelessWidget {
         },
         onGenerateRoute: (settings) {
           if (settings.name == AppRoutes.POSTS_FORM) {
-            // Extrai o argumento do nome de usuário
             final idUsuario = settings.arguments as String?;
             return MaterialPageRoute(
               builder: (context) => PostsForm(

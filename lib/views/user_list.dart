@@ -1,5 +1,3 @@
-//import 'dart:ffi';
-
 import 'package:appteste/components/user_tile.dart';
 import 'package:appteste/provider/users_provider.dart';
 import 'package:flutter/material.dart';

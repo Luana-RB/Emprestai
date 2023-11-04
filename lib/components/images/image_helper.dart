@@ -47,12 +47,9 @@ class ImageHelper {
               toolbarWidgetColor: Colors.white,
               initAspectRatio: CropAspectRatioPreset.original,
               lockAspectRatio: true),
-
           IOSUiSettings(
             title: 'Cropper',
           ),
-
-          /// this settings is required for Web
           WebUiSettings(
             context: context,
             presentStyle: CropperPresentStyle.dialog,
@@ -67,7 +64,7 @@ class ImageHelper {
         ],
       );
 
-// Salva o arquivo em SharedPreferences
+//Sets the file in SharedPreferences
   void saveImageToSharedPreferences(XFile file) async {
     final prefs = await SharedPreferences.getInstance();
     final bytes = await file.readAsBytes();
@@ -75,7 +72,7 @@ class ImageHelper {
     prefs.setString('image', encoded);
   }
 
-  // Resgata o arquivo de SharedPreferences
+//Gets the file in SharedPreferences
   Future<XFile?> getImageFromSharedPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     final encoded = prefs.getString('image');

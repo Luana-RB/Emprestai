@@ -74,7 +74,6 @@ class _PostPageState extends State<PostPage> {
     final User? thisUser = usersProvider.findById(widget.idUsuario.toString());
     String userId = thisUser != null ? thisUser.id.toString() : 'null';
 
-    //o creator é o user cujo id é igual ao id do criador do post, senão, é nulo
     final User? creator = usersProvider.all.isNotEmpty
         ? usersProvider.all.firstWhere(
             (user) => user.id == widget.post.creatorId,
@@ -83,7 +82,6 @@ class _PostPageState extends State<PostPage> {
         : null;
     String creatorId = creator != null ? creator.id.toString() : 'null';
 
-    //o owner é o user cujo id é igual ao id do owner do post, senão, é nulo
     final User? owner = usersProvider.all.isNotEmpty
         ? usersProvider.all.firstWhere(
             (user) => user.id == widget.post.ownerId,
