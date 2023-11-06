@@ -265,7 +265,10 @@ class _PostPageState extends State<PostPage> {
               const SizedBox(height: 20),
 //Dates
               PostCalendar(
-                  loanDate: widget.post.dateOfLending, color: colorName),
+                  loanDate: widget.post.status == "Solicitado"
+                      ? widget.post.dateOfLending
+                      : widget.post.dateOfReturning,
+                  color: colorName),
               const SizedBox(height: 20),
             ],
           )),
