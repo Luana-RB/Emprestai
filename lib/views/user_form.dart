@@ -1,18 +1,19 @@
-// ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member, use_build_context_synchronously
 
 import 'package:appteste/models/user/user.dart';
+import 'package:appteste/provider/users_provider.dart';
+import 'package:appteste/views/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:appteste/provider/users_provider.dart';
 
-class UserForm extends StatefulWidget {
-  const UserForm({Key? key}) : super(key: key);
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({Key? key}) : super(key: key);
 
   @override
-  State<UserForm> createState() => _UserFormState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _UserFormState extends State<UserForm> {
+class _RegisterPageState extends State<RegisterPage> {
   final _form = GlobalKey<FormState>();
   final Map<String, String> _formData = {};
 
@@ -27,14 +28,16 @@ class _UserFormState extends State<UserForm> {
 //Set Load Data
   @override
   void didChangeDependencies() {
-    final user = ModalRoute.of(context)?.settings.arguments as User;
-    _loadFormaData(user);
+    final user = ModalRoute.of(context)?.settings.arguments;
+    if (user != null && user is User) {
+      _loadFormaData(user);
+    }
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    const title = 'UserForm';
+    const title = 'Register';
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -44,16 +47,17 @@ class _UserFormState extends State<UserForm> {
 //Save Button
           IconButton(
             icon: const Icon(Icons.save),
-            onPressed: () {
+            onPressed: () async {
               final isValid = _form.currentState!.validate();
               if (isValid) {
                 _form.currentState!.save();
 //Find User ID
                 final userProvider =
                     Provider.of<UsersProvider>(context, listen: false);
-                final existingUser = userProvider.findById(_formData['id']!);
+                final existingUser =
+                    await userProvider.findById(_formData['id'].toString());
 //Update user's data
-                if (existingUser != null) {
+                if (existingUser.id != null) {
                   existingUser.setName = _formData['name']!;
                   existingUser.setEmail = _formData['email']!;
                   existingUser.setPassword = _formData['password']!;
@@ -61,7 +65,7 @@ class _UserFormState extends State<UserForm> {
                 } else {
 //if user doesn't exists yet, creat new user
                   final newUser = User(
-                    id: _formData['id']!,
+                    id: null,
                     name: _formData['name']!,
                     email: _formData['email']!,
                     password: _formData['password']!,
@@ -69,7 +73,8 @@ class _UserFormState extends State<UserForm> {
                   userProvider.put(newUser);
                   userProvider.notifyListeners();
                 }
-                Navigator.of(context).pop();
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()));
               }
             },
           ),

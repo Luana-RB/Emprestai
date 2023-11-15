@@ -56,96 +56,122 @@ class _MyProfilePageState extends State<MyProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    final usersProvider = Provider.of<UsersProvider>(context, listen: false);
-    final User? thisUser = usersProvider.all.isNotEmpty
-        ? usersProvider.all.firstWhere(
-            (user) => user.id == widget.idUsuario.toString(),
-            orElse: () => User(name: 'null', id: 'null'))
-        : null;
-    String userName = thisUser != null ? thisUser.name.toString() : 'null';
-    String userId = thisUser != null ? thisUser.id.toString() : 'null';
-    String userEmail = thisUser != null ? thisUser.email.toString() : 'null';
-
-    const String title = 'Perfil de Usuário';
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      appBar: const PreferredSize(
-          preferredSize: Size.fromHeight(50), child: AppBarPage(title: title)),
-      bottomNavigationBar: CustomBottomNavigationBar(
-        selectedIndex: _selectedIndex,
-        onItemTapped: onTap,
-      ),
-      body: Center(
-        child: Column(
-          children: [
-            const SizedBox(height: 40),
-//Profile Image
-            Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: ProfilePicture(
-                  initials: userName[0].toUpperCase(),
-                  userId: userId,
-                  color:
-                      Theme.of(context).colorScheme.secondary.withOpacity(0.5),
-                  size: 0.2,
-                  isSelect: true,
-                )),
-            const SizedBox(height: 16),
-//Name
-            Text(
-              userName,
-              style: TextStyle(
-                  fontSize: 25, color: Theme.of(context).colorScheme.secondary),
-              softWrap: true,
-            ),
-            const SizedBox(height: 2),
-//Email
-            Text(
-              userEmail,
-              style: TextStyle(
-                  fontSize: 16, color: Theme.of(context).colorScheme.secondary),
-              softWrap: true,
-            ),
-            const SizedBox(height: 40),
-//Panel Button
-            Container(
-              width: MediaQuery.of(context).size.width * 0.9,
-              height: MediaQuery.of(context).size.height * 0.11,
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary,
-                borderRadius: BorderRadius.circular(10.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Theme.of(context).colorScheme.shadow,
-                    spreadRadius: 2,
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
+    return FutureBuilder<List<User>>(
+        future: Provider.of<UsersProvider>(context).getAll(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
               ),
-              child: Center(
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => LendingPanel(
-                          idUsuario: userId,
-                          fromHomePage: false,
+            );
+          } else if (snapshot.hasError) {
+            return Scaffold(
+              body: Center(
+                child: Text('Erro: ${snapshot.error}'),
+              ),
+            );
+          } else {
+            List<User> allUsers = snapshot.data!;
+
+            final User? thisUser = allUsers.isNotEmpty
+                ? allUsers.firstWhere(
+                    (user) => user.id == widget.idUsuario.toString(),
+                    orElse: () => User(name: 'null', id: 'null'))
+                : null;
+            String userName =
+                thisUser != null ? thisUser.name.toString() : 'null';
+            String userId = thisUser != null ? thisUser.id.toString() : 'null';
+            String userEmail =
+                thisUser != null ? thisUser.email.toString() : 'null';
+
+            const String title = 'Perfil de Usuário';
+            return Scaffold(
+              backgroundColor: Theme.of(context).colorScheme.background,
+              appBar: const PreferredSize(
+                  preferredSize: Size.fromHeight(50),
+                  child: AppBarPage(title: title)),
+              bottomNavigationBar: CustomBottomNavigationBar(
+                selectedIndex: _selectedIndex,
+                onItemTapped: onTap,
+              ),
+              body: Center(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 40),
+//Profile Image
+                    Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ProfilePicture(
+                          initials: userName[0].toUpperCase(),
+                          userId: userId,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .secondary
+                              .withOpacity(0.5),
+                          size: 0.2,
+                          isSelect: true,
+                        )),
+                    const SizedBox(height: 16),
+//Name
+                    Text(
+                      userName,
+                      style: TextStyle(
+                          fontSize: 25,
+                          color: Theme.of(context).colorScheme.secondary),
+                      softWrap: true,
+                    ),
+                    const SizedBox(height: 2),
+//Email
+                    Text(
+                      userEmail,
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: Theme.of(context).colorScheme.secondary),
+                      softWrap: true,
+                    ),
+                    const SizedBox(height: 40),
+//Panel Button
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.9,
+                      height: MediaQuery.of(context).size.height * 0.11,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary,
+                        borderRadius: BorderRadius.circular(10.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Theme.of(context).colorScheme.shadow,
+                            spreadRadius: 2,
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LendingPanel(
+                                  idUsuario: userId,
+                                  fromHomePage: false,
+                                ),
+                              ),
+                            );
+                          },
+                          child: const Text(
+                            'Painel de Empréstimos',
+                            style: TextStyle(fontSize: 20, color: Colors.white),
+                          ),
                         ),
                       ),
-                    );
-                  },
-                  child: const Text(
-                    'Painel de Empréstimos',
-                    style: TextStyle(fontSize: 20, color: Colors.white),
-                  ),
+                    )
+                  ],
                 ),
               ),
-            )
-          ],
-        ),
-      ),
-    );
+            );
+          }
+        });
   }
 }

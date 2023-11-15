@@ -128,9 +128,7 @@ class _PostsFormState extends State<PostsForm> {
   Widget build(BuildContext context) {
     const title = '';
 //Find User
-    final usersProvider = Provider.of<UsersProvider>(context, listen: false);
-    final User? thisUser = usersProvider.findById(widget.idUsuario.toString());
-    String userId = thisUser != null ? thisUser.id.toString() : 'null';
+    String userId = widget.idUsuario;
 
     final UsersProvider users = Provider.of(context);
 
@@ -310,8 +308,10 @@ class _PostsFormState extends State<PostsForm> {
                     ),
                   ),
                 ),
-                suggestionsCallback: (pattern) {
-                  return users.all
+                suggestionsCallback: (pattern) async {
+                  final List<User> allUsers = await users.getAll();
+
+                  return allUsers
                       .where((user) => user.name!
                           .toLowerCase()
                           .contains(pattern.toLowerCase()))

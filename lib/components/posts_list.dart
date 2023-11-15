@@ -1,8 +1,6 @@
 import 'package:appteste/components/post_tile.dart';
 import 'package:appteste/models/posts/post_object.dart';
-import 'package:appteste/models/user/user.dart';
 import 'package:appteste/provider/posts_provider.dart';
-import 'package:appteste/provider/users_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -96,18 +94,14 @@ class _PostsPanelState extends State<PostsPanel> {
           );
         } else {
           final List<Post> allPosts = snapshot.data ?? [];
-          final usersProvider =
-              Provider.of<UsersProvider>(context, listen: false);
-          final User? thisUser =
-              usersProvider.findById(widget.idUsuario.toString());
-          String userId = thisUser != null ? thisUser.id.toString() : 'null';
 
           var filterPostsByStatus =
               Provider.of<PostsProvider>(context, listen: false)
                   .filterPostsByStatus;
 
           List<Post> userPosts = allPosts
-              .where((post) => widget.doesPostBelongToUser(userId, post))
+              .where((post) => widget.doesPostBelongToUser(
+                  widget.idUsuario.toString(), post))
               .toList();
 
           List<Post> filteredUserPostsSolicitado =

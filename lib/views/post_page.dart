@@ -68,210 +68,236 @@ class _PostPageState extends State<PostPage> {
       headerTextColor = colorName;
     }
 
-    final usersProvider = Provider.of<UsersProvider>(context, listen: false);
-
     //Find User
-    final User? thisUser = usersProvider.findById(widget.idUsuario.toString());
-    String userId = thisUser != null ? thisUser.id.toString() : 'null';
+    String userId = widget.idUsuario.toString();
+    String creatorId = widget.post.creatorId.toString();
 
-    final User? creator = usersProvider.all.isNotEmpty
-        ? usersProvider.all.firstWhere(
-            (user) => user.id == widget.post.creatorId,
-            orElse: () => User(name: 'null', id: 'null'),
-          )
-        : null;
-    String creatorId = creator != null ? creator.id.toString() : 'null';
+    return FutureBuilder<List<User>>(
+        future: Provider.of<UsersProvider>(context).getAll(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          } else if (snapshot.hasError) {
+            return Scaffold(
+              body: Center(
+                child: Text('Erro: ${snapshot.error}'),
+              ),
+            );
+          } else {
+            List<User> allUsers = snapshot.data!;
 
-    final User? owner = usersProvider.all.isNotEmpty
-        ? usersProvider.all.firstWhere(
-            (user) => user.id == widget.post.ownerId,
-            orElse: () => User(name: '?', id: 'null'),
-          )
-        : null;
-    String ownerName = owner != null ? owner.name.toString() : '?';
-    String ownerId = owner != null ? owner.id.toString() : 'null';
+            //the creator is the user whose id is the id of the post creator, or else, is null
+            final User? creator = allUsers.isNotEmpty
+                ? allUsers.firstWhere(
+                    (user) => user.id == creatorId,
+                    orElse: () => User(name: 'null', id: 'null'),
+                  )
+                : null;
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: colorName,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: Text(
-          widget.post.status.toString(),
-          style: const TextStyle(color: Colors.white),
-        ),
-        centerTitle: true,
-        actions: <Widget>[
+            //the creator is the user whose id is the id of the post creator, or else, is null
+            final User? owner = allUsers.isNotEmpty
+                ? allUsers.firstWhere(
+                    (user) => user.id == widget.post.ownerId,
+                    orElse: () => User(name: 'null', id: 'null'),
+                  )
+                : null;
+
+            String ownerName = owner != null ? owner.name.toString() : '?';
+            String ownerId = owner != null ? owner.id.toString() : 'null';
+
+            return Scaffold(
+              appBar: AppBar(
+                backgroundColor: colorName,
+                leading: IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                title: Text(
+                  widget.post.status.toString(),
+                  style: const TextStyle(color: Colors.white),
+                ),
+                centerTitle: true,
+                actions: <Widget>[
 //Edit Button
-          Visibility(
-            visible: userId == creatorId,
-            child: IconButton(
-              icon: const Icon(Icons.edit),
-              color: Colors.white,
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => PostsForm(
-                      idUsuario: userId.toString(),
-                      fromHomePage: widget.fromHomePage,
-                    ),
-                    settings: RouteSettings(
-                      arguments: widget.post,
+                  Visibility(
+                    visible: userId == creatorId,
+                    child: IconButton(
+                      icon: const Icon(Icons.edit),
+                      color: Colors.white,
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PostsForm(
+                              idUsuario: userId.toString(),
+                              fromHomePage: widget.fromHomePage,
+                            ),
+                            settings: RouteSettings(
+                              arguments: widget.post,
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
-                );
-              },
-            ),
-          ),
 //Chat button
-          Visibility(
-            visible: userId != creatorId,
-            child: IconButton(
-              icon: const Icon(Icons.chat),
-              color: Colors.white,
-              onPressed: () {},
-            ),
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-          controller: scrollController,
-          child: Column(
-            children: [
-//Header
-              Container(
-                height: 80,
-                decoration: BoxDecoration(
-                  color: headerColor,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-//Title
-                    Text(
-                      widget.post.title.toString(),
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: headerTextColor,
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  Visibility(
+                    visible: userId != creatorId,
+                    child: IconButton(
+                      icon: const Icon(Icons.chat),
+                      color: Colors.white,
+                      onPressed: () {},
                     ),
-                  ],
-                ),
-              ),
-//Image
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Container(
-                  decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(15.0)),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: FittedBox(
-                        fit: BoxFit.contain,
-                        child: PostPicture(
-                          postId: widget.post.id.toString(),
-                          isSelect: true,
-                          width: 0.9,
-                          height: 0.4,
-                        )),
-                  ),
-                ),
-              ),
-//Description
-              SizedBox(
-                width: 480,
-                height: 100,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Text(widget.post.description.toString(),
-                          softWrap: true,
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: Theme.of(context).colorScheme.secondary)),
-                    ),
-                  ],
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      FittedBox(
-                          fit: BoxFit.contain,
-//Solicitant Image
-                          child: ProfilePicture(
-                            initials: creator!.name![0].toUpperCase(),
-                            userId: creatorId,
-                            color: colorName,
-                            size: 0.13,
-                            isSelect: false,
-                          )),
-
-                      const SizedBox(height: 10),
-//Solicitant Name
-                      SizedBox(
-                        child: Text(
-                          creator.name.toString(),
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: Theme.of(context).colorScheme.secondary),
-                        ),
-                      )
-                    ],
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      FittedBox(
-                          fit: BoxFit.contain,
-
-//Owner Image
-                          child: ProfilePicture(
-                            initials: ownerName[0].toUpperCase(),
-                            userId: ownerId,
-                            color: colorName,
-                            size: 0.13,
-                            isSelect: false,
-                          )),
-                      const SizedBox(height: 10),
-//Owner Name
-                      SizedBox(
-                        child: Text(
-                          ownerName,
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: Theme.of(context).colorScheme.secondary),
-                        ),
-                      )
-                    ],
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+              body: SingleChildScrollView(
+                  controller: scrollController,
+                  child: Column(
+                    children: [
+//Header
+                      Container(
+                        height: 80,
+                        decoration: BoxDecoration(
+                          color: headerColor,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+//Title
+                            Text(
+                              widget.post.title.toString(),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: headerTextColor,
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+//Image
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15.0)),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10.0),
+                            child: FittedBox(
+                                fit: BoxFit.contain,
+                                child: PostPicture(
+                                  postId: widget.post.id.toString(),
+                                  isSelect: true,
+                                  width: 0.9,
+                                  height: 0.4,
+                                )),
+                          ),
+                        ),
+                      ),
+//Description
+                      SizedBox(
+                        width: 480,
+                        height: 100,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Text(widget.post.description.toString(),
+                                  softWrap: true,
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary)),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              FittedBox(
+                                  fit: BoxFit.contain,
+//Solicitant Image
+                                  child: ProfilePicture(
+                                    initials: creator!.name![0].toUpperCase(),
+                                    userId: creatorId,
+                                    color: colorName,
+                                    size: 0.13,
+                                    isSelect: false,
+                                  )),
+
+                              const SizedBox(height: 10),
+//Solicitant Name
+                              SizedBox(
+                                child: Text(
+                                  creator.name.toString(),
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary),
+                                ),
+                              )
+                            ],
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              FittedBox(
+                                  fit: BoxFit.contain,
+
+//Owner Image
+                                  child: ProfilePicture(
+                                    initials: ownerName[0].toUpperCase(),
+                                    userId: ownerId,
+                                    color: colorName,
+                                    size: 0.13,
+                                    isSelect: false,
+                                  )),
+                              const SizedBox(height: 10),
+//Owner Name
+                              SizedBox(
+                                child: Text(
+                                  ownerName,
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary),
+                                ),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
 //Dates
-              PostCalendar(
-                  loanDate: widget.post.status == "Solicitado"
-                      ? widget.post.dateOfLending
-                      : widget.post.dateOfReturning,
-                  color: colorName),
-              const SizedBox(height: 20),
-            ],
-          )),
-    );
+                      PostCalendar(
+                          loanDate: widget.post.status == "Solicitado"
+                              ? widget.post.dateOfLending
+                              : widget.post.dateOfReturning,
+                          color: colorName),
+                      const SizedBox(height: 20),
+                    ],
+                  )),
+            );
+          }
+        });
   }
 }

@@ -1,5 +1,6 @@
 import 'package:appteste/components/appbar.dart';
 import 'package:appteste/components/chat_tile.dart';
+import 'package:appteste/models/user/user.dart';
 import 'package:appteste/provider/users_provider.dart';
 import 'package:appteste/views/home_page.dart';
 import 'package:appteste/components/navigationbar.dart';
@@ -64,9 +65,36 @@ class _ChatSelectionPageState extends State<ChatSelectionPage> {
         selectedIndex: _selectedIndex,
         onItemTapped: onTap,
       ),
-      body: ListView.builder(
-        itemCount: chatUsers.count,
-        itemBuilder: (ctx, i) => ChatTile(user: chatUsers.byIndex(i)),
+      body: FutureBuilder<int>(
+        future: chatUsers.getCount(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            return Text('Erro: ${snapshot.error}');
+          } else {
+            int itemCount = snapshot.data ?? 0;
+            return ListView.builder(
+              itemCount: itemCount,
+              itemBuilder: (ctx, i) {
+                return FutureBuilder<User>(
+                  future: chatUsers.byIndex(i),
+                  builder: (context, userSnapshot) {
+                    if (userSnapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    } else if (userSnapshot.hasError) {
+                      return Text('Erro: ${userSnapshot.error}');
+                    } else {
+                      User user = userSnapshot.data!;
+                      return ChatTile(user: user);
+                    }
+                  },
+                );
+              },
+            );
+          }
+        },
       ),
     );
   }
