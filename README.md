@@ -10,6 +10,6 @@ Envolvidos:
 - Luana Reginato Bassanesi
 - Ederson Almeida (Professor Orientador)
 
- ## Contatos: 
+ ### Contatos: 
  linkedin: https://www.linkedin.com/in/luana-reginato-bassanesi-228642280/ <br />
  github: https://github.com/Luana-RB
